@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\NailsSys.Infrastructure\NailsSys.Infrastructure.csproj" />
+    <ProjectReference Include="..\NailsSys.Core\NailsSys.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="mediatr" Version="10.0.1" />
+    <PackageReference Include="mediatr.extensions.microsoft.dependencyinjection" Version="10.0.1" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <!-- <Nullable>enable</Nullable> -->
+  </PropertyGroup>
+
+</Project>
