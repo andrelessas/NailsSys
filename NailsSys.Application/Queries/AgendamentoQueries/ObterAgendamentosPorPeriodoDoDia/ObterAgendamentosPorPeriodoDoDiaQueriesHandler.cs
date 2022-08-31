@@ -20,16 +20,27 @@ namespace NailsSys.Application.Queries.AgendamentoQueries.ObterAgendamentosPorPe
         }
         public async Task<IEnumerable<AgendamentoViewModel>> Handle(ObterAgendamentosPorPeriodoDoDiaQueries request, CancellationToken cancellationToken)
         {
-            var agendamentos = await _agendamentoRepository.ObterAgendamentosPorPeriodoDoDiaAsync(request.PeriodoInicial,request.PeriodoFinal);
+            var lstItens = new List<ItemAgendamentoViewModel>();
+            var lstAgendamentos = new List<AgendamentoViewModel>();
 
-            foreach (var agendamento in agendamentos)
-            {
-                var itens = await _itemAgendamentoRepository.ObterItensAsync(agendamento.Id);
-                itens.Select(i => new ItemAgendamentoViewModel(i.DescricaoProduto,i.Quantidade,i.PrecoInicial,i.Id));
+            request.PeriodoInicial = new DateTime(request.PeriodoInicial.Year,request.PeriodoInicial.Month,request.PeriodoInicial.Day,request.PeriodoInicial.Hour,request.PeriodoInicial.Minute,request.PeriodoInicial.Second);
+            request.PeriodoFinal = new DateTime(request.PeriodoFinal.Year,request.PeriodoFinal.Month,request.PeriodoFinal.Day,request.PeriodoFinal.Hour,request.PeriodoFinal.Minute,request.PeriodoFinal.Second);
+
+            var agendamentos = await _agendamentoRepository.ObterAgendamentosPorPeriodoDoDiaAsync(request.PeriodoInicial,request.PeriodoFinal);        
+            
+            lstAgendamentos = agendamentos.ToList().ConvertAll(a => new AgendamentoViewModel(a.DataAtendimento,
+                                                                                             a.InicioPrevisto,
+                                                                                             a.TerminoPrevisto,
+                                                                                             a.Cliente.NomeCliente,
+                                                                                             a.Id));
+                                                                                             
+            foreach (var agendamento in lstAgendamentos)
+            {                
+                var itensDTO = await _itemAgendamentoRepository.ObterItensAsync(agendamento.Id);                
+                agendamento.Itens = itensDTO.ToList().ConvertAll(i => new ItemAgendamentoViewModel(i.DescricaoProduto,i.Quantidade,i.PrecoInicial,i.Id));                
             }
 
-            // return agendamentos.Select( a => new AgendamentoViewModel(a.DataAtendimento,a.InicioPrevisto,a.TerminoPrevisto,a.Cliente.NomeCliente));
-            return null;
+            return lstAgendamentos;
         }
     }
 }

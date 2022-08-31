@@ -16,16 +16,24 @@ namespace NailsSys.Application.Queries.AgendamentoQueries.ObterAgendamentosPorDa
         }
         public async Task<IEnumerable<AgendamentoViewModel>> Handle(ObterAgendamentosPorDataQueries request, CancellationToken cancellationToken)
         {
-            var agendamentos = await _agendamentoRepository.ObterAgendamentosPorDataAsync(request.Data);
+            var lstItens = new List<ItemAgendamentoViewModel>();
+            var lstAgendamentos = new List<AgendamentoViewModel>();
 
-            foreach (var agendamento in agendamentos)
+            var agendamentos = await _agendamentoRepository.ObterAgendamentosPorDataAsync(request.Data);        
+            
+            lstAgendamentos = agendamentos.ToList().ConvertAll(a => new AgendamentoViewModel(a.DataAtendimento,
+                                                                                             a.InicioPrevisto,
+                                                                                             a.TerminoPrevisto,
+                                                                                             a.Cliente.NomeCliente,
+                                                                                             a.Id));
+                                                                                             
+            foreach (var agendamento in lstAgendamentos)
             {
-                var itens = await _itemAgendamentoRepository.ObterItensAsync(agendamento.Id);
-                itens.Select(i => new ItemAgendamentoViewModel(i.DescricaoProduto,i.Quantidade,i.PrecoInicial,i.Id));
+                var itensDTO = await _itemAgendamentoRepository.ObterItensAsync(agendamento.Id);                
+                agendamento.Itens = itensDTO.ToList().ConvertAll(i => new ItemAgendamentoViewModel(i.DescricaoProduto,i.Quantidade,i.PrecoInicial,i.Id));                
             }
 
-            // return agendamentos.Select( a => new AgendamentoViewModel(a.DataAtendimento,a.InicioPrevisto,a.TerminoPrevisto,a.Cliente.NomeCliente));
-            return null;
+            return lstAgendamentos;
         }
     }
 }

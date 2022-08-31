@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using NailsSys.Application.Commands.AgendamentoCommands.AlterarAgendamento;
 using NailsSys.Application.Commands.AgendamentoCommands.NovoAgendamento;
 using NailsSys.Application.Queries.AgendamentoQueries.ObterAgendamentosHoje;
+using NailsSys.Application.Queries.AgendamentoQueries.ObterAgendamentosPorData;
 using NailsSys.Application.Queries.AgendamentoQueries.ObterAgendamentosPorPeriodoDoDia;
 
 namespace NailsSys.API.Controllers
@@ -27,7 +28,8 @@ namespace NailsSys.API.Controllers
         [HttpGet("pordata")]
         public async Task<IActionResult> ObterPorData(DateTime data)
         {
-            var agendamentosPorData = await _mediator.Send(data);
+            var request = new ObterAgendamentosPorDataQueries(data);
+            var agendamentosPorData = await _mediator.Send(request);
             if(agendamentosPorData == null)
                 return NotFound();
             return Ok(agendamentosPorData);    

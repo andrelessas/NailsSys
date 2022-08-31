@@ -9,6 +9,11 @@ namespace NailsSys.Application.Queries.AgendamentoQueries.ObterAgendamentosPorDa
 {
     public class ObterAgendamentosPorDataQueries:IRequest<IEnumerable<AgendamentoViewModel>>
     {
-        public DateTime Data { get; set; }        
+        public ObterAgendamentosPorDataQueries(DateTime data)
+        {
+            Data = data;
+        }
+
+        public DateTime Data { get; private set; }        
     }
 }
