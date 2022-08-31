@@ -1,11 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using NailsSys.Application.InputModels;
-using NailsSys.Application.Services.Interfaces;
+using NailsSys.Application.Commands.AgendamentoCommands.AlterarAgendamento;
+using NailsSys.Application.Commands.AgendamentoCommands.NovoAgendamento;
+using NailsSys.Application.Queries.AgendamentoQueries.ObterAgendamentosHoje;
+using NailsSys.Application.Queries.AgendamentoQueries.ObterAgendamentosPorPeriodoDoDia;
 
 namespace NailsSys.API.Controllers
 {
@@ -13,59 +11,56 @@ namespace NailsSys.API.Controllers
     [Route("api/[controller]")]
     public class AgendamentoController : MainController
     {
-        private readonly IAgendamentoService _service;
-
-        public AgendamentoController(IAgendamentoService service,IMediator mediator)
+        public AgendamentoController(IMediator mediator)
             :base(mediator)
-        {
-            _service = service;
-        }
+        {}
 
         [HttpGet("hoje")]
-        public IActionResult ObterAgendamentosDeHoje()
+        public async Task<IActionResult> ObterAgendamentosDeHoje()
         {
-            var agendamentosHoje = _service.ObterUnhasAgendadasHoje();
+            var agendamentosHoje = await _mediator.Send(new ObterAgendamentosHojeQueries());
             if(agendamentosHoje == null)
                 return NotFound();
             return Ok(agendamentosHoje);
         }
 
         [HttpGet("pordata")]
-        public IActionResult ObterPorData(DateTime data)
+        public async Task<IActionResult> ObterPorData(DateTime data)
         {
-            var agendamentosPorData = _service.ObterUnhasAgendadasPorData(data);
+            var agendamentosPorData = await _mediator.Send(data);
             if(agendamentosPorData == null)
                 return NotFound();
             return Ok(agendamentosPorData);    
         }
 
         [HttpGet("porperiodo")]
-        public IActionResult ObterPorPeriodo(DateTime dataInicial, DateTime dataFinal)
+        public async Task<IActionResult> ObterAgenamentoPorPeriodoDia(DateTime dataInicial, DateTime dataFinal)
         {
-            var agendamentosPorPeriodo = _service.ObterUnhasAgendadasPorPeriodoDoDia(dataInicial,dataFinal);
+            var request = new ObterAgendamentosPorPeriodoDoDiaQueries(dataInicial,dataFinal);
+            var agendamentosPorPeriodo = await _mediator.Send(request);
             if(agendamentosPorPeriodo == null)
                 return NotFound();
             return Ok(agendamentosPorPeriodo);    
         }
 
         [HttpPost]
-        public IActionResult Inserir(NovoAgendamentoInputModel inputModel)
+        public async Task<IActionResult> NovoAgendamento(NovoAgendamentoCommand request)
         {
-            _service.NovoAgendamento(inputModel);
+            await _mediator.Send(request);
             return Ok();
         }
 
         [HttpPut]
-        public IActionResult Alterar(AlterarAgendamentoInputModel inputModel)
+        public async Task<IActionResult> AlterarAgendamento(AlterarAgendamentoCommand request)
         {
-            _service.AlterarAgendamento(inputModel);
+            await _mediator.Send(request);
             return Ok();
         }
 
         [HttpPut("cancelaragendamento")]
-        public IActionResult CancelarAgendamento(int id)
+        public async Task<IActionResult> CancelarAgendamento(int id)
         {
-            _service.CancelarAgendamento(id);
+            await _mediator.Send(id);
             return Ok();
         }
     }

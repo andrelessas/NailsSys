@@ -1,15 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using NailsSys.Application.Commands.ProdutoCommands.AlterarProduto;
 using NailsSys.Application.Commands.ProdutoCommands.InserirProduto;
-using NailsSys.Application.InputModels;
 using NailsSys.Application.Queries.ProdutoQueries.ObterProdutos;
-using NailsSys.Application.Services.Interfaces;
-using NailsSys.Application.ViewModels;
 
 namespace NailsSys.API.Controllers
 {

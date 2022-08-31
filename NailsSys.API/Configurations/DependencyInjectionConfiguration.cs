@@ -1,9 +1,6 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using NailsSys.Application.Commands.ClienteCommands.InserirCliente;
 using NailsSys.Application.Commands.ProdutoCommands.InserirProduto;
-using NailsSys.Application.Services.Implementations;
-using NailsSys.Application.Services.Interfaces;
 using NailsSys.Core.Interfaces;
 using NailsSys.Infrastructure.Context;
 using NailsSys.Infrastructure.Persistense.Repositories;
@@ -17,11 +14,10 @@ namespace NailsSys.API.Configurations
             services.AddDbContext<NailsSysContext>(options => options.UseSqlServer(configuration.GetConnectionString("conexao")));
             // services.AddDbContext<NailsSysContext>(options => options.UseInMemoryDatabase("NailsBD"));
             services.AddMediatR(typeof(InserirProdutoCommand));
-
             services.AddScoped<IProdutoRepository,ProdutoRepository>();
             services.AddScoped<IClienteRepository,ClienteRepository>();
-            services.AddScoped<IItemAgendamentoService,ItemAgendamentoService>();
-            services.AddScoped<IAgendamentoService,AgendamentoService>();
+            services.AddScoped<IItemAgendamentoRepository,ItemAgendamentoRepository>();
+            services.AddScoped<IAgendamentoRepository,AgendamentoRepository>();
         }
     }
 }

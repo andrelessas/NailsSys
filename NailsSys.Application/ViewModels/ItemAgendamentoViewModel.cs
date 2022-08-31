@@ -7,15 +7,15 @@ namespace NailsSys.Application.ViewModels
 {
     public class ItemAgendamentoViewModel
     {
-        public ItemAgendamentoViewModel(ProdutoItemAgendViewModel produto, int quantidade, decimal precoInicial, int item)
+        public ItemAgendamentoViewModel(string nomeProduto, int quantidade, decimal precoInicial, int item)
         {
-            Produto = produto;
+            NomeProduto = nomeProduto;
             Quantidade = quantidade;
             PrecoInicial = precoInicial;
             Item = item;
         }
         public int Item { get; private set; }
-        public ProdutoItemAgendViewModel Produto { get; private set; }
+        public string NomeProduto { get; private set; }
         public int Quantidade { get; private set; }
         public decimal PrecoInicial { get; private set; }  
     }

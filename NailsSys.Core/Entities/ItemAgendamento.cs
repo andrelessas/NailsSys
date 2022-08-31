@@ -7,13 +7,12 @@ namespace NailsSys.Core.Entities
 {
     public class ItemAgendamento:BaseEntity
     {
-        public ItemAgendamento(int idProduto, int idAgendamento, int quantidade, decimal precoInicial)
+        public ItemAgendamento(int idAgendamento, int idProduto, int quantidade, decimal precoInicial)
         {
             IdProduto = idProduto;
             IdAgendamento = idAgendamento;
-            Quantidade = quantidade;
-            PrecoInicial = precoInicial;
-            AtualizarPreco();
+            Quantidade = quantidade;            
+            AtualizarPreco(precoInicial);
         }
         public int IdAgendamento { get; private set; }
         public Agendamento Agendamento { get; private set; }
@@ -26,13 +25,13 @@ namespace NailsSys.Core.Entities
             if(Quantidade > 0)
             {
                 Quantidade = quantidade;
-                PrecoInicial = PrecoInicial * Quantidade;
+                AtualizarPreco(PrecoInicial);
             }
         }
-        public void AtualizarPreco()
+        public void AtualizarPreco(decimal valor)
         {
             if(Quantidade > 0)
-                PrecoInicial = PrecoInicial * Quantidade;
+                PrecoInicial = valor * Quantidade;
         }
     }
 }

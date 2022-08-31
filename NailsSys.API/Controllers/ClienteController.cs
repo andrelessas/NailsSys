@@ -2,9 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using NailsSys.Application.Commands.ClienteCommands.AlterarCliente;
 using NailsSys.Application.Commands.ClienteCommands.InserirCliente;
-using NailsSys.Application.InputModels;
 using NailsSys.Application.Queries.ClienteQueries.ObterClientes;
-using NailsSys.Application.Services.Interfaces;
 
 namespace NailsSys.API.Controllers
 {

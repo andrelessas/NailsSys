@@ -1,11 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using NailsSys.Application.InputModels;
-using NailsSys.Application.Services.Interfaces;
+using NailsSys.Application.Commands.ItemAgendamentoCommands.InserirItemCommand;
+using NailsSys.Application.Queries.ItemAgendamentoQueries.ObterItemPorId;
+using NailsSys.Application.Queries.ItemAgendamentoQueries.ObterItens;
 
 namespace NailsSys.API.Controllers
 {
@@ -13,34 +10,41 @@ namespace NailsSys.API.Controllers
     [Route("api/[controller]")]
     public class ItemAgendamentoController : MainController
     {
-        private readonly IItemAgendamentoService _service;
-
-        public ItemAgendamentoController(IItemAgendamentoService service,IMediator mediator)
+        public ItemAgendamentoController(IMediator mediator)
             :base(mediator)
-        {
-            _service = service;
-        }
+        {}
 
         [HttpGet]
-        public IActionResult Obter(int idAgendamento)
+        public async Task<IActionResult> ObterTodosItens(int idAgendamento)
         {
-            var itensAgendamento =_service.ObterItens(idAgendamento);
+            var request = new ObterItensQueries(idAgendamento);
+            var itens = await _mediator.Send(request);
+            if (itens == null)
+                return NotFound();
+            return Ok(itens);
+        }
+
+        [HttpGet("porid")]
+        public async Task<IActionResult> ObterItemPorId(int idAgendamento)
+        {
+            var request = new ObterItemPorIdQueries(idAgendamento);
+            var itensAgendamento = await _mediator.Send(request);
             if(itensAgendamento == null)
                 return NotFound();
             return Ok(itensAgendamento);
         }
 
         [HttpPost]
-        public IActionResult Inserir(NovoItemAgendamentoInputModel inputModel)
+        public async Task<IActionResult> InserirItem(InserirItemCommand request)
         {
-            _service.InserirItem(inputModel);
+            await _mediator.Send(request);
             return Ok();
         }
 
         [HttpDelete]
-        public IActionResult Excluir(int id)
+        public async Task<IActionResult> RemoverItem(int id)
         {
-            _service.RemoverItem(id);
+            await _mediator.Send(id);
             return Ok();
         }
     }

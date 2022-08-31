@@ -2,12 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using NailsSys.Application.ViewModels;
-using NailsSys.Core.Entities;
+using MediatR;
 
-namespace NailsSys.Application.InputModels
+namespace NailsSys.Application.Commands.AgendamentoCommands.NovoAgendamento
 {
-    public class NovoAgendamentoInputModel
+    public class NovoAgendamentoCommand:IRequest<Unit>
     {
         public int idCliente { get; set; }
         public DateTime DataAtendimento { get; set; }

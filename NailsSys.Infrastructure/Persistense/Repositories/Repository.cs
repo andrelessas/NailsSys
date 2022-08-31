@@ -7,7 +7,7 @@ namespace NailsSys.Data.Repository
 {
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
-        private readonly NailsSysContext _context;
+        protected readonly NailsSysContext _context;
 
         public Repository(NailsSysContext context)
         {

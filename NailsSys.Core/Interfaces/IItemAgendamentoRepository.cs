@@ -1,0 +1,15 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using NailsSys.Core.DTOs;
+using NailsSys.Core.Entities;
+
+namespace NailsSys.Core.Interfaces
+{
+    public interface IItemAgendamentoRepository:IRepository<ItemAgendamento>
+    {
+        Task<IEnumerable<ItemAgendamentoDTO>> ObterItensAsync(int idAgendamento);
+        Task<ItemAgendamentoDTO> ObterItemPorId(int idAgendamento);
+    }
+}
