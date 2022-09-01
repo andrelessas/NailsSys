@@ -21,7 +21,8 @@ namespace NailsSys.Application.Commands.ItemAgendamentoCommands.InserirItemComma
         public async Task<Unit> Handle(InserirItemCommand request, CancellationToken cancellationToken)
         {
             var produto = await _produtoRepository.ObterPorIDAsync(request.IdProduto);
-            _itemAgendamentoRepository.InserirAsync(new ItemAgendamento(request.IdAgendamento,request.IdProduto,request.Quantidade,produto.Preco));
+            var maxItem = await _itemAgendamentoRepository.ObterMaxItem(request.IdAgendamento);
+            await _itemAgendamentoRepository.InserirItemAsync(new ItemAgendamento(request.IdAgendamento,request.IdProduto,request.Quantidade,maxItem + 1));
             await _itemAgendamentoRepository.SaveChangesAsync();
             return Unit.Value;
         }

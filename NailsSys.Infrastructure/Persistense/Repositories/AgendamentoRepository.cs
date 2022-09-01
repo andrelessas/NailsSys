@@ -34,5 +34,10 @@ namespace NailsSys.Infrastructure.Persistense.Repositories
                                                          d.TerminoPrevisto <= horarioFinal)
                                              .ToListAsync();
         }
+
+        public async Task<int> ObterMaxAgendamento()
+        {
+            return await _context.Agendamento.Select(a => a.Id).DefaultIfEmpty().MaxAsync();
+        }
     }
 }

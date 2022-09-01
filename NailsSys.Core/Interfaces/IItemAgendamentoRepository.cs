@@ -11,5 +11,7 @@ namespace NailsSys.Core.Interfaces
     {
         Task<IEnumerable<ItemAgendamentoDTO>> ObterItensAsync(int idAgendamento);
         Task<ItemAgendamentoDTO> ObterItemPorId(int idAgendamento);
+        Task<int> ObterMaxItem(int idAgendamento);
+        Task InserirItemAsync(ItemAgendamento itemAgendamento);
     }
 }

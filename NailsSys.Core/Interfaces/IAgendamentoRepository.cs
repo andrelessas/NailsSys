@@ -11,5 +11,6 @@ namespace NailsSys.Core.Interfaces
         Task<IEnumerable<Agendamento>> ObterAgendamentosHojeAsync();
         Task<IEnumerable<Agendamento>> ObterAgendamentosPorDataAsync(DateTime data);
         Task<IEnumerable<Agendamento>> ObterAgendamentosPorPeriodoDoDiaAsync(DateTime horarioInicial,DateTime horarioFinal);
+        Task<int> ObterMaxAgendamento();
     }
 }

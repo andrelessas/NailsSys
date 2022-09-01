@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using MediatR;
+using NailsSys.Application.InputModels;
 
 namespace NailsSys.Application.Commands.AgendamentoCommands.NovoAgendamento
 {
@@ -12,5 +9,6 @@ namespace NailsSys.Application.Commands.AgendamentoCommands.NovoAgendamento
         public DateTime DataAtendimento { get; set; }
         public DateTime InicioPrevisto { get; set; }
         public DateTime TerminoPrevisto { get; set; }
+        public List<ItemAgendamentoInputModel> Itens { get; set; }
     }
 }

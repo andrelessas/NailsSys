@@ -30,7 +30,7 @@ namespace NailsSys.Application.Queries.AgendamentoQueries.ObterAgendamentosPorDa
             foreach (var agendamento in lstAgendamentos)
             {
                 var itensDTO = await _itemAgendamentoRepository.ObterItensAsync(agendamento.Id);                
-                agendamento.Itens = itensDTO.ToList().ConvertAll(i => new ItemAgendamentoViewModel(i.DescricaoProduto,i.Quantidade,i.PrecoInicial,i.Id));                
+                agendamento.Itens = itensDTO.ToList().ConvertAll(i => new ItemAgendamentoViewModel(i.DescricaoProduto,i.Quantidade,i.PrecoInicial,i.Item));                
             }
 
             return lstAgendamentos;

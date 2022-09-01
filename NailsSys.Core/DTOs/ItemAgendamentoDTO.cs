@@ -7,7 +7,7 @@ namespace NailsSys.Core.DTOs
 {
     public class ItemAgendamentoDTO
     {
-        public ItemAgendamentoDTO(int id, int idAgendamento, int idProduto, string descricaoProduto, int quantidade, decimal precoInicial)
+        public ItemAgendamentoDTO(int id, int idAgendamento, int idProduto, string descricaoProduto, int quantidade, decimal precoInicial, int item)
         {
             Id = id;
             IdAgendamento = idAgendamento;
@@ -15,13 +15,15 @@ namespace NailsSys.Core.DTOs
             DescricaoProduto = descricaoProduto;
             Quantidade = quantidade;
             PrecoInicial = precoInicial;
+            Item = item;
         }
 
-        public int Id { get; set; }
-        public int IdAgendamento { get; set; }
-        public int IdProduto { get; set; }
-        public string DescricaoProduto { get; set; }
-        public int Quantidade { get; set; }
-        public decimal PrecoInicial { get; set; }   
+        public int Id { get; private set; }
+        public int IdAgendamento { get; private set; }
+        public int IdProduto { get; private set; }
+        public int Item { get; private set; }
+        public string DescricaoProduto { get; private set; }
+        public int Quantidade { get; private set; }
+        public decimal PrecoInicial { get; private set; }   
     }
 }

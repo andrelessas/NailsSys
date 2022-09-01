@@ -7,18 +7,19 @@ namespace NailsSys.Core.Entities
 {
     public class ItemAgendamento:BaseEntity
     {
-        public ItemAgendamento(int idAgendamento, int idProduto, int quantidade, decimal precoInicial)
+        public ItemAgendamento(int idAgendamento, int idProduto, int quantidade, int item)
         {
             IdProduto = idProduto;
             IdAgendamento = idAgendamento;
-            Quantidade = quantidade;            
-            AtualizarPreco(precoInicial);
+            Quantidade = quantidade;
+            Item = item;
         }
         public int IdAgendamento { get; private set; }
         public Agendamento Agendamento { get; private set; }
         public int IdProduto { get; private set; }
         public Produto Produto { get; private set; }
         public int Quantidade { get; private set; }
+        public int Item { get; private set; }
         public decimal PrecoInicial { get; private set; }        
         public void AlterarQuantidade(int quantidade)
         {
