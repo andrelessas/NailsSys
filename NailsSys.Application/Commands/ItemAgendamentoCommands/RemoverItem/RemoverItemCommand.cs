@@ -8,6 +8,11 @@ namespace NailsSys.Application.Commands.ItemAgendamentoCommands.RemoverItem
 {
     public class RemoverItemCommand:IRequest<Unit>
     {
+        public RemoverItemCommand(int id)
+        {
+            Id = id;
+        }
+
         public int Id { get; set; }
     }
 }

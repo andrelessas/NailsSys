@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using NailsSys.Application.Commands.ItemAgendamentoCommands.InserirItemCommand;
+using NailsSys.Application.Commands.ItemAgendamentoCommands.RemoverItem;
 using NailsSys.Application.Queries.ItemAgendamentoQueries.ObterItemPorId;
 using NailsSys.Application.Queries.ItemAgendamentoQueries.ObterItens;
 
@@ -44,7 +45,7 @@ namespace NailsSys.API.Controllers
         [HttpDelete]
         public async Task<IActionResult> RemoverItem(int id)
         {
-            await _mediator.Send(id);
+            await _mediator.Send(new RemoverItemCommand(id));
             return Ok();
         }
     }

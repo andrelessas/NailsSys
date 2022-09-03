@@ -9,6 +9,11 @@ namespace NailsSys.Application.Queries.ClienteQueries.ObterClientePorId
 {
     public class ObterClientePorIdQueries:IRequest<ClienteViewModel>
     {
+        public ObterClientePorIdQueries(int id)
+        {
+            Id = id;
+        }
+
         public int Id { get; set; }    
     }
 }

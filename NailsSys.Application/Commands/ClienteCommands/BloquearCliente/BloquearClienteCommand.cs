@@ -8,6 +8,11 @@ namespace NailsSys.Application.Commands.ClienteCommands.BloquearCliente
 {
     public class BloquearClienteCommand:IRequest<Unit>
     {
+        public BloquearClienteCommand(int id)
+        {
+            Id = id;
+        }
+
         public int Id { get; set; }
     }
 }

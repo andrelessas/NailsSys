@@ -22,7 +22,7 @@ namespace NailsSys.Core.Entities
 
         public void BloquearCliente()
         {
-            if(!Bloqueado && DataCadastro != null)
+            if(!Bloqueado)
                 Bloqueado = true;
         }
 

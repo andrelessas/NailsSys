@@ -15,8 +15,9 @@ namespace NailsSys.Application.Queries.ItemAgendamentoQueries.ObterItens
         public async Task<IEnumerable<ItemAgendamentoViewModel>> Handle(ObterItensQueries request, CancellationToken cancellationToken)
         {
             var itens = await _itemAgendamentoRepository.ObterItensAsync(request.IdAgendamento);
-            return itens.Select(i => new ItemAgendamentoViewModel(i.DescricaoProduto,i.Quantidade,i.PrecoInicial,i.Id))
-                        .ToList();
+            // return itens.Select(i => new ItemAgendamentoViewModel(i.DescricaoProduto,i.Quantidade,i.PrecoInicial,i.Id))
+            //             .ToList();
+            return null;
         }
     }
 }

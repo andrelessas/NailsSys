@@ -1,6 +1,9 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using NailsSys.Application.Commands.ProdutoCommands.InserirProduto;
+using NailsSys.Application.Validations;
 using NailsSys.Core.Interfaces;
 using NailsSys.Infrastructure.Context;
 using NailsSys.Infrastructure.Persistense.Repositories;
@@ -13,6 +16,7 @@ namespace NailsSys.API.Configurations
         {
             services.AddDbContext<NailsSysContext>(options => options.UseSqlServer(configuration.GetConnectionString("conexao")));
             // services.AddDbContext<NailsSysContext>(options => options.UseInMemoryDatabase("NailsBD"));
+            
             services.AddMediatR(typeof(InserirProdutoCommand));
             services.AddScoped<IProdutoRepository,ProdutoRepository>();
             services.AddScoped<IClienteRepository,ClienteRepository>();

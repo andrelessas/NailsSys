@@ -1,21 +1,20 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using NailsSys.Application.Commands.ClienteCommands.AlterarCliente;
+using NailsSys.Application.Commands.ClienteCommands.BloquearCliente;
 using NailsSys.Application.Commands.ClienteCommands.InserirCliente;
+using NailsSys.Application.Queries.ClienteQueries.ObterClientePorId;
 using NailsSys.Application.Queries.ClienteQueries.ObterClientes;
 
 namespace NailsSys.API.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
+    [ApiController]
     public class ClienteController : MainController
     {
-        // private readonly IMediator _mediator;
         public ClienteController(IMediator mediator)
             :base(mediator)
-        {
-            // _mediator = mediator;
-        }  
+        {}  
 
         [HttpGet]
         public async Task<IActionResult> ObterClientes()
@@ -29,8 +28,8 @@ namespace NailsSys.API.Controllers
 
         [HttpGet("porId")]
         public async Task<IActionResult> ObterClientePorId(int id)
-        {
-            var cliente = await _mediator.Send(id);
+        {            
+            var cliente = await _mediator.Send(new ObterClientePorIdQueries(id));
             if (cliente == null)
                 return NotFound();
                 
@@ -54,8 +53,8 @@ namespace NailsSys.API.Controllers
         
         [HttpPut("bloquearcliente")]
         public async Task<IActionResult> BloquearCliente(int id)
-        {
-            await _mediator.Send(id);
+        {            
+            await _mediator.Send(new BloquearClienteCommand(id));
             
             return Ok();
         }
