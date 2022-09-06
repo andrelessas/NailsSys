@@ -17,6 +17,7 @@ namespace NailsSys.Infrastructure.Context
         public DbSet<ItemAgendamento> ItemAgendamento { get; set; }
         public DbSet<Atendimento> Atendimento { get; set; }
         public DbSet<ItemAtendimento> ItemAtendimento { get; set; }
+        public DbSet<Usuario> Usuario { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {            

@@ -22,6 +22,7 @@ namespace NailsSys.API.Configurations
             services.AddScoped<IClienteRepository,ClienteRepository>();
             services.AddScoped<IItemAgendamentoRepository,ItemAgendamentoRepository>();
             services.AddScoped<IAgendamentoRepository,AgendamentoRepository>();
+            services.AddScoped<IUsuarioRepository,UsuarioRepository>();
         }
     }
 }
