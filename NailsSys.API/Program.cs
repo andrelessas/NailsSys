@@ -15,6 +15,8 @@ builder.Services.AddMvc().AddJsonOptions(o =>
             });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDependencyInjectionConfiguration(builder.Configuration);
+builder.Services.AddSwaggerConfiguration();
+builder.Services.AddAuthenticationConfiguration(builder.Configuration);
 builder.Services.AddServicesConfigurations();
 builder.Services.AddSwaggerGen();
 
@@ -32,6 +34,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

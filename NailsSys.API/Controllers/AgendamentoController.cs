@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NailsSys.Application.Commands.AgendamentoCommands.AlterarAgendamento;
 using NailsSys.Application.Commands.AgendamentoCommands.NovoAgendamento;
@@ -16,7 +17,7 @@ namespace NailsSys.API.Controllers
             :base(mediator)
         {}
 
-        [HttpGet("hoje")]
+        [HttpGet("hoje")]        
         public async Task<IActionResult> ObterAgendamentosDeHoje()
         {
             var agendamentosHoje = await _mediator.Send(new ObterAgendamentosHojeQueries());
@@ -25,7 +26,7 @@ namespace NailsSys.API.Controllers
             return Ok(agendamentosHoje);
         }
 
-        [HttpGet("pordata")]
+        [HttpGet("pordata")]        
         public async Task<IActionResult> ObterPorData(DateTime data)
         {
             var request = new ObterAgendamentosPorDataQueries(data);
@@ -60,6 +61,7 @@ namespace NailsSys.API.Controllers
         }
 
         [HttpPut("cancelaragendamento")]
+        [Authorize(Roles = "administrador, gerente")]
         public async Task<IActionResult> CancelarAgendamento(int id)
         {
             await _mediator.Send(id);

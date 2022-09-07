@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NailsSys.Application.Commands.ProdutoCommands.AlterarProduto;
 using NailsSys.Application.Commands.ProdutoCommands.DescontinuarProduto;
@@ -36,18 +37,21 @@ namespace NailsSys.API.Controllers
             return Ok(produto);
         }
         [HttpPost]
+        [Authorize(Roles = "administrador, gerente")]
         public async Task<IActionResult> InserirProduto(InserirProdutoCommand request)
         {
             await _mediator.Send(request);
             return Ok();
         }
         [HttpPut]
+        [Authorize(Roles = "administrador, gerente")]
         public async Task<IActionResult> AlterarProduto(AlterarProdutoCommand request)
         {
             await _mediator.Send(request);
             return Ok();
         }
         [HttpPut("descontinuar")]
+        [Authorize(Roles = "administrador, gerente")]
         public async Task<IActionResult> DescontinuarProduto(int id)
         {
             await _mediator.Send(new DescontinuarProdutoCommand(id));

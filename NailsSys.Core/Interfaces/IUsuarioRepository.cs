@@ -8,6 +8,6 @@ namespace NailsSys.Core.Interfaces
 {
     public interface IUsuarioRepository:IRepository<Usuario>
     {
-
+        Task<Usuario> ObterUsuarioPorIdLoginSenha(int Id, string login, string senhaHash);
     }
 }

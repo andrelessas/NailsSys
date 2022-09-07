@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using NailsSys.Application.Commands.ProdutoCommands.InserirProduto;
 using NailsSys.Application.Validations;
 using NailsSys.Core.Interfaces;
+using NailsSys.Core.Services;
+using NailsSys.Infrastructure.Autenticacao;
 using NailsSys.Infrastructure.Context;
 using NailsSys.Infrastructure.Persistense.Repositories;
 
@@ -23,6 +25,7 @@ namespace NailsSys.API.Configurations
             services.AddScoped<IItemAgendamentoRepository,ItemAgendamentoRepository>();
             services.AddScoped<IAgendamentoRepository,AgendamentoRepository>();
             services.AddScoped<IUsuarioRepository,UsuarioRepository>();
+            services.AddScoped<IAutenticacaoService,AutenticacaoService>();
         }
     }
 }

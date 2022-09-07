@@ -2,8 +2,8 @@ namespace NailsSys.Core.Enums
 {
     public enum Cargos
     {
-        Administrador,
-        Gerente,
-        Atendente
+        Administrador = 1,
+        Gerente = 2,
+        Atendente = 3
     }
 }

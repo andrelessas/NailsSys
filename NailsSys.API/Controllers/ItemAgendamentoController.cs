@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NailsSys.Application.Commands.ItemAgendamentoCommands.InserirItemCommand;
 using NailsSys.Application.Commands.ItemAgendamentoCommands.RemoverItem;

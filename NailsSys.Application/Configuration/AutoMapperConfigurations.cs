@@ -21,6 +21,10 @@ namespace NailsSys.Application.Configuration
             CreateMap<Cliente,ClienteViewModel>()
                 .ForMember(dest => dest.Id,conf => conf.MapFrom(src=>src.Id))
                 .ReverseMap();
+
+            CreateMap<Usuario,UsuarioViewModel>()
+                .ForMember(dest => dest.Id,config => config.MapFrom(src => src.Id))
+                .ReverseMap();
         }
     }
 }

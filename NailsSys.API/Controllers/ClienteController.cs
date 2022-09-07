@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NailsSys.Application.Commands.ClienteCommands.AlterarCliente;
 using NailsSys.Application.Commands.ClienteCommands.BloquearCliente;
@@ -8,8 +9,8 @@ using NailsSys.Application.Queries.ClienteQueries.ObterClientes;
 
 namespace NailsSys.API.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]  
     public class ClienteController : MainController
     {
         public ClienteController(IMediator mediator)
@@ -52,6 +53,7 @@ namespace NailsSys.API.Controllers
         }
         
         [HttpPut("bloquearcliente")]
+        [Authorize(Roles = "administrador, gerente")]
         public async Task<IActionResult> BloquearCliente(int id)
         {            
             await _mediator.Send(new BloquearClienteCommand(id));
