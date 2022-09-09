@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace NailsSys.Core.Entities
 {
-    public class ItemAgendamento:BaseEntity
+    public class ItemAgendamento : BaseEntity
     {
         public ItemAgendamento(int idAgendamento, int idProduto, int quantidade, int item)
         {
@@ -20,19 +20,15 @@ namespace NailsSys.Core.Entities
         public Produto Produto { get; private set; }
         public int Quantidade { get; private set; }
         public int Item { get; private set; }
-        public decimal PrecoInicial { get; private set; }        
+        public decimal PrecoInicial { get; private set; }
         public void AlterarQuantidade(int quantidade)
         {
-            if(Quantidade > 0)
-            {
-                Quantidade = quantidade;
-                AtualizarPreco(PrecoInicial);
-            }
+            Quantidade = quantidade;
+            AtualizarPreco(PrecoInicial);
         }
         public void AtualizarPreco(decimal valor)
         {
-            if(Quantidade > 0)
-                PrecoInicial = valor * Quantidade;
+            PrecoInicial = valor * Quantidade;
         }
     }
 }

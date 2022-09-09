@@ -8,9 +8,9 @@ using NailsSys.Application.Commands.UsuarioCommands.InserirUsuario;
 
 namespace NailsSys.Application.Validations
 {
-    public class InserirUsuarioValidation:AbstractValidator<InserirUsuarioCommand>
+    public class InserirUsuarioCommandValidation:AbstractValidator<InserirUsuarioCommand>
     {
-        public InserirUsuarioValidation()
+        public InserirUsuarioCommandValidation()
         {
             RuleFor(u => u.NomeCompleto)
                 .NotNull()
