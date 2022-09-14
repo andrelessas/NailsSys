@@ -43,7 +43,6 @@ namespace NailsSys.UnitsTests.Application.Commands
             //Act
             await inserirUsuarioCommandHandler.Handle(_inserirUsuarioCommand, new CancellationToken());
             //Assert   
-            Assert.True(_validationResult.IsValid);
             _usuarioRepositoryMock.Verify(x => x.InserirAsync(It.IsAny<Usuario>()), Times.Once);
         }
     }

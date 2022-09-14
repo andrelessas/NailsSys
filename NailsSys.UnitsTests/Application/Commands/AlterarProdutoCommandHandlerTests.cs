@@ -5,8 +5,11 @@ using System.Threading.Tasks;
 using Bogus;
 using Moq;
 using NailsSys.Application.Commands.ProdutoCommands.AlterarProduto;
+using NailsSys.Application.Commands.ProdutoCommands.InserirProduto;
+using NailsSys.Application.Validations;
 using NailsSys.Core.Entities;
 using NailsSys.Core.Interfaces;
+using NailsSys.Core.Notificacoes;
 using Xunit;
 
 namespace NailsSys.UnitsTests.Application.Commands
@@ -15,6 +18,7 @@ namespace NailsSys.UnitsTests.Application.Commands
     {
         private readonly Mock<IProdutoRepository> _produtoRepository;
         private readonly AlterarProdutoCommand _produtoCommand;
+        private readonly AlterarProdutoCommandHandler _produtoCommandHandler;
 
         public AlterarProdutoCommandHandlerTests()
         {
@@ -24,14 +28,15 @@ namespace NailsSys.UnitsTests.Application.Commands
                 .RuleFor(p=> p.Descricao, f=> f.Commerce.ProductName())
                 .RuleFor(p=> p.Preco, f=> Convert.ToDecimal(f.Commerce.Price()))
                 .RuleFor(p=> p.TipoProduto, "S")
-                .Generate();                
+                .Generate(); 
+
+            _produtoCommandHandler = new AlterarProdutoCommandHandler(_produtoRepository.Object);              
         }
 
         [Fact]
-        public async void DadoProdutoValidos_AlterarCadastroDeProduto()
+        public async void DadoProdutoValido_AlterarCadastroDeProduto()
         {
             //Arrange
-            var produtoCommandHandler = new AlterarProdutoCommandHandler(_produtoRepository.Object);
             var produto = new Produto(
                 new Faker().Commerce.ProductName(),
                 "S",
@@ -39,10 +44,29 @@ namespace NailsSys.UnitsTests.Application.Commands
             );
             _produtoRepository.Setup(x => x.ObterPorIDAsync(It.IsAny<int>())).ReturnsAsync(produto);
             //Act
-            await produtoCommandHandler.Handle(_produtoCommand,new CancellationToken());
+            await _produtoCommandHandler.Handle(_produtoCommand,new CancellationToken());
             //Assert
             _produtoRepository.Verify(x => x.ObterPorIDAsync(It.IsAny<int>()),Times.Once);
             _produtoRepository.Verify(x => x.SaveChangesAsync(),Times.Once);
+        }
+
+        [Fact]
+        public void DadoProdutoNaoEncontrado_QuandoExecutado_RetornarExcecaoAsync()
+        {
+            //Arrange - Act - Assert
+            var excecao = Assert.ThrowsAsync<ExcecoesPersonalizadas>(() => _produtoCommandHandler.Handle(_produtoCommand,new CancellationToken())).Result;            
+            Assert.Equal("Produto não encontrado.",excecao.Message);
+        }
+
+        [Fact]
+        public void DadoProdutoComEntradaInvalida_QuandoExecutado_RetornarExcecoesFluentValidations()
+        {
+            //Arrange            
+            var produtoValidation = new AlterarProdutoCommandValidation();
+            //Act
+            var result = produtoValidation.Validate(new AlterarProdutoCommand());
+            //Assert
+            Assert.False(result.IsValid);                  
         }
     }
 }
