@@ -1,16 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Bogus;
 using Moq;
 using NailsSys.Application.Commands.UsuarioCommands.LoginUsuarioCommand;
+using NailsSys.Application.Validations;
 using NailsSys.Core.Entities;
 using NailsSys.Core.Interfaces;
 using NailsSys.Core.Services;
 using Xunit;
 
-namespace NailsSys.UnitsTests.Application.Commands
+namespace NailsSys.UnitsTests.Application.CommandHandler
 {
     public class LoginUsuarioCommandHandlerTest
     {
@@ -19,6 +16,7 @@ namespace NailsSys.UnitsTests.Application.Commands
         private LoginUsuarioCommand _usuarioLoginCommand;
         private Usuario _usuario;
         private LoginUsuarioCommandHandler _loginUsuarioCommandHandler;
+        private readonly LoginUsuarioCommandValidation _loginValidate;
 
         public LoginUsuarioCommandHandlerTest()
         {
@@ -33,6 +31,8 @@ namespace NailsSys.UnitsTests.Application.Commands
             _usuario = new Usuario("",new Faker().Name.FirstName(),"","");                
 
             _loginUsuarioCommandHandler = new LoginUsuarioCommandHandler(_usuarioRepository.Object,_autenticacaoService.Object);
+
+            _loginValidate = new LoginUsuarioCommandValidation();
         }
         [Fact]
         public async Task DadosLoginValidos_ExecutaLogin_RetornarObjeto()
@@ -62,6 +62,50 @@ namespace NailsSys.UnitsTests.Application.Commands
             //Assert
             Assert.Null(usuarioViewModel);
             _usuarioRepository.Verify(x => x.ObterUsuarioPorIdLoginSenha(It.IsAny<int>(),It.IsAny<string>(),It.IsAny<string>()),Times.Once);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-1)]
+        public void ValidarIdUsuarioInvalido_RetornarExcecaoFluentValidation(int id)
+        {
+            //Arrange
+            var login = new LoginUsuarioCommand{Id = id};
+            //Act
+            var result = _loginValidate.Validate(login);            
+            //Assert
+            Assert.False(result.IsValid);
+            var erros = result.Errors.Select(x=> x.ErrorMessage).ToList();
+            Assert.True(erros.Contains("Necessário informar o Id ou Login do usuário para acessar o sistema.") == true);
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData("dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd")]
+        public void ValidarLoginUsuarioInvalido_RetornarExcecaoFluentValidation(string login)
+        {
+            //Arrange
+            var loginUsuario = new LoginUsuarioCommand{Usuario = login};            
+            //Act
+            var result = _loginValidate.Validate(loginUsuario);            
+            //Assert
+            Assert.False(result.IsValid);
+            var erros = result.Errors.Select(x=> x.ErrorMessage).ToList();
+            Assert.True(erros.Contains("Necessário informar o Id ou Login do usuário para acessar o sistema.") == true);
+        }
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        public void ValidarSenhaUsuarioInvalido_RetornarExcecaoFluentValidation(string senha)
+        {
+            //Arrange
+            var login = new LoginUsuarioCommand{Senha = senha};
+            //Act
+            var result = _loginValidate.Validate(login);            
+            //Assert
+            Assert.False(result.IsValid);
+            var erros = result.Errors.Select(x=> x.ErrorMessage).ToList();
+            Assert.True(erros.Contains("Necessário informar a senha de acesso ao sistema.") == true);
         }
     }
 }
