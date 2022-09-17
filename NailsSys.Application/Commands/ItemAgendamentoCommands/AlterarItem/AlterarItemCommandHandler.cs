@@ -1,9 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using MediatR;
 using NailsSys.Core.Interfaces;
+using NailsSys.Core.Notificacoes;
 
 namespace NailsSys.Application.Commands.ItemAgendamentoCommands.AlterarItem
 {
@@ -18,6 +15,10 @@ namespace NailsSys.Application.Commands.ItemAgendamentoCommands.AlterarItem
         public async Task<Unit> Handle(AlterarItemCommand request, CancellationToken cancellationToken)
         {
             var item = await _itemAgendamentoRepository.ObterPorIDAsync(request.Id);
+
+            if(item == null)
+                throw new ExcecoesPersonalizadas("Item não encontrado.");
+
             item.AlterarQuantidade(request.Quantidade);
             await _itemAgendamentoRepository.SaveChangesAsync();
             return Unit.Value;

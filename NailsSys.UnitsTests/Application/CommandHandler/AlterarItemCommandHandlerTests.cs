@@ -1,12 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Bogus;
 using Moq;
 using NailsSys.Application.Commands.ItemAgendamentoCommands.AlterarItem;
 using NailsSys.Application.Validations;
-using NailsSys.Core.DTOs;
 using NailsSys.Core.Entities;
 using NailsSys.Core.Interfaces;
 using NailsSys.Core.Notificacoes;

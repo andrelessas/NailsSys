@@ -21,9 +21,10 @@ namespace NailsSys.Application.Validations
             
             RuleFor(x=>x.TipoProduto)
                 .NotEmpty()
+                .WithMessage("Necessário informar o tipo do produto.")
                 .NotNull()
+                .WithMessage("Necessário informar o tipo do produto.")
                 .Must(ValidarTipoProduto)
-                .MaximumLength(1)
                 .WithMessage("Necessário informar o tipo do produto, se é S - Serviço ou P - Produto.");
 
             RuleFor(x=>x.Preco)
