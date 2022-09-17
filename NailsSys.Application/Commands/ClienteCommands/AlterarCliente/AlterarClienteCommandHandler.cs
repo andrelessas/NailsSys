@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using NailsSys.Core.Interfaces;
+using NailsSys.Core.Notificacoes;
 
 namespace NailsSys.Application.Commands.ClienteCommands.AlterarCliente
 {
@@ -18,6 +19,10 @@ namespace NailsSys.Application.Commands.ClienteCommands.AlterarCliente
         public async Task<Unit> Handle(AlterarClienteCommand request, CancellationToken cancellationToken)
         {
             var cliente = await _clienteRepository.ObterPorIDAsync(request.Id);
+
+            if(cliente == null)
+                throw new ExcecoesPersonalizadas("Nenhum cliente encontrado.");
+
             cliente.AlterarCliente(request.NomeCliente,request.Telefone);
             await _clienteRepository.SaveChangesAsync();
             return Unit.Value;

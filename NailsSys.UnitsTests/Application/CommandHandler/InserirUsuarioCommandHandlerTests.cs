@@ -61,8 +61,8 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             // Assert
             Assert.False(result.IsValid);
             var erros = result.Errors.Select(e => e.ErrorMessage).ToList();
-            Assert.True(erros.Contains("Necessário informar o nome completo.") == true ||
-                        erros.Contains("O nome do usuário deve conter no mínimo 5 caracteres e no máximo 70 caracteres.") == true);
+            Assert.True(erros.Contains("Necessário informar o nome completo.") ||
+                        erros.Contains("O nome do usuário deve conter no mínimo 5 caracteres e no máximo 70 caracteres."));
         }
 
         [Theory]
@@ -80,8 +80,8 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             // Assert
             Assert.False(result.IsValid);
             var erros = result.Errors.Select(e => e.ErrorMessage).ToList();
-            Assert.True(erros.Contains("Necessário informar o login do usuário.") == true ||
-                        erros.Contains("O login do usuário deve conter no mínimo 5 caracteres e no máximo 15 caracteres.") == true);
+            Assert.True(erros.Contains("Necessário informar o login do usuário.") ||
+                        erros.Contains("O login do usuário deve conter no mínimo 5 caracteres e no máximo 15 caracteres."));
         }
 
         [Theory]
@@ -99,8 +99,8 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             // Assert
             Assert.False(result.IsValid);
             var erros = result.Errors.Select(e => e.ErrorMessage).ToList();
-            Assert.True(erros.Contains("Necessário informar a senha do usuário.") == true ||
-                        erros.Contains("Senha deve conter pelo menos 8 caracteres, um número, uma letra maiúscula, uma minúscula, e um caractere especial") == true);
+            Assert.True(erros.Contains("Necessário informar a senha do usuário.") ||
+                        erros.Contains("Senha deve conter pelo menos 8 caracteres, um número, uma letra maiúscula, uma minúscula, e um caractere especial"));
         }
 
         [Theory]
@@ -116,8 +116,8 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             // Assert
             Assert.False(result.IsValid);
             var erros = result.Errors.Select(e => e.ErrorMessage).ToList();
-            Assert.True(erros.Contains("Necessário informar o cargo do usuário.") == true ||
-                        erros.Contains("Cargo do usuário inválido, o cargo deve ser Adminitrador, Gerente ou Atendente.") == true);
+            Assert.True(erros.Contains("Necessário informar o cargo do usuário.") ||
+                        erros.Contains("Cargo do usuário inválido, o cargo deve ser Adminitrador, Gerente ou Atendente."));
         }
     }
 }

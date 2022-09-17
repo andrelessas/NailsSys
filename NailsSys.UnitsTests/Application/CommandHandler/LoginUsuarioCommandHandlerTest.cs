@@ -76,7 +76,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             //Assert
             Assert.False(result.IsValid);
             var erros = result.Errors.Select(x=> x.ErrorMessage).ToList();
-            Assert.True(erros.Contains("Necessário informar o Id ou Login do usuário para acessar o sistema.") == true);
+            Assert.True(erros.Contains("Necessário informar o Id ou Login do usuário para acessar o sistema."));
         }
 
         [Theory]
@@ -91,7 +91,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             //Assert
             Assert.False(result.IsValid);
             var erros = result.Errors.Select(x=> x.ErrorMessage).ToList();
-            Assert.True(erros.Contains("Necessário informar o Id ou Login do usuário para acessar o sistema.") == true);
+            Assert.True(erros.Contains("Necessário informar o Id ou Login do usuário para acessar o sistema."));
         }
         [Theory]
         [InlineData(null)]
@@ -105,7 +105,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             //Assert
             Assert.False(result.IsValid);
             var erros = result.Errors.Select(x=> x.ErrorMessage).ToList();
-            Assert.True(erros.Contains("Necessário informar a senha de acesso ao sistema.") == true);
+            Assert.True(erros.Contains("Necessário informar a senha de acesso ao sistema."));
         }
     }
 }

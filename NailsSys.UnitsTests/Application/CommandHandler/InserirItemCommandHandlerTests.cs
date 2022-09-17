@@ -61,8 +61,8 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             //Assert
             Assert.False(result.IsValid);
             var erros = result.Errors.Select(e => e.ErrorMessage).ToList();
-            Assert.True(erros.Contains("Necessário informar o Id do Produto.") == true ||
-                        erros.Contains("Id Produto inválido, o Id Produto deve ser maior que 0.") == true);
+            Assert.True(erros.Contains("Necessário informar o Id do Produto.") ||
+                        erros.Contains("Id Produto inválido, o Id Produto deve ser maior que 0."));
         }
 
         [Theory]
@@ -78,8 +78,8 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             //Assert
             Assert.False(result.IsValid);
             var erros = result.Errors.Select(e => e.ErrorMessage).ToList();
-            Assert.True(erros.Contains("Necessário informar o Id do Agendamento.") == true ||
-                        erros.Contains("Id Agendamento inválido, o Id Agendamento deve ser maior que 0.") == true);
+            Assert.True(erros.Contains("Necessário informar o Id do Agendamento.") ||
+                        erros.Contains("Id Agendamento inválido, o Id Agendamento deve ser maior que 0."));
         }
 
         [Theory]
@@ -95,8 +95,8 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             //Assert
             Assert.False(result.IsValid);
             var erros = result.Errors.Select(e => e.ErrorMessage).ToList();
-            Assert.True(erros.Contains("Necessário informar a quantidade do produto.") == true ||
-                        erros.Contains("Quantidade inválida, a quantidade deve ser maior que 0.") == true);
+            Assert.True(erros.Contains("Necessário informar a quantidade do produto.") ||
+                        erros.Contains("Quantidade inválida, a quantidade deve ser maior que 0."));
         }
     }
 }

@@ -63,7 +63,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             //Assert
             Assert.False(result.IsValid);
             var erros = result.Errors.Select(e => e.ErrorMessage).ToList();
-            Assert.True(erros.Contains("Necessário informar o Id do produto que será descontinuado.") == true ||
+            Assert.True(erros.Contains("Necessário informar o Id do produto que será descontinuado.") ||
                         erros.Contains("O Id do produto deve ser maior que 0."));
         }
     }

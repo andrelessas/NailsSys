@@ -1,6 +1,7 @@
 using MediatR;
 using NailsSys.Core.Entities;
 using NailsSys.Core.Interfaces;
+using NailsSys.Core.Notificacoes;
 
 namespace NailsSys.Application.Commands.AgendamentoCommands.NovoAgendamento
 {
@@ -20,11 +21,14 @@ namespace NailsSys.Application.Commands.AgendamentoCommands.NovoAgendamento
         }
         public async Task<Unit> Handle(NovoAgendamentoCommand request, CancellationToken cancellationToken)
         {
-            _agendamentoRepository.InserirAsync(new Agendamento(request.idCliente,
+            _agendamentoRepository.InserirAsync(new Agendamento(request.IdCliente,
                                                                 request.DataAtendimento,
                                                                 request.InicioPrevisto,
                                                                 request.TerminoPrevisto));
             await _agendamentoRepository.SaveChangesAsync();
+
+            if(request.Itens == null || request.Itens.Count() == 0)
+                throw new ExcecoesPersonalizadas("Nenhum produto informado para realizar o agendamento.");
             
             var maxAgendamento = await _agendamentoRepository.ObterMaxAgendamento();
 
