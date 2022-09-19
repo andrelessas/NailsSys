@@ -6,10 +6,11 @@ using AutoMapper;
 using MediatR;
 using NailsSys.Application.ViewModels;
 using NailsSys.Core.Interfaces;
+using NailsSys.Core.Models;
 
 namespace NailsSys.Application.Queries.ClienteQueries.ObterClientes
 {
-    public class ObterClientesQueriesHandler : IRequestHandler<ObterClientesQueries,IEnumerable<ClienteViewModel>>
+    public class ObterClientesQueriesHandler : IRequestHandler<ObterClientesQueries,PaginationResult<ClienteViewModel>>
     {
         private readonly IClienteRepository _clienteRepository;
         private readonly IMapper _mapper;
@@ -20,9 +21,10 @@ namespace NailsSys.Application.Queries.ClienteQueries.ObterClientes
             _clienteRepository = clienteRepository;
             _mapper = mapper;
         }
-        public async Task<IEnumerable<ClienteViewModel>> Handle(ObterClientesQueries request, CancellationToken cancellationToken)
+        public async Task<PaginationResult<ClienteViewModel>> Handle(ObterClientesQueries request, CancellationToken cancellationToken)
         {
-            return _mapper.Map<IEnumerable<ClienteViewModel>>(await _clienteRepository.ObterTodosAsync());
+            var cliente = await _clienteRepository.ObterTodosAsync(request.Page);
+            return _mapper.Map<PaginationResult<ClienteViewModel>>(cliente);
         }
     }
 }

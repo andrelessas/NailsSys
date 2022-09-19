@@ -2,10 +2,11 @@ using AutoMapper;
 using MediatR;
 using NailsSys.Application.ViewModels;
 using NailsSys.Core.Interfaces;
+using NailsSys.Core.Models;
 
 namespace NailsSys.Application.Queries.UsuarioQueries.ObterUsuarios
 {
-    public class ObterUsuariosQueriesHandler : IRequestHandler<ObterUsuariosQueries, IEnumerable<UsuarioViewModel>>
+    public class ObterUsuariosQueriesHandler : IRequestHandler<ObterUsuariosQueries, PaginationResult<UsuarioViewModel>>
     {
         private readonly IUsuarioRepository _usuarioRepository;
         private readonly IMapper _mapper;
@@ -16,9 +17,9 @@ namespace NailsSys.Application.Queries.UsuarioQueries.ObterUsuarios
             _usuarioRepository = usuarioRepository;
             _mapper = mapper;
         }
-        public async Task<IEnumerable<UsuarioViewModel>> Handle(ObterUsuariosQueries request, CancellationToken cancellationToken)
+        public async Task<PaginationResult<UsuarioViewModel>> Handle(ObterUsuariosQueries request, CancellationToken cancellationToken)
         {
-            return _mapper.Map<IEnumerable<UsuarioViewModel>>(await _usuarioRepository.ObterTodosAsync());
+            return _mapper.Map<PaginationResult<UsuarioViewModel>>(await _usuarioRepository.ObterTodosAsync(request.Page));
         }
     }
 }

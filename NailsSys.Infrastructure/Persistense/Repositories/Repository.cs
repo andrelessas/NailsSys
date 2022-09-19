@@ -1,22 +1,25 @@
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using NailsSys.Core.Interfaces;
+using NailsSys.Core.Models;
 using NailsSys.Infrastructure.Context;
+using NailsSys.Infrastructure.Persistense.Extensions;
 
 namespace NailsSys.Data.Repository
 {
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
         protected readonly NailsSysContext _context;
+        private const int PAGE_SIZE = 10;
 
         public Repository(NailsSysContext context)
         {
             _context = context;
         }
 
-        public async Task<IEnumerable<TEntity>> ObterAsync(Expression<Func<TEntity, bool>> predicate)
+        public async Task<PaginationResult<TEntity>> ObterAsync(int page, Expression<Func<TEntity, bool>> predicate)
         {
-            return await _context.Set<TEntity>().AsNoTracking().Where(predicate).ToListAsync();
+            return await _context.Set<TEntity>().AsNoTracking().Where(predicate).GetPagination<TEntity>(page,PAGE_SIZE);
         }
 
         public async Task<TEntity> ObterPorIDAsync(int Id)
@@ -24,9 +27,9 @@ namespace NailsSys.Data.Repository
             return await _context.Set<TEntity>().FindAsync(Id);
         }
 
-        public async Task<IEnumerable<TEntity>> ObterTodosAsync()
+        public async Task<PaginationResult<TEntity>> ObterTodosAsync(int page)
         {
-            return await _context.Set<TEntity>().AsNoTracking().ToListAsync();
+            return await _context.Set<TEntity>().GetPagination<TEntity>(page, PAGE_SIZE);
         }
         public void AlterarAsync(TEntity entity)
         {
@@ -43,7 +46,7 @@ namespace NailsSys.Data.Repository
             _context.Set<TEntity>().Add(entity);
         }
 
-        public void Property(TEntity entity,Expression<Func<TEntity, object>> predicate, bool isModified)
+        public void Property(TEntity entity, Expression<Func<TEntity, object>> predicate, bool isModified)
         {
             _context.Entry(entity).Property(predicate).IsModified = isModified;
         }

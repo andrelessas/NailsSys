@@ -22,7 +22,8 @@ namespace NailsSys.Application.Queries.AgendamentoQueries.ObterAgendamentosHoje
         }
         public async Task<IEnumerable<AgendamentoViewModel>> Handle(ObterAgendamentosHojeQueries request, CancellationToken cancellationToken)
         {
-            return _mapper.Map<IEnumerable<Agendamento>,IEnumerable<AgendamentoViewModel>>(await _agendamentoRepository.ObterAgendamentosHojeAsync());
+            // return _mapper.Map<IEnumerable<Agendamento>,IEnumerable<AgendamentoViewModel>>(await _agendamentoRepository.ObterAgendamentosHojeAsync());
+            return _mapper.Map<IEnumerable<AgendamentoViewModel>>(await _agendamentoRepository.ObterAgendamentosHojeAsync());
         }
     }
 }

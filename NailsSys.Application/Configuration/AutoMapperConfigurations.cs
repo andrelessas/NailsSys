@@ -1,6 +1,7 @@
 using AutoMapper;
 using NailsSys.Application.ViewModels;
 using NailsSys.Core.Entities;
+using NailsSys.Core.Models;
 
 namespace NailsSys.Application.Configuration
 {
@@ -20,6 +21,22 @@ namespace NailsSys.Application.Configuration
 
             CreateMap<Cliente,ClienteViewModel>()
                 .ForMember(dest => dest.Id,conf => conf.MapFrom(src=>src.Id))
+                .ReverseMap();
+            
+            CreateMap<PaginationResult<Cliente>,PaginationResult<ClienteViewModel>>()
+                .ForMember(dest => dest.Data,conf => conf.MapFrom(src=>src.Data))
+                .ReverseMap();
+            
+            CreateMap<Produto,ProdutoViewModel>()
+                .ForMember(dest => dest.Id,conf => conf.MapFrom(src=>src.Id))
+                .ReverseMap();
+            
+            CreateMap<PaginationResult<Produto>,PaginationResult<ProdutoViewModel>>()
+                .ForMember(dest => dest.Data,conf => conf.MapFrom(src=>src.Data))
+                .ReverseMap();
+            
+            CreateMap<PaginationResult<Usuario>,PaginationResult<UsuarioViewModel>>()
+                .ForMember(dest => dest.Data,conf => conf.MapFrom(src=>src.Data))
                 .ReverseMap();
 
             CreateMap<Usuario,UsuarioViewModel>()

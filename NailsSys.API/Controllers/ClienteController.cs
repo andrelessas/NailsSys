@@ -18,9 +18,9 @@ namespace NailsSys.API.Controllers
         {}  
 
         [HttpGet]
-        public async Task<IActionResult> ObterClientes()
+        public async Task<IActionResult> ObterClientes(int page)
         {
-            var clientes = await _mediator.Send(new ObterClientesQueries());
+            var clientes = await _mediator.Send(new ObterClientesQueries(page));
             if (clientes == null)
                 return NotFound();
 
