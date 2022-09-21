@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoBogus;
 using Bogus;
 using Moq;
 using Moq.AutoMock;
@@ -33,12 +34,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
         public async Task InformadoIdAgendamentoValido_QuandoExecutado_CancelarAgendamentoAsync()
         {
             //Arrange
-            var agendamento = new Agendamento(
-                new Faker().Random.Int(0, 10),
-                new Faker().Date.Recent(),
-                new Faker().Date.Recent(),
-                new Faker().Date.Recent());
-
+            var agendamento = AutoFaker.Generate<Agendamento>();
             _mocker.GetMock<IAgendamentoRepository>().Setup(x=> x.ObterPorIDAsync(It.IsAny<int>())).ReturnsAsync(agendamento);
             //Act
             await _cancelarAgendamentoCommandHandler.Handle(_cancelarAgendamentoCommand, new CancellationToken());

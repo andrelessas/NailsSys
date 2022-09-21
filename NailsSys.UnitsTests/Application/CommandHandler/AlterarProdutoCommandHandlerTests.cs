@@ -1,3 +1,4 @@
+using AutoBogus;
 using Bogus;
 using Moq;
 using NailsSys.Application.Commands.ProdutoCommands.AlterarProduto;
@@ -34,11 +35,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
         public async void DadoProdutoValido_AlterarCadastroDeProduto()
         {
             //Arrange
-            var produto = new Produto(
-                new Faker().Commerce.ProductName(),
-                "S",
-                Convert.ToDecimal(new Faker().Commerce.Price())
-            );
+            var produto = AutoFaker.Generate<Produto>();
             _produtoRepository.Setup(x => x.ObterPorIDAsync(It.IsAny<int>())).ReturnsAsync(produto);
             //Act
             await _produtoCommandHandler.Handle(_produtoCommand,new CancellationToken());

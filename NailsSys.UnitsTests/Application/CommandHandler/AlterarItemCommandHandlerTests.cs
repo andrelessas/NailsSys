@@ -1,3 +1,4 @@
+using AutoBogus;
 using Bogus;
 using Moq;
 using NailsSys.Application.Commands.ItemAgendamentoCommands.AlterarItem;
@@ -32,12 +33,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
         public async void ItemValido_QuandoExceutado_AlterarItemDoAgendamento()
         {
             //Arrange
-            var itemAgendamento = new ItemAgendamento(
-                new Faker().Random.Int(),
-                new Faker().Random.Int(),
-                new Faker().Random.Int(),
-                new Faker().Random.Int());
-
+            var itemAgendamento = AutoFaker.Generate<ItemAgendamento>();
             _itemAgendamentoRepository.Setup(ir => ir.ObterPorIDAsync(It.IsAny<int>())).ReturnsAsync(itemAgendamento);
             //Act
             await _alterarItemCommandHandler.Handle(_alterarItemCommand, new CancellationToken());

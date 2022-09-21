@@ -18,9 +18,9 @@ namespace NailsSys.API.Controllers
         {}
 
         [HttpGet]
-        public async Task<IActionResult> ObterProdutos()
+        public async Task<IActionResult> ObterProdutos(int page)
         {
-            var query = new ObterProdutosQueries();
+            var query = new ObterProdutosQueries(page);
             var produtos = await _mediator.Send(query);
             if(produtos == null)
                 return NotFound();

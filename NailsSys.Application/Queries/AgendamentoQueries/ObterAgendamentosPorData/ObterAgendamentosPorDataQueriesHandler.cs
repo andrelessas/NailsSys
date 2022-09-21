@@ -2,6 +2,7 @@ using AutoMapper;
 using MediatR;
 using NailsSys.Application.ViewModels;
 using NailsSys.Core.Interfaces;
+using NailsSys.Core.Notificacoes;
 
 namespace NailsSys.Application.Queries.AgendamentoQueries.ObterAgendamentosPorData
 {
@@ -15,10 +16,15 @@ namespace NailsSys.Application.Queries.AgendamentoQueries.ObterAgendamentosPorDa
         {
             _agendamentoRepository = agendamentoRepository;
             _mapper = mapper;
-        }
+        }    
         public async Task<IEnumerable<AgendamentoViewModel>> Handle(ObterAgendamentosPorDataQueries request, CancellationToken cancellationToken)
         {
-            return _mapper.Map<IEnumerable<AgendamentoViewModel>>(await _agendamentoRepository.ObterAgendamentosPorDataAsync(request.Data));
+            var agendamentos = await _agendamentoRepository.ObterAgendamentosPorDataAsync(request.Data);
+
+            if(agendamentos.Count() == 0)
+                throw new ExcecoesPersonalizadas("Nenhum agendamento encontrado para a data informada.");
+
+            return _mapper.Map<IEnumerable<AgendamentoViewModel>>(agendamentos);
         }
     }
 }

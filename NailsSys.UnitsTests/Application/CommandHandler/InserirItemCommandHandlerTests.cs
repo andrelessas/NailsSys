@@ -1,3 +1,4 @@
+using AutoBogus;
 using Bogus;
 using Moq;
 using Moq.AutoMock;
@@ -34,11 +35,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
         public async Task ItemValido_QuandoExcecutado_InserirNovoItemNoAgendamentoAsync()
         {
             //Arrange
-            var produto = new Produto(
-                new Faker().Commerce.ProductDescription(),
-                "S",
-                new Faker().Random.Decimal());
-
+            var produto = AutoFaker.Generate<Produto>();
             _mocker.GetMock<IItemAgendamentoRepository>().Setup(it => it.ObterMaxItem(It.IsAny<int>())).ReturnsAsync(2);
             _mocker.GetMock<IProdutoRepository>().Setup(pr => pr.ObterPorIDAsync(It.IsAny<int>())).ReturnsAsync(produto);
             //Act

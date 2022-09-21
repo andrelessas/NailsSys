@@ -1,32 +1,25 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using AutoMapper;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using NailsSys.Application.ViewModels;
 using NailsSys.Core.Interfaces;
-using NailsSys.Infrastructure.Context;
+using NailsSys.Core.Models;
 
 namespace NailsSys.Application.Queries.ProdutoQueries.ObterProdutos
 {
-    public class ObterProdutosQueriesHandler : IRequestHandler<ObterProdutosQueries, IEnumerable<ProdutoViewModel>>
+    public class ObterProdutosQueriesHandler : IRequestHandler<ObterProdutosQueries, PaginationResult<ProdutoViewModel>>
     {
         private readonly IProdutoRepository _produtoRepository;
+        private readonly IMapper _mapper;
 
-        public ObterProdutosQueriesHandler(IProdutoRepository produtoRepository)
+        public ObterProdutosQueriesHandler(IProdutoRepository produtoRepository, IMapper mapper)
         {
             _produtoRepository = produtoRepository;
+            _mapper = mapper;
         }
-        public async Task<IEnumerable<ProdutoViewModel>> Handle(ObterProdutosQueries request, CancellationToken cancellationToken)
+        public async Task<PaginationResult<ProdutoViewModel>> Handle(ObterProdutosQueries request, CancellationToken cancellationToken)
         {
-            var produto = await _produtoRepository.ObterTodosAsync();
-            return produto.Select(p => new ProdutoViewModel(p.Id,
-                                                            p.Descricao,
-                                                            p.TipoProduto,
-                                                            p.Preco,
-                                                            p.Descontinuado))
-                          .ToList();
+            var produto = await _produtoRepository.ObterTodosAsync(request.Page);
+            return _mapper.Map<PaginationResult<ProdutoViewModel>>(produto);
         }
     }
 }

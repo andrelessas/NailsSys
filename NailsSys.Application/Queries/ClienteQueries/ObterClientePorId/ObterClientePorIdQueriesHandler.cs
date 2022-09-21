@@ -6,6 +6,7 @@ using AutoMapper;
 using MediatR;
 using NailsSys.Application.ViewModels;
 using NailsSys.Core.Interfaces;
+using NailsSys.Core.Notificacoes;
 
 namespace NailsSys.Application.Queries.ClienteQueries.ObterClientePorId
 {
@@ -22,7 +23,12 @@ namespace NailsSys.Application.Queries.ClienteQueries.ObterClientePorId
         }
         public async Task<ClienteViewModel> Handle(ObterClientePorIdQueries request, CancellationToken cancellationToken)
         {
-            return _mapper.Map<ClienteViewModel>(await _clienteRepository.ObterPorIDAsync(request.Id));
+            var cliente = await _clienteRepository.ObterPorIDAsync(request.Id);
+
+            if(cliente == null)
+                throw new ExcecoesPersonalizadas("Nenhum cliente encontrado.");
+            
+            return _mapper.Map<ClienteViewModel>(cliente);
         }
     }
 }

@@ -18,10 +18,10 @@ namespace NailsSys.API.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Administrador, Gerente")]
-        public async Task<IActionResult> ObterAsync()
+        // [Authorize(Roles = "Administrador, Gerente")]
+        public async Task<IActionResult> ObterUsuariosAsync(int page)
         {
-            var usuarios = await _mediator.Send(new ObterUsuariosQueries());
+            var usuarios = await _mediator.Send(new ObterUsuariosQueries(page));
             if(usuarios == null)
                 return NotFound();
             return Ok(usuarios);
@@ -29,7 +29,7 @@ namespace NailsSys.API.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> InserirAsync(InserirUsuarioCommand request)
+        public async Task<IActionResult> CadastrarUsuarioAsync(InserirUsuarioCommand request)
         {
             await _mediator.Send(request);
             return Ok();
@@ -37,7 +37,7 @@ namespace NailsSys.API.Controllers
 
         [HttpPut("login")]
         [AllowAnonymous]
-        public async Task<IActionResult> InserirAsync(LoginUsuarioCommand request)
+        public async Task<IActionResult> RealizarLoginAsync(LoginUsuarioCommand request)
         {
             var token = await _mediator.Send(request);
             if(token == null)
