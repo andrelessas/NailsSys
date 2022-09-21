@@ -7,6 +7,7 @@ using MediatR;
 using NailsSys.Application.ViewModels;
 using NailsSys.Core.Interfaces;
 using NailsSys.Core.Models;
+using NailsSys.Core.Notificacoes;
 
 namespace NailsSys.Application.Queries.ClienteQueries.ObterClientes
 {
@@ -24,6 +25,10 @@ namespace NailsSys.Application.Queries.ClienteQueries.ObterClientes
         public async Task<PaginationResult<ClienteViewModel>> Handle(ObterClientesQueries request, CancellationToken cancellationToken)
         {
             var cliente = await _clienteRepository.ObterTodosAsync(request.Page);
+
+            if(cliente == null || cliente.Data.Count() == 0)
+                throw new ExcecoesPersonalizadas("Nenhum cliente encontrado.");
+
             return _mapper.Map<PaginationResult<ClienteViewModel>>(cliente);
         }
     }

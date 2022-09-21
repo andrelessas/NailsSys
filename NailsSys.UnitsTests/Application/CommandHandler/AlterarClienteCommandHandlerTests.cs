@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoBogus;
 using Bogus;
 using Moq;
 using Moq.AutoMock;
@@ -27,9 +28,9 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             _mocker = new AutoMocker();
             _alterarClienteCommandHandler = _mocker.CreateInstance<AlterarClienteCommandHandler>();
             _alterarClienteCommand = new Faker<AlterarClienteCommand>()
-                .RuleFor(x=> x.Id,y=>y.Random.Int(0,10))
-                .RuleFor(x=> x.NomeCliente,y=>y.Person.FullName)
-                .RuleFor(x=> x.Telefone,y=>y.Phone.PhoneNumber())
+                .RuleFor(x => x.Id, y => y.Random.Int(0, 10))
+                .RuleFor(x => x.NomeCliente, y => y.Person.FullName)
+                .RuleFor(x => x.Telefone, y => y.Phone.PhoneNumber())
                 .Generate();
 
             _alterarClienteCommandHandlerValidation = new AlterarClienteCommandValidation();
@@ -39,23 +40,21 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
         public async Task DadosClienteValido_QuandoExecutado_AlteraCadastroClienteAsync()
         {
             //Arrange
-            var cliente = new Cliente(
-                new Faker().Name.FullName(),
-                new Faker().Phone.PhoneNumber());
+            var cliente = AutoFaker.Generate<Cliente>();
 
-            _mocker.GetMock<IClienteRepository>().Setup(x=>x.ObterPorIDAsync(It.IsAny<int>())).ReturnsAsync(cliente);
+            _mocker.GetMock<IClienteRepository>().Setup(x => x.ObterPorIDAsync(It.IsAny<int>())).ReturnsAsync(cliente);
             //Act
-            await _alterarClienteCommandHandler.Handle(_alterarClienteCommand,new CancellationToken());
+            await _alterarClienteCommandHandler.Handle(_alterarClienteCommand, new CancellationToken());
             //Assert
-            _mocker.GetMock<IClienteRepository>().Verify(x=>x.SaveChangesAsync(),Times.Once);
+            _mocker.GetMock<IClienteRepository>().Verify(x => x.SaveChangesAsync(), Times.Once);
         }
 
         [Fact]
         public void MudarNomedoMetodo()
         {
             //Arrange - Act - Assert
-            var result = Assert.ThrowsAsync<ExcecoesPersonalizadas>(() => _alterarClienteCommandHandler.Handle(_alterarClienteCommand,new CancellationToken()));
-            Assert.Equal("Nenhum cliente encontrado.",result.Result.Message);
+            var result = Assert.ThrowsAsync<ExcecoesPersonalizadas>(() => _alterarClienteCommandHandler.Handle(_alterarClienteCommand, new CancellationToken()));
+            Assert.Equal("Nenhum cliente encontrado.", result.Result.Message);
             Assert.NotNull(result.Result);
         }
 
@@ -66,12 +65,12 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
         public void NomeClienteInvalido_RetornarExcecoesFluentValidation(string nomeCliente)
         {
             //Arrange
-            var alterarClienteCommand = new AlterarClienteCommand{NomeCliente = nomeCliente};
+            var alterarClienteCommand = new AlterarClienteCommand { NomeCliente = nomeCliente };
             //Act
             var result = _alterarClienteCommandHandlerValidation.Validate(alterarClienteCommand);
             //Assert
             Assert.False(result.IsValid);
-            var erros = result.Errors.Select(x=>x.ErrorMessage).ToList();
+            var erros = result.Errors.Select(x => x.ErrorMessage).ToList();
             Assert.True(erros.Contains("Necessário informar o nome do cliente.") ||
                         erros.Contains("O nome do cliente deve ter no máximo 50 caracteres"));
 
@@ -86,12 +85,12 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
         public void TelefoneInvalido_RetornarExcecoesFluentValidation(string telefone)
         {
             //Arrange
-            var alterarClienteCommand = new AlterarClienteCommand{Telefone = telefone};
+            var alterarClienteCommand = new AlterarClienteCommand { Telefone = telefone };
             //Act
             var result = _alterarClienteCommandHandlerValidation.Validate(alterarClienteCommand);
             //Assert
             Assert.False(result.IsValid);
-            var erros = result.Errors.Select(x=>x.ErrorMessage).ToList();
+            var erros = result.Errors.Select(x => x.ErrorMessage).ToList();
             Assert.True(erros.Contains("Informe um telefone válido."));
         }
     }

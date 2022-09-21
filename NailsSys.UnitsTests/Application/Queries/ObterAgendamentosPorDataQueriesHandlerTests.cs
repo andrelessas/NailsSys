@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Bogus;
 using Moq;
-using NailsSys.Application.Queries.AgendamentoQueries.ObterAgendamentosHoje;
+using NailsSys.Application.Queries.AgendamentoQueries.ObterAgendamentosPorData;
 using NailsSys.Application.ViewModels;
 using NailsSys.Core.Entities;
 using NailsSys.Core.Interfaces;
@@ -13,19 +9,18 @@ using Xunit;
 
 namespace NailsSys.UnitsTests.Application.Queries
 {
-    public class ObterAgendamentosHojeQueriesHandlerTests : Configurations
+    public class ObterAgendamentosPorDataQueriesHandlerTests:Configurations
     {
         private readonly Mock<IAgendamentoRepository> _agendamentosRepository;
-        private readonly ObterAgendamentosHojeQueriesHandler _obterAgendamentosHojeQueriesHandler;
+        private readonly ObterAgendamentosPorDataQueriesHandler _obterAgendamentosPorDataQueriesHandler;
 
-        public ObterAgendamentosHojeQueriesHandlerTests()
+        public ObterAgendamentosPorDataQueriesHandlerTests()
         {
             _agendamentosRepository = new Mock<IAgendamentoRepository>();
-            _obterAgendamentosHojeQueriesHandler = new ObterAgendamentosHojeQueriesHandler(_agendamentosRepository.Object, IMapper);
+            _obterAgendamentosPorDataQueriesHandler = new ObterAgendamentosPorDataQueriesHandler(_agendamentosRepository.Object, IMapper);
         }
-
         [Fact]
-        public async Task ObtergendamentosHoje_QuandoExecutado_RetornarListagemsDeAgendamentosAsync()
+        public async Task ObtergendamentosPorData_QuandoExecutado_RetornarListagemsDeAgendamentosAsync()
         {
             //Arrange            
             var listaDeAgendamentos = new List<Agendamento>();
@@ -39,10 +34,10 @@ namespace NailsSys.UnitsTests.Application.Queries
                         new Faker().Date.Recent().AddHours(2))   
                 );
             }
-            _agendamentosRepository.Setup(x => x.ObterAgendamentosHojeAsync()).ReturnsAsync(listaDeAgendamentos);
+            _agendamentosRepository.Setup(x => x.ObterAgendamentosPorDataAsync(It.IsAny<DateTime>())).ReturnsAsync(listaDeAgendamentos);
 
             //Act
-            var result = await _obterAgendamentosHojeQueriesHandler.Handle(new ObterAgendamentosHojeQueries(), new CancellationToken());
+            var result = await _obterAgendamentosPorDataQueriesHandler.Handle(new ObterAgendamentosPorDataQueries(DateTime.Now), new CancellationToken());
             //Assert
             Assert.NotNull(result);
             Assert.Equal(listaDeAgendamentos.Count(),result.Count());
@@ -58,9 +53,9 @@ namespace NailsSys.UnitsTests.Application.Queries
         public void AgendamentoInvalido_QuandoExecutado_RetornarExcecao()
         {
             //Arrange - Act - Assert
-            var excecao = Assert.ThrowsAsync<ExcecoesPersonalizadas>(() => _obterAgendamentosHojeQueriesHandler.Handle(new ObterAgendamentosHojeQueries(), new CancellationToken()));
+            var excecao = Assert.ThrowsAsync<ExcecoesPersonalizadas>(() => _obterAgendamentosPorDataQueriesHandler.Handle(new ObterAgendamentosPorDataQueries(DateTime.Now), new CancellationToken()));
             Assert.NotNull(excecao.Result);
-            Assert.Equal("Nenhum agendamento encontrado para hoje.",excecao.Result.Message);
+            Assert.Equal("Nenhum agendamento encontrado para a data informada.",excecao.Result.Message);
         }
     }
 }

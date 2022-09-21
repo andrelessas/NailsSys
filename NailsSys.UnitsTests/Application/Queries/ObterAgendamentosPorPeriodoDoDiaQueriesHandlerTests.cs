@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Bogus;
 using Moq;
-using NailsSys.Application.Queries.AgendamentoQueries.ObterAgendamentosHoje;
+using NailsSys.Application.Queries.AgendamentoQueries.ObterAgendamentosPorPeriodoDoDia;
 using NailsSys.Application.ViewModels;
 using NailsSys.Core.Entities;
 using NailsSys.Core.Interfaces;
@@ -13,19 +9,19 @@ using Xunit;
 
 namespace NailsSys.UnitsTests.Application.Queries
 {
-    public class ObterAgendamentosHojeQueriesHandlerTests : Configurations
+    public class ObterAgendamentosPorPeriodoDoDiaQueriesHandlerTests:Configurations
     {
-        private readonly Mock<IAgendamentoRepository> _agendamentosRepository;
-        private readonly ObterAgendamentosHojeQueriesHandler _obterAgendamentosHojeQueriesHandler;
+        private readonly Mock<IAgendamentoRepository> _agendamentoRepository;
+        private readonly ObterAgendamentosPorPeriodoDoDiaQueriesHandler _obterAgendamentoPorPeriodoQueriesHandler;
 
-        public ObterAgendamentosHojeQueriesHandlerTests()
+        public ObterAgendamentosPorPeriodoDoDiaQueriesHandlerTests()
         {
-            _agendamentosRepository = new Mock<IAgendamentoRepository>();
-            _obterAgendamentosHojeQueriesHandler = new ObterAgendamentosHojeQueriesHandler(_agendamentosRepository.Object, IMapper);
-        }
+            _agendamentoRepository = new Mock<IAgendamentoRepository>();
+            _obterAgendamentoPorPeriodoQueriesHandler = new ObterAgendamentosPorPeriodoDoDiaQueriesHandler(_agendamentoRepository.Object,IMapper);
+        }    
 
         [Fact]
-        public async Task ObtergendamentosHoje_QuandoExecutado_RetornarListagemsDeAgendamentosAsync()
+        public async Task ObtergendamentosPorPeriodo_QuandoExecutado_RetornarListagemsDeAgendamentosAsync()
         {
             //Arrange            
             var listaDeAgendamentos = new List<Agendamento>();
@@ -39,10 +35,10 @@ namespace NailsSys.UnitsTests.Application.Queries
                         new Faker().Date.Recent().AddHours(2))   
                 );
             }
-            _agendamentosRepository.Setup(x => x.ObterAgendamentosHojeAsync()).ReturnsAsync(listaDeAgendamentos);
+            _agendamentoRepository.Setup(x => x.ObterAgendamentosPorPeriodoDoDiaAsync(It.IsAny<DateTime>(),It.IsAny<DateTime>())).ReturnsAsync(listaDeAgendamentos);
 
             //Act
-            var result = await _obterAgendamentosHojeQueriesHandler.Handle(new ObterAgendamentosHojeQueries(), new CancellationToken());
+            var result = await _obterAgendamentoPorPeriodoQueriesHandler.Handle(new ObterAgendamentosPorPeriodoDoDiaQueries(DateTime.Now,DateTime.Now.AddHours(5)), new CancellationToken());
             //Assert
             Assert.NotNull(result);
             Assert.Equal(listaDeAgendamentos.Count(),result.Count());
@@ -51,16 +47,17 @@ namespace NailsSys.UnitsTests.Application.Queries
                 Assert.Contains<AgendamentoViewModel>(result,x=> x.DataAtendimento == agendamento.DataAtendimento);  
                 Assert.Contains<AgendamentoViewModel>(result,x=> x.InicioPrevisto == agendamento.InicioPrevisto);  
                 Assert.Contains<AgendamentoViewModel>(result,x=> x.TerminoPrevisto == agendamento.TerminoPrevisto);  
-            }
+            }            
         }
 
         [Fact]
         public void AgendamentoInvalido_QuandoExecutado_RetornarExcecao()
         {
             //Arrange - Act - Assert
-            var excecao = Assert.ThrowsAsync<ExcecoesPersonalizadas>(() => _obterAgendamentosHojeQueriesHandler.Handle(new ObterAgendamentosHojeQueries(), new CancellationToken()));
+            var excecao = Assert.ThrowsAsync<ExcecoesPersonalizadas>(() => _obterAgendamentoPorPeriodoQueriesHandler.Handle(new ObterAgendamentosPorPeriodoDoDiaQueries(DateTime.Now,DateTime.Now.AddHours(5)), new CancellationToken()));
             Assert.NotNull(excecao.Result);
-            Assert.Equal("Nenhum agendamento encontrado para hoje.",excecao.Result.Message);
+            Assert.Equal("Nenhum agendamento encontrado dentro do período informado.",excecao.Result.Message);
         }
+
     }
 }

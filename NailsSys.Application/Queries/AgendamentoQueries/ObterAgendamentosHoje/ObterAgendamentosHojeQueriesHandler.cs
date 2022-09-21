@@ -7,6 +7,7 @@ using MediatR;
 using NailsSys.Application.ViewModels;
 using NailsSys.Core.Entities;
 using NailsSys.Core.Interfaces;
+using NailsSys.Core.Notificacoes;
 
 namespace NailsSys.Application.Queries.AgendamentoQueries.ObterAgendamentosHoje
 {
@@ -22,8 +23,12 @@ namespace NailsSys.Application.Queries.AgendamentoQueries.ObterAgendamentosHoje
         }
         public async Task<IEnumerable<AgendamentoViewModel>> Handle(ObterAgendamentosHojeQueries request, CancellationToken cancellationToken)
         {
-            // return _mapper.Map<IEnumerable<Agendamento>,IEnumerable<AgendamentoViewModel>>(await _agendamentoRepository.ObterAgendamentosHojeAsync());
-            return _mapper.Map<IEnumerable<AgendamentoViewModel>>(await _agendamentoRepository.ObterAgendamentosHojeAsync());
+            var agendamentos = await _agendamentoRepository.ObterAgendamentosHojeAsync();
+
+            if(agendamentos.Count() == 0)
+                throw new ExcecoesPersonalizadas("Nenhum agendamento encontrado para hoje.");
+
+            return _mapper.Map<IEnumerable<AgendamentoViewModel>>(agendamentos);
         }
     }
 }
