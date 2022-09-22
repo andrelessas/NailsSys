@@ -11,11 +11,12 @@ using NailsSys.Application.Validations;
 using NailsSys.Core.Entities;
 using NailsSys.Core.Interfaces;
 using NailsSys.Core.Notificacoes;
+using NailsSys.UnitsTests.Application.Configurations;
 using Xunit;
 
 namespace NailsSys.UnitsTests.Application.CommandHandler
 {
-    public class CancelarAgendamentoCommandHandlerTests
+    public class CancelarAgendamentoCommandHandlerTests:TestsConfigurations
     {
         private readonly AutoMocker _mocker;
         private readonly CancelarAgendamentoCommandHandler _cancelarAgendamentoCommandHandler;
@@ -61,7 +62,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             var result = _cancelarAgendamentoCommandValidation.Validate(cancelarAgendamentoCommand);
             //Assert
             Assert.False(result.IsValid);
-            var erros = result.Errors.Select(x => x.ErrorMessage).ToList();
+            var erros = ObterListagemErro(result);
             Assert.True(erros.Contains("Para cancelar o agendamento, é necessário informar o Id do Agendamento."));
         }
 

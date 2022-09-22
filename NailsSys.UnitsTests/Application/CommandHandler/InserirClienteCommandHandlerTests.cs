@@ -4,11 +4,12 @@ using NailsSys.Application.Commands.ClienteCommands.InserirCliente;
 using NailsSys.Application.Validations;
 using NailsSys.Core.Entities;
 using NailsSys.Core.Interfaces;
+using NailsSys.UnitsTests.Application.Configurations;
 using Xunit;
 
 namespace NailsSys.UnitsTests.Application.CommandHandler
 {
-    public class InserirClienteCommandHandlerTests
+    public class InserirClienteCommandHandlerTests:TestsConfigurations
     {
         private readonly AutoMocker _mocker;
         private readonly InserirClienteCommandHandler _inserirClienteCommandHandler;
@@ -52,7 +53,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             var result = _inserirClienteCommandValidation.Validate(inserirClienteCommand);
             //Assert
             Assert.False(result.IsValid);
-            var erros = result.Errors.Select(x=>x.ErrorMessage).ToList();
+            var erros = ObterListagemErro(result);
             Assert.True(erros.Contains("Necessário informar o nome do cliente.") ||
                         erros.Contains("O nome do cliente deve ter no máximo 50 caracteres."));
 
@@ -72,7 +73,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             var result = _inserirClienteCommandValidation.Validate(inserirClienteCommand);
             //Assert
             Assert.False(result.IsValid);
-            var erros = result.Errors.Select(x=>x.ErrorMessage).ToList();
+            var erros = ObterListagemErro(result);
             Assert.True(erros.Contains("Informe um telefone válido."));
         }
     }

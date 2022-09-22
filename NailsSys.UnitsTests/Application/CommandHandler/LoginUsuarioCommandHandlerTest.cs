@@ -5,11 +5,12 @@ using NailsSys.Application.Validations;
 using NailsSys.Core.Entities;
 using NailsSys.Core.Interfaces;
 using NailsSys.Core.Services;
+using NailsSys.UnitsTests.Application.Configurations;
 using Xunit;
 
 namespace NailsSys.UnitsTests.Application.CommandHandler
 {
-    public class LoginUsuarioCommandHandlerTest
+    public class LoginUsuarioCommandHandlerTest:TestsConfigurations
     {
         private Mock<IUsuarioRepository> _usuarioRepository;
         private Mock<IAutenticacaoService> _autenticacaoService;
@@ -75,7 +76,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             var result = _loginValidate.Validate(login);            
             //Assert
             Assert.False(result.IsValid);
-            var erros = result.Errors.Select(x=> x.ErrorMessage).ToList();
+            var erros = ObterListagemErro(result);
             Assert.True(erros.Contains("Necessário informar o Id ou Login do usuário para acessar o sistema."));
         }
 
@@ -90,7 +91,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             var result = _loginValidate.Validate(loginUsuario);            
             //Assert
             Assert.False(result.IsValid);
-            var erros = result.Errors.Select(x=> x.ErrorMessage).ToList();
+            var erros = ObterListagemErro(result);
             Assert.True(erros.Contains("Necessário informar o Id ou Login do usuário para acessar o sistema."));
         }
         [Theory]
@@ -104,7 +105,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             var result = _loginValidate.Validate(login);            
             //Assert
             Assert.False(result.IsValid);
-            var erros = result.Errors.Select(x=> x.ErrorMessage).ToList();
+            var erros = ObterListagemErro(result);
             Assert.True(erros.Contains("Necessário informar a senha de acesso ao sistema."));
         }
     }

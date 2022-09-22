@@ -6,11 +6,12 @@ using NailsSys.Application.Validations;
 using NailsSys.Core.Entities;
 using NailsSys.Core.Interfaces;
 using NailsSys.Core.Notificacoes;
+using NailsSys.UnitsTests.Application.Configurations;
 using Xunit;
 
 namespace NailsSys.UnitsTests.Application.CommandHandler
 {
-    public class AlterarProdutoCommandHandlerTests
+    public class AlterarProdutoCommandHandlerTests:TestsConfigurations
     {
         private readonly Mock<IProdutoRepository> _produtoRepository;
         private readonly AlterarProdutoCommand _produtoCommand;
@@ -63,7 +64,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             var result = _alterarProdutoValidation.Validate(produtoCommand);
             //Assert
             Assert.False(result.IsValid);
-            var erros = result.Errors.Select(m => m.ErrorMessage).ToList();
+            var erros = ObterListagemErro(result);
             Assert.True(erros.Contains("Informe o nome do produto.") || 
                         erros.Contains("Descrição do produto deve ter no máximo 50 caracteres."));        
         }
@@ -79,7 +80,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             var result = _alterarProdutoValidation.Validate(produtoCommand);
             //Assert
             Assert.False(result.IsValid);
-            var erros = result.Errors.Select(m => m.ErrorMessage).ToList();
+            var erros = ObterListagemErro(result);
             Assert.True(erros.Contains("Necessário informar o tipo do produto, se é S - Serviço ou P - Produto.") ||
                         erros.Contains("Necessário informar o tipo do produto."));        
         }
@@ -94,7 +95,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             var result = _alterarProdutoValidation.Validate(produtoCommand);
             //Assert
             Assert.False(result.IsValid);
-            var erros = result.Errors.Select(m => m.ErrorMessage).ToList();
+            var erros = ObterListagemErro(result);
             Assert.True(erros.Contains("Informe o preço de venda do produto."));        
         }
     }

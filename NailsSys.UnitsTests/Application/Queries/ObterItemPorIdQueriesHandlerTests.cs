@@ -5,11 +5,12 @@ using NailsSys.Core.DTOs;
 using NailsSys.Core.Entities;
 using NailsSys.Core.Interfaces;
 using NailsSys.Core.Notificacoes;
+using NailsSys.UnitsTests.Application.Configurations;
 using Xunit;
 
 namespace NailsSys.UnitsTests.Application.Queries
 {
-    public class ObterItemPorIdQueriesHandlerTests:Configurations
+    public class ObterItemPorIdQueriesHandlerTests:TestsConfigurations
     {
         private readonly Mock<IItemAgendamentoRepository> _itemAgendamentoRepository;
         private readonly ObterItemPorIdQueriesHandler _obterItemPorIdQueriesHandler;

@@ -10,11 +10,12 @@ using NailsSys.Application.Validations;
 using NailsSys.Core.Entities;
 using NailsSys.Core.Interfaces;
 using NailsSys.Core.Notificacoes;
+using NailsSys.UnitsTests.Application.Configurations;
 using Xunit;
 
 namespace NailsSys.UnitsTests.Application.CommandHandler
 {
-    public class AlterarAgendamentoCommandHandlerTests
+    public class AlterarAgendamentoCommandHandlerTests:TestsConfigurations
     {
         private readonly AutoMocker _mocker;
         private readonly AlterarAgendamentoCommandHandler _alterarAgendamentoCommandHandler;
@@ -73,7 +74,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             var result = _alterarAgendamentoCommandValidation.Validate(alterarAgendamentoCommand);
             //Assert
             Assert.False(result.IsValid);
-            var erros = result.Errors.Select(x => x.ErrorMessage).ToList();
+            var erros = ObterListagemErro(result);
             Assert.True(erros.Contains("Data inválida.") ||
                         erros.Contains("Necessário informar uma Data válida."));
         }               
@@ -89,7 +90,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             var result = _alterarAgendamentoCommandValidation.Validate(alterarAgendamentoCommand);
             //Assert
             Assert.False(result.IsValid);
-            var erros = result.Errors.Select(x => x.ErrorMessage).ToList();
+            var erros = ObterListagemErro(result);
             Assert.True(erros.Contains("Horário inválido.") ||
                         erros.Contains("Necessário informar um horário válido.") ||
                         erros.Contains("O término do agendamento não pode ser maior que o inicio do agendamento."));

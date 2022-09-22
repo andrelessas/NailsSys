@@ -6,11 +6,12 @@ using NailsSys.Core.Entities;
 using NailsSys.Core.Enums;
 using NailsSys.Core.Interfaces;
 using NailsSys.Core.Services;
+using NailsSys.UnitsTests.Application.Configurations;
 using Xunit;
 
 namespace NailsSys.UnitsTests.Application.CommandHandler
 {
-    public class InserirUsuarioCommandHandlerTests
+    public class InserirUsuarioCommandHandlerTests:TestsConfigurations
     {
         private InserirUsuarioCommand _inserirUsuarioCommand;
         private FluentValidation.Results.ValidationResult _validationResult;
@@ -60,7 +61,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             var result = usuarioValidator.Validate(usuario);
             // Assert
             Assert.False(result.IsValid);
-            var erros = result.Errors.Select(e => e.ErrorMessage).ToList();
+            var erros = ObterListagemErro(result);
             Assert.True(erros.Contains("Necessário informar o nome completo.") ||
                         erros.Contains("O nome do usuário deve conter no mínimo 5 caracteres e no máximo 70 caracteres."));
         }
@@ -79,7 +80,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             var result = usuarioValidator.Validate(usuario);
             // Assert
             Assert.False(result.IsValid);
-            var erros = result.Errors.Select(e => e.ErrorMessage).ToList();
+            var erros = ObterListagemErro(result);
             Assert.True(erros.Contains("Necessário informar o login do usuário.") ||
                         erros.Contains("O login do usuário deve conter no mínimo 5 caracteres e no máximo 15 caracteres."));
         }
@@ -98,7 +99,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             var result = usuarioValidator.Validate(usuario);
             // Assert
             Assert.False(result.IsValid);
-            var erros = result.Errors.Select(e => e.ErrorMessage).ToList();
+            var erros = ObterListagemErro(result);
             Assert.True(erros.Contains("Necessário informar a senha do usuário.") ||
                         erros.Contains("Senha deve conter pelo menos 8 caracteres, um número, uma letra maiúscula, uma minúscula, e um caractere especial"));
         }
@@ -115,7 +116,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             var result = usuarioValidator.Validate(usuario);
             // Assert
             Assert.False(result.IsValid);
-            var erros = result.Errors.Select(e => e.ErrorMessage).ToList();
+            var erros = ObterListagemErro(result);
             Assert.True(erros.Contains("Necessário informar o cargo do usuário.") ||
                         erros.Contains("Cargo do usuário inválido, o cargo deve ser Adminitrador, Gerente ou Atendente."));
         }

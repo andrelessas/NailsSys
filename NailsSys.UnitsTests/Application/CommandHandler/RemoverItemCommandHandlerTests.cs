@@ -9,11 +9,12 @@ using NailsSys.Application.Validations;
 using NailsSys.Core.Entities;
 using NailsSys.Core.Interfaces;
 using NailsSys.Core.Notificacoes;
+using NailsSys.UnitsTests.Application.Configurations;
 using Xunit;
 
 namespace NailsSys.UnitsTests.Application.CommandHandler
 {
-    public class RemoverItemCommandHandlerTests
+    public class RemoverItemCommandHandlerTests:TestsConfigurations
     {
         private readonly AutoMocker _mocker;
         private readonly RemoverItemCommandHandler _removerItemCommandHandler;
@@ -61,7 +62,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             var result = _removerItemCommandValidation.Validate(removerItemCommand);
             //Assert
             Assert.False(result.IsValid);
-            var erros = result.Errors.Select(x=>x.ErrorMessage).ToList();
+            var erros = ObterListagemErro(result);
             Assert.True(erros.Contains("Para remover o item do agendamento, é necessário informar o Item."));
         }
     }

@@ -7,11 +7,12 @@ using NailsSys.Core.Entities;
 using NailsSys.Core.Interfaces;
 using NailsSys.Core.Models;
 using NailsSys.Core.Notificacoes;
+using NailsSys.UnitsTests.Application.Configurations;
 using Xunit;
 
 namespace NailsSys.UnitsTests.Application.Queries
 {
-    public class ObterClientesQueriesHandlerTests:Configurations
+    public class ObterClientesQueriesHandlerTests:TestsConfigurations
     {
         private readonly Mock<IClienteRepository> _clienteRepository;
         private readonly ObterClientesQueriesHandler _obterClientesQueriesHandler;

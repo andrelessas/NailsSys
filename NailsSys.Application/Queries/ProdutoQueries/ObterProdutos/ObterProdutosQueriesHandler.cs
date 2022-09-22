@@ -3,6 +3,7 @@ using MediatR;
 using NailsSys.Application.ViewModels;
 using NailsSys.Core.Interfaces;
 using NailsSys.Core.Models;
+using NailsSys.Core.Notificacoes;
 
 namespace NailsSys.Application.Queries.ProdutoQueries.ObterProdutos
 {
@@ -19,6 +20,10 @@ namespace NailsSys.Application.Queries.ProdutoQueries.ObterProdutos
         public async Task<PaginationResult<ProdutoViewModel>> Handle(ObterProdutosQueries request, CancellationToken cancellationToken)
         {
             var produto = await _produtoRepository.ObterTodosAsync(request.Page);
+
+            if(produto == null || produto.Data.Count() == 0)
+                throw new ExcecoesPersonalizadas("Nenhum produto encontrado.");
+                
             return _mapper.Map<PaginationResult<ProdutoViewModel>>(produto);
         }
     }

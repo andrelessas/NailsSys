@@ -2,6 +2,7 @@
 using System.Text.Json.Serialization;
 using NailsSys.API.Configurations;
 using NailsSys.API.Filters;
+using NailsSys.API.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +35,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
 app.UseAuthentication();
 

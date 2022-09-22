@@ -11,11 +11,12 @@ using NailsSys.Application.Validations;
 using NailsSys.Core.Entities;
 using NailsSys.Core.Interfaces;
 using NailsSys.Core.Notificacoes;
+using NailsSys.UnitsTests.Application.Configurations;
 using Xunit;
 
 namespace NailsSys.UnitsTests.Application.CommandHandler
 {
-    public class NovoAgendamentoCommandHandlerTests
+    public class NovoAgendamentoCommandHandlerTests:TestsConfigurations
     {
         private readonly AutoMocker _mocker;
         private readonly NovoAgendamentoCommandHandler _novoAgendamentoCommandHandler;
@@ -79,7 +80,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             var result = _novoAgendamentoCommandValidation.Validate(novoAgendamentoCommand);
             //Assert
             Assert.False(result.IsValid);
-            var erros = result.Errors.Select(e => e.ErrorMessage).ToList();
+            var erros = ObterListagemErro(result);
             Assert.True(erros.Contains("Necessário informar o Cliente que será atendido."));
         }
 
@@ -93,7 +94,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             var result = _novoAgendamentoCommandValidation.Validate(novoAgendamentoCommand);
             //Assert
             Assert.False(result.IsValid);
-            var erros = result.Errors.Select(e => e.ErrorMessage).ToList();
+            var erros = ObterListagemErro(result);
             Assert.True(erros.Contains("Necessário informar uma Data válida.") ||
                         erros.Contains("Data inválida."));
         }
@@ -109,7 +110,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             var result = _novoAgendamentoCommandValidation.Validate(novoAgendamentoCommand);
             //Assert
             Assert.False(result.IsValid);
-            var erros = result.Errors.Select(e => e.ErrorMessage).ToList();
+            var erros = ObterListagemErro(result);
             Assert.True(erros.Contains("Necessário informar um horário válido.") ||
                         erros.Contains("Horário inválido.") ||
                         erros.Contains("O término do agendamento não pode ser maior que o inicio do agendamento."));

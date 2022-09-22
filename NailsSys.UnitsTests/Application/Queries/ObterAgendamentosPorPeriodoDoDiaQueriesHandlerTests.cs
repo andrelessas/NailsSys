@@ -5,11 +5,12 @@ using NailsSys.Application.ViewModels;
 using NailsSys.Core.Entities;
 using NailsSys.Core.Interfaces;
 using NailsSys.Core.Notificacoes;
+using NailsSys.UnitsTests.Application.Configurations;
 using Xunit;
 
 namespace NailsSys.UnitsTests.Application.Queries
 {
-    public class ObterAgendamentosPorPeriodoDoDiaQueriesHandlerTests:Configurations
+    public class ObterAgendamentosPorPeriodoDoDiaQueriesHandlerTests:TestsConfigurations
     {
         private readonly Mock<IAgendamentoRepository> _agendamentoRepository;
         private readonly ObterAgendamentosPorPeriodoDoDiaQueriesHandler _obterAgendamentoPorPeriodoQueriesHandler;

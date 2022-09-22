@@ -10,11 +10,12 @@ using NailsSys.Application.Commands.ClienteCommands.InserirCliente;
 using NailsSys.Application.Validations;
 using NailsSys.Core.Entities;
 using NailsSys.Core.Interfaces;
+using NailsSys.UnitsTests.Application.Configurations;
 using Xunit;
 
 namespace NailsSys.UnitsTests.Application.CommandHandler
 {
-    public class BloquearClienteCommandHandlerTests
+    public class BloquearClienteCommandHandlerTests:TestsConfigurations
     {
         private readonly AutoMocker _mocker;
         private readonly BloquearClienteCommandHandler _bloquearClienteCommandHandler;
@@ -54,7 +55,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             var result = _bloquearClienteCommandValidation.Validate(bloquearClienteCommand);
             //Assert
             Assert.False(result.IsValid);
-            var erros = result.Errors.Select(x=>x.ErrorMessage).ToList();
+            var erros = ObterListagemErro(result);
             Assert.True(erros.Contains("Para bloquear o cliente, é necessário informar o Id do Cliente válido."));
         }
 

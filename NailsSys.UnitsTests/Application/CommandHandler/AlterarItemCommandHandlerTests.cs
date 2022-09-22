@@ -6,11 +6,12 @@ using NailsSys.Application.Validations;
 using NailsSys.Core.Entities;
 using NailsSys.Core.Interfaces;
 using NailsSys.Core.Notificacoes;
+using NailsSys.UnitsTests.Application.Configurations;
 using Xunit;
 
 namespace NailsSys.UnitsTests.Application.CommandHandler
 {
-    public class AlterarItemCommandHandlerTests
+    public class AlterarItemCommandHandlerTests:TestsConfigurations
     {
         private readonly Mock<IItemAgendamentoRepository> _itemAgendamentoRepository;
         private readonly AlterarItemCommand _alterarItemCommand;
@@ -61,7 +62,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             var result = _alterarItemCommandValidation.Validate(itemAgendamentoCommand);
             //Assert
             Assert.False(result.IsValid);
-            var erros = result.Errors.Select(e => e.ErrorMessage).ToList();
+            var erros = ObterListagemErro(result);
             Assert.True(erros.Contains("Necessário informar o Item.") ||
                         erros.Contains("O Item deve ser maior que 0."));
         }
@@ -78,7 +79,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             var result = _alterarItemCommandValidation.Validate(itemAgendamentoCommand);
             //Assert
             Assert.False(result.IsValid);
-            var erros = result.Errors.Select(e => e.ErrorMessage).ToList();
+            var erros = ObterListagemErro(result);
             Assert.True(erros.Contains("Necessário informar a quantidade do item.") ||
                         erros.Contains("A Quantidade deve ser maior que 0."));
         }

@@ -10,11 +10,12 @@ using NailsSys.Application.Validations;
 using NailsSys.Core.Entities;
 using NailsSys.Core.Interfaces;
 using NailsSys.Core.Notificacoes;
+using NailsSys.UnitsTests.Application.Configurations;
 using Xunit;
 
 namespace NailsSys.UnitsTests.Application.CommandHandler
 {
-    public class DescontinuarProdutoCommandHandlerTests
+    public class DescontinuarProdutoCommandHandlerTests:TestsConfigurations
     {
         private readonly DescontinuarProdutoCommand _produtoCommand;
         private readonly Mock<IProdutoRepository> _produtoRepository;
@@ -59,7 +60,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             var result = descontinuarProdutoCommandValidation.Validate(descontinuarProdutoCommand);
             //Assert
             Assert.False(result.IsValid);
-            var erros = result.Errors.Select(e => e.ErrorMessage).ToList();
+            var erros = ObterListagemErro(result);
             Assert.True(erros.Contains("Necessário informar o Id do produto que será descontinuado.") ||
                         erros.Contains("O Id do produto deve ser maior que 0."));
         }

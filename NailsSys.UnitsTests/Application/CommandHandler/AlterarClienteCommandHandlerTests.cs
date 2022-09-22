@@ -12,11 +12,12 @@ using NailsSys.Application.Validations;
 using NailsSys.Core.Entities;
 using NailsSys.Core.Interfaces;
 using NailsSys.Core.Notificacoes;
+using NailsSys.UnitsTests.Application.Configurations;
 using Xunit;
 
 namespace NailsSys.UnitsTests.Application.CommandHandler
 {
-    public class AlterarClienteCommandHandlerTests
+    public class AlterarClienteCommandHandlerTests:TestsConfigurations
     {
         private readonly AutoMocker _mocker;
         private readonly AlterarClienteCommandHandler _alterarClienteCommandHandler;
@@ -70,7 +71,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             var result = _alterarClienteCommandHandlerValidation.Validate(alterarClienteCommand);
             //Assert
             Assert.False(result.IsValid);
-            var erros = result.Errors.Select(x => x.ErrorMessage).ToList();
+            var erros = ObterListagemErro(result);
             Assert.True(erros.Contains("Necessário informar o nome do cliente.") ||
                         erros.Contains("O nome do cliente deve ter no máximo 50 caracteres"));
 
@@ -90,7 +91,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             var result = _alterarClienteCommandHandlerValidation.Validate(alterarClienteCommand);
             //Assert
             Assert.False(result.IsValid);
-            var erros = result.Errors.Select(x => x.ErrorMessage).ToList();
+            var erros = ObterListagemErro(result);
             Assert.True(erros.Contains("Informe um telefone válido."));
         }
     }

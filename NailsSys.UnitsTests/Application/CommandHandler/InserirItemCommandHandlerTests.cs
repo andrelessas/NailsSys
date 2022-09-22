@@ -6,11 +6,12 @@ using NailsSys.Application.Commands.ItemAgendamentoCommands.InserirItemCommand;
 using NailsSys.Application.Validations;
 using NailsSys.Core.Entities;
 using NailsSys.Core.Interfaces;
+using NailsSys.UnitsTests.Application.Configurations;
 using Xunit;
 
 namespace NailsSys.UnitsTests.Application.CommandHandler
 {
-    public class InserirItemCommandHandlerTests
+    public class InserirItemCommandHandlerTests:TestsConfigurations
     {
         private readonly AutoMocker _mocker;
         private readonly InserirItemCommand _inserirItemCommand;
@@ -57,7 +58,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             var result = _itenserirItemCommandValidate.Validate(itemAgendamentoCommand);
             //Assert
             Assert.False(result.IsValid);
-            var erros = result.Errors.Select(e => e.ErrorMessage).ToList();
+            var erros = ObterListagemErro(result);
             Assert.True(erros.Contains("Necessário informar o Id do Produto.") ||
                         erros.Contains("Id Produto inválido, o Id Produto deve ser maior que 0."));
         }
@@ -74,7 +75,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             var result = _itenserirItemCommandValidate.Validate(itemAgendamentoCommand);
             //Assert
             Assert.False(result.IsValid);
-            var erros = result.Errors.Select(e => e.ErrorMessage).ToList();
+            var erros = ObterListagemErro(result);
             Assert.True(erros.Contains("Necessário informar o Id do Agendamento.") ||
                         erros.Contains("Id Agendamento inválido, o Id Agendamento deve ser maior que 0."));
         }
@@ -91,7 +92,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             var result = _itenserirItemCommandValidate.Validate(itemAgendamentoCommand);
             //Assert
             Assert.False(result.IsValid);
-            var erros = result.Errors.Select(e => e.ErrorMessage).ToList();
+            var erros = ObterListagemErro(result);
             Assert.True(erros.Contains("Necessário informar a quantidade do produto.") ||
                         erros.Contains("Quantidade inválida, a quantidade deve ser maior que 0."));
         }

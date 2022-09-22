@@ -17,9 +17,9 @@ namespace NailsSys.API.Controllers
         {}
 
         [HttpGet]
-        public async Task<IActionResult> ObterTodosItens(int idAgendamento)
+        public async Task<IActionResult> ObterTodosItens(int idAgendamento, int page)
         {
-            var request = new ObterItensQueries(idAgendamento);
+            var request = new ObterItensQueries(idAgendamento,page);
             var itens = await _mediator.Send(request);
             if (itens == null)
                 return NotFound();

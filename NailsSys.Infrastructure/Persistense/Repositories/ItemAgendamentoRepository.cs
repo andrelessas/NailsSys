@@ -6,13 +6,16 @@ using Microsoft.EntityFrameworkCore;
 using NailsSys.Core.DTOs;
 using NailsSys.Core.Entities;
 using NailsSys.Core.Interfaces;
+using NailsSys.Core.Models;
 using NailsSys.Data.Repository;
 using NailsSys.Infrastructure.Context;
+using NailsSys.Infrastructure.Persistense.Extensions;
 
 namespace NailsSys.Infrastructure.Persistense.Repositories
 {
     public class ItemAgendamentoRepository : Repository<ItemAgendamento>, IItemAgendamentoRepository
     {
+        private const int PAGE_SIZE = 5;
         public ItemAgendamentoRepository(NailsSysContext context)
             : base(context)
         {
@@ -31,19 +34,19 @@ namespace NailsSys.Infrastructure.Persistense.Repositories
             var consulta = from i in _context.ItemAgendamento
                            join p in _context.Produto on i.IdProduto equals p.Id
                            where (i.IdAgendamento == idAgendamento)
-                           select new ItemAgendamentoDTO(i.Id,i.IdAgendamento,p.Id,p.Descricao,i.Quantidade,i.PrecoInicial,i.Item);
+                           select new ItemAgendamentoDTO(i.Id, i.IdAgendamento, p.Id, p.Descricao, i.Quantidade, i.PrecoInicial, i.Item);
 
             return await consulta.FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<ItemAgendamentoDTO>> ObterItensAsync(int idAgendamento)
+        public async Task<PaginationResult<ItemAgendamentoDTO>> ObterItensAsync(int idAgendamento, int page)
         {
             var consulta = from i in _context.ItemAgendamento
                            join p in _context.Produto on i.IdProduto equals p.Id
                            where (i.IdAgendamento == idAgendamento)
-                           select new ItemAgendamentoDTO (i.Id,i.IdAgendamento,p.Id, p.Descricao, i.Quantidade, i.PrecoInicial,i.Item );
+                           select new ItemAgendamentoDTO(i.Id, i.IdAgendamento, p.Id, p.Descricao, i.Quantidade, i.PrecoInicial, i.Item);
 
-            return await consulta.ToListAsync();
+            return await consulta.GetPagination<ItemAgendamentoDTO>(page, PAGE_SIZE);
         }
 
         public async Task<int> ObterMaxItem(int idAgendamento)

@@ -40,6 +40,10 @@ namespace NailsSys.Application.Configuration
                 .ForMember(dest => dest.Data, conf => conf.MapFrom(src => src.Data))
                 .ReverseMap();
 
+            CreateMap<PaginationResult<ItemAgendamentoDTO>, PaginationResult<ItemAgendamentoViewModel>>()
+                .ForMember(dest => dest.Data, conf => conf.MapFrom(src => src.Data))
+                .ReverseMap();
+
             CreateMap<Usuario, UsuarioViewModel>()
                 .ForMember(dest => dest.Id, config => config.MapFrom(src => src.Id))
                 .ReverseMap();
