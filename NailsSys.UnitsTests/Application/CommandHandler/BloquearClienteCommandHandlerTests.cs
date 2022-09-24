@@ -10,6 +10,7 @@ using NailsSys.Application.Commands.ClienteCommands.InserirCliente;
 using NailsSys.Application.Validations;
 using NailsSys.Core.Entities;
 using NailsSys.Core.Interfaces;
+using NailsSys.Core.Notificacoes;
 using NailsSys.UnitsTests.Application.Configurations;
 using Xunit;
 
@@ -56,7 +57,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             //Assert
             Assert.False(result.IsValid);
             var erros = ObterListagemErro(result);
-            Assert.True(erros.Contains("Para bloquear o cliente, é necessário informar o Id do Cliente válido."));
+            Assert.True(erros.Contains(MensagensCliente.IdClienteNaoInformadoAoBloquearCLiente));
         }
 
     }

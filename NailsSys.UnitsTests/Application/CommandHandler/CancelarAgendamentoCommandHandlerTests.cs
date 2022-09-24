@@ -63,7 +63,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             //Assert
             Assert.False(result.IsValid);
             var erros = ObterListagemErro(result);
-            Assert.True(erros.Contains("Para cancelar o agendamento, é necessário informar o Id do Agendamento."));
+            Assert.True(erros.Contains(MensagensAgendamento.IdAgendamentoNaoInformadoCancelarAgendamento));
         }
 
 

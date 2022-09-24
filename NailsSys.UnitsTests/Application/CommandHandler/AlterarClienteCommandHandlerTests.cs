@@ -1,12 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoBogus;
 using Bogus;
 using Moq;
 using Moq.AutoMock;
-using NailsSys.Application.Commands.AgendamentoCommands.AlterarAgendamento;
 using NailsSys.Application.Commands.ClienteCommands.AlterarCliente;
 using NailsSys.Application.Validations;
 using NailsSys.Core.Entities;
@@ -72,8 +67,8 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             //Assert
             Assert.False(result.IsValid);
             var erros = ObterListagemErro(result);
-            Assert.True(erros.Contains("Necessário informar o nome do cliente.") ||
-                        erros.Contains("O nome do cliente deve ter no máximo 50 caracteres"));
+            Assert.True(erros.Contains(MensagensCliente.NomeClienteNullVazio) ||
+                        erros.Contains(MensagensCliente.NomeClienteQuantidadeCaracteresSuperiorAoLimite));
 
         }
 
@@ -92,7 +87,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             //Assert
             Assert.False(result.IsValid);
             var erros = ObterListagemErro(result);
-            Assert.True(erros.Contains("Informe um telefone válido."));
+            Assert.True(erros.Contains(MensagensCliente.TelefoneInvalido));
         }
     }
 }

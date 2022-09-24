@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using FluentValidation;
 using NailsSys.Application.Commands.UsuarioCommands.InserirUsuario;
 using NailsSys.Core.Enums;
+using NailsSys.Core.Notificacoes;
 
 namespace NailsSys.Application.Validations
 {
@@ -14,40 +15,26 @@ namespace NailsSys.Application.Validations
         public InserirUsuarioCommandValidation()
         {
             RuleFor(u => u.NomeCompleto)
-                .NotNull()
-                .WithMessage("Necessário informar o nome completo.")
-                .NotEmpty()
-                .WithMessage("Necessário informar o nome completo.")
-                .MaximumLength(70)
-                .WithMessage("O nome do usuário deve conter no mínimo 5 caracteres e no máximo 70 caracteres.")
-                .MinimumLength(5)
-                .WithMessage("O nome do usuário deve conter no mínimo 5 caracteres e no máximo 70 caracteres.");
+                .NotNull().WithMessage(MensagensUsuario.NomeCompletoNullVazio)
+                .NotEmpty().WithMessage(MensagensUsuario.NomeCompletoNullVazio)
+                .MaximumLength(70).WithMessage(MensagensUsuario.NomeCompletoCurtoOuLongo)
+                .MinimumLength(5).WithMessage(MensagensUsuario.NomeCompletoCurtoOuLongo);
 
             RuleFor(u => u.Login)
-                .NotNull()
-                .WithMessage("Necessário informar o login do usuário.")
-                .NotEmpty()
-                .WithMessage("Necessário informar o login do usuário.")
-                .MaximumLength(15)
-                .WithMessage("O login do usuário deve conter no mínimo 5 caracteres e no máximo 15 caracteres.")
-                .MinimumLength(5)
-                .WithMessage("O login do usuário deve conter no mínimo 5 caracteres e no máximo 15 caracteres.");
+                .NotNull().WithMessage(MensagensUsuario.LoginNullVazio)
+                .NotEmpty().WithMessage(MensagensUsuario.LoginNullVazio)
+                .MaximumLength(15).WithMessage(MensagensUsuario.LoginCurtoOuLongo)
+                .MinimumLength(5).WithMessage(MensagensUsuario.LoginCurtoOuLongo);
 
             RuleFor(u => u.Senha)
-                .NotNull()
-                .WithMessage("Necessário informar a senha do usuário.")
-                .NotEmpty()
-                .WithMessage("Necessário informar a senha do usuário.")
-                .Must(ValidarSenha)
-                .WithMessage("Senha deve conter pelo menos 8 caracteres, um número, uma letra maiúscula, uma minúscula, e um caractere especial");
+                .NotNull().WithMessage(MensagensUsuario.SenhaNullVazio)
+                .NotEmpty().WithMessage(MensagensUsuario.SenhaNullVazio)
+                .Must(ValidarSenha).WithMessage(MensagensUsuario.SenhaFraca);
             
             RuleFor(u => u.Cargo)
-                .NotNull()
-                .WithMessage("Necessário informar o cargo do usuário.")
-                .NotEmpty()
-                .WithMessage("Necessário informar o cargo do usuário.")
-                .Must(ValidarCargo)
-                .WithMessage("Cargo do usuário inválido, o cargo deve ser Adminitrador, Gerente ou Atendente.");
+                .NotNull().WithMessage(MensagensUsuario.CargoNullVazio)
+                .NotEmpty().WithMessage(MensagensUsuario.CargoNullVazio)
+                .Must(ValidarCargo).WithMessage(MensagensUsuario.CargoInvalido);
         }
         public bool ValidarSenha(string password)
         {

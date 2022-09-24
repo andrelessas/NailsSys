@@ -75,10 +75,10 @@ namespace NailsSys.UnitsTests.Application.Queries
             var result = _obterClientesQueriesHandlerValidation.Validate(new ObterClientesQueries(page));
             //Assert
             Assert.NotNull(result);
-            foreach (var erro in result.Errors)
-            {
-                Assert.Equal("Necessário informar a quantidade de páginas para que seja realizada a paginação dos dados.",erro.ErrorMessage);
-            }
+            var erros = ObterListagemErro(result);
+            Assert.True(erros.Contains(MensagensPaginacao.PageNullVazio) ||
+                        erros.Contains(MensagensPaginacao.PageMaiorQueZero));
+            
             
         }
     }

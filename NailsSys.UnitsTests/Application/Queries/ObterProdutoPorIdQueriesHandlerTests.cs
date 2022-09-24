@@ -63,8 +63,8 @@ namespace NailsSys.UnitsTests.Application.Queries
             Assert.NotNull(result);
             Assert.False(result.IsValid);
             var erros = ObterListagemErro(result);
-            Assert.True(erros.Contains("Necessário informar o Id do produto.") ||
-                        erros.Contains("O Id do produto deve ser maior que 0."));
+            Assert.True(erros.Contains(MensagensProduto.IdProdutoMaiorQueZero) ||
+                        erros.Contains(MensagensProduto.IdProdutoNullVazio));
         }
     }
 }

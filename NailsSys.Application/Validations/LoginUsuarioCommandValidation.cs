@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation;
 using NailsSys.Application.Commands.UsuarioCommands.LoginUsuarioCommand;
+using NailsSys.Core.Notificacoes;
 
 namespace NailsSys.Application.Validations
 {
@@ -12,14 +13,14 @@ namespace NailsSys.Application.Validations
         public LoginUsuarioCommandValidation()
         {
             RuleFor(i => i.Id)
-                .Must(ValidarId).WithMessage("Necessário informar o Id ou Login do usuário para acessar o sistema.");
+                .Must(ValidarId).WithMessage(MensagensLogin.LoginNullVazio);
 
             RuleFor(u => u.Usuario)
-                .Must(ValidarLogin).WithMessage("Necessário informar o Id ou Login do usuário para acessar o sistema.");
+                .Must(ValidarLogin).WithMessage(MensagensLogin.LoginNullVazio);
             
             RuleFor(s => s.Senha)
-                .NotNull().WithMessage("Necessário informar a senha de acesso ao sistema.")
-                .NotEmpty().WithMessage("Necessário informar a senha de acesso ao sistema.");
+                .NotNull().WithMessage(MensagensLogin.SenhaNullVazio)
+                .NotEmpty().WithMessage(MensagensLogin.SenhaNullVazio);
         }
 
         public bool ValidarLogin(string login)

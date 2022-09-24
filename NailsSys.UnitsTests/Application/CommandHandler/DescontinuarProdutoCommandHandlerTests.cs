@@ -51,7 +51,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
         [InlineData(0)]
         [InlineData(null)]
         [InlineData(-10)]
-        public void MudarNomedoMetodo(int idProduto)
+        public void IdProdutoInvalido_RetornarExcecaoFluentValidation(int idProduto)
         {
             //Arrange
             var descontinuarProdutoCommandValidation = new DescontinuarProdutoCommandValidation();
@@ -61,8 +61,8 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             //Assert
             Assert.False(result.IsValid);
             var erros = ObterListagemErro(result);
-            Assert.True(erros.Contains("Necessário informar o Id do produto que será descontinuado.") ||
-                        erros.Contains("O Id do produto deve ser maior que 0."));
+            Assert.True(erros.Contains(MensagensProduto.IdProdutoNaoInformadoParaBloqueioProduto) ||
+                        erros.Contains(MensagensProduto.IdProdutoMaiorQueZero));
         }
     }
 }

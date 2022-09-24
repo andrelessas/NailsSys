@@ -4,6 +4,7 @@ using NailsSys.Application.Commands.ClienteCommands.InserirCliente;
 using NailsSys.Application.Validations;
 using NailsSys.Core.Entities;
 using NailsSys.Core.Interfaces;
+using NailsSys.Core.Notificacoes;
 using NailsSys.UnitsTests.Application.Configurations;
 using Xunit;
 
@@ -54,8 +55,8 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             //Assert
             Assert.False(result.IsValid);
             var erros = ObterListagemErro(result);
-            Assert.True(erros.Contains("Necessário informar o nome do cliente.") ||
-                        erros.Contains("O nome do cliente deve ter no máximo 50 caracteres."));
+            Assert.True(erros.Contains(MensagensCliente.NomeClienteNullVazio) ||
+                        erros.Contains(MensagensCliente.NomeClienteQuantidadeCaracteresSuperiorAoLimite));
 
         }
 
@@ -74,7 +75,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             //Assert
             Assert.False(result.IsValid);
             var erros = ObterListagemErro(result);
-            Assert.True(erros.Contains("Informe um telefone válido."));
+            Assert.True(erros.Contains(MensagensCliente.TelefoneInvalido));
         }
     }
 }

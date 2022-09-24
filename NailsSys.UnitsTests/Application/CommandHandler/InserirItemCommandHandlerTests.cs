@@ -6,6 +6,7 @@ using NailsSys.Application.Commands.ItemAgendamentoCommands.InserirItemCommand;
 using NailsSys.Application.Validations;
 using NailsSys.Core.Entities;
 using NailsSys.Core.Interfaces;
+using NailsSys.Core.Notificacoes;
 using NailsSys.UnitsTests.Application.Configurations;
 using Xunit;
 
@@ -59,8 +60,8 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             //Assert
             Assert.False(result.IsValid);
             var erros = ObterListagemErro(result);
-            Assert.True(erros.Contains("Necessário informar o Id do Produto.") ||
-                        erros.Contains("Id Produto inválido, o Id Produto deve ser maior que 0."));
+            Assert.True(erros.Contains(MensagensItensAgendamento.IdProdutoMaiorQueZero) ||
+                        erros.Contains(MensagensItensAgendamento.IdProdutoNullVazio));
         }
 
         [Theory]
@@ -76,8 +77,8 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             //Assert
             Assert.False(result.IsValid);
             var erros = ObterListagemErro(result);
-            Assert.True(erros.Contains("Necessário informar o Id do Agendamento.") ||
-                        erros.Contains("Id Agendamento inválido, o Id Agendamento deve ser maior que 0."));
+            Assert.True(erros.Contains(MensagensItensAgendamento.IdAgendamentoMaiorQueZero) ||
+                        erros.Contains(MensagensItensAgendamento.IdAgendamentoNullVazio));
         }
 
         [Theory]
@@ -93,8 +94,8 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             //Assert
             Assert.False(result.IsValid);
             var erros = ObterListagemErro(result);
-            Assert.True(erros.Contains("Necessário informar a quantidade do produto.") ||
-                        erros.Contains("Quantidade inválida, a quantidade deve ser maior que 0."));
+            Assert.True(erros.Contains(MensagensItensAgendamento.QuantidadeMaiorQueZero) ||
+                        erros.Contains(MensagensItensAgendamento.QuantidadeNullVazio));
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation;
 using NailsSys.Application.Queries.ItemAgendamentoQueries.ObterItens;
+using NailsSys.Core.Notificacoes;
 
 namespace NailsSys.Application.Validations
 {
@@ -12,14 +13,14 @@ namespace NailsSys.Application.Validations
         public ObterItensQueriesValidation()
         {
             RuleFor(x=>x.IdAgendamento)
-                .NotNull().WithMessage("Necessário informar o id Agendamento para obter os itens.")
-                .NotEmpty().WithMessage("Necessário informar o id Agendamento para obter os itens.")
-                .GreaterThan(0).WithMessage("O id Agendamento deve ser maior qur 0.");
+                .NotNull().WithMessage(MensagensItensAgendamento.IdAgendamentoNullVazio)
+                .NotEmpty().WithMessage(MensagensItensAgendamento.IdAgendamentoNullVazio)
+                .GreaterThan(0).WithMessage(MensagensItensAgendamento.IdAgendamentoMaiorQueZero);
             
             RuleFor(x=>x.Page)
-                .NotNull().WithMessage("Necessário informar a quantidade de páginas para que seja realizada a paginação dos dados.")
-                .NotEmpty().WithMessage("Necessário informar a quantidade de páginas para que seja realizada a paginação dos dados.")
-                .GreaterThan(0).WithMessage("Necessário informar a quantidade de páginas para que seja realizada a paginação dos dados.");
+                .NotNull().WithMessage(MensagensPaginacao.PageNullVazio)
+                .NotEmpty().WithMessage(MensagensPaginacao.PageNullVazio)
+                .GreaterThan(0).WithMessage(MensagensPaginacao.PageMaiorQueZero);
         }
     }
 }

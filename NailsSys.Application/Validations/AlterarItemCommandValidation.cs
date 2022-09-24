@@ -1,5 +1,6 @@
 using FluentValidation;
 using NailsSys.Application.Commands.ItemAgendamentoCommands.AlterarItem;
+using NailsSys.Core.Notificacoes;
 
 namespace NailsSys.Application.Validations
 {
@@ -8,14 +9,14 @@ namespace NailsSys.Application.Validations
         public AlterarItemCommandValidation()
         {
             RuleFor(a => a.Id)
-                .NotEmpty().WithMessage("Necessário informar o Item.")
-                .NotNull().WithMessage("Necessário informar o Item.")                
-                .GreaterThan(0).WithMessage("O Item deve ser maior que 0.");
+                .NotEmpty().WithMessage(MensagensItensAgendamento.ItemNullVazio)
+                .NotNull().WithMessage(MensagensItensAgendamento.ItemNullVazio)      
+                .GreaterThan(0).WithMessage(MensagensItensAgendamento.ItemMaiorQueZero);
                 
             RuleFor(a => a.Quantidade)
-                .NotEmpty().WithMessage("Necessário informar a quantidade do item.")
-                .NotNull().WithMessage("Necessário informar a quantidade do item.")                
-                .GreaterThan(0).WithMessage("A Quantidade deve ser maior que 0.");
+                .NotEmpty().WithMessage(MensagensItensAgendamento.QuantidadeNullVazio)
+                .NotNull().WithMessage(MensagensItensAgendamento.QuantidadeNullVazio)
+                .GreaterThan(0).WithMessage(MensagensItensAgendamento.QuantidadeMaiorQueZero);
         }
     }
 }

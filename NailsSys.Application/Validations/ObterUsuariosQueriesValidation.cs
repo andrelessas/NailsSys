@@ -8,11 +8,11 @@ using NailsSys.Core.Notificacoes;
 
 namespace NailsSys.Application.Validations
 {
-    public class ObterClientesQueriesValidation:AbstractValidator<ObterClientesQueries>
+    public class ObterUsuariosQueriesValidation:AbstractValidator<ObterClientesQueries>
     {
-        public ObterClientesQueriesValidation()
+        public ObterUsuariosQueriesValidation()
         {
-            RuleFor(x => x.Page)
+            RuleFor(x=>x.Page)
                 .NotNull().WithMessage(MensagensPaginacao.PageNullVazio)
                 .NotEmpty().WithMessage(MensagensPaginacao.PageNullVazio)
                 .GreaterThan(0).WithMessage(MensagensPaginacao.PageMaiorQueZero);

@@ -72,7 +72,8 @@ namespace NailsSys.UnitsTests.Application.Queries
             //Assert
             Assert.False(result.IsValid);
             var erros = ObterListagemErro(result);
-            Assert.True(erros.Contains("Necessário informar a quantidade de páginas para que seja realizada a paginação dos dados."));
+            Assert.True(erros.Contains(MensagensPaginacao.PageMaiorQueZero) ||
+                        erros.Contains(MensagensPaginacao.PageNullVazio));
         }
     }
 }

@@ -4,6 +4,7 @@ using NailsSys.Application.Commands.UsuarioCommands.LoginUsuarioCommand;
 using NailsSys.Application.Validations;
 using NailsSys.Core.Entities;
 using NailsSys.Core.Interfaces;
+using NailsSys.Core.Notificacoes;
 using NailsSys.Core.Services;
 using NailsSys.UnitsTests.Application.Configurations;
 using Xunit;
@@ -77,7 +78,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             //Assert
             Assert.False(result.IsValid);
             var erros = ObterListagemErro(result);
-            Assert.True(erros.Contains("Necessário informar o Id ou Login do usuário para acessar o sistema."));
+            Assert.True(erros.Contains(MensagensLogin.LoginNullVazio));
         }
 
         [Theory]
@@ -92,7 +93,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             //Assert
             Assert.False(result.IsValid);
             var erros = ObterListagemErro(result);
-            Assert.True(erros.Contains("Necessário informar o Id ou Login do usuário para acessar o sistema."));
+            Assert.True(erros.Contains(MensagensLogin.LoginNullVazio));
         }
         [Theory]
         [InlineData(null)]
@@ -106,7 +107,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             //Assert
             Assert.False(result.IsValid);
             var erros = ObterListagemErro(result);
-            Assert.True(erros.Contains("Necessário informar a senha de acesso ao sistema."));
+            Assert.True(erros.Contains(MensagensLogin.SenhaNullVazio));
         }
     }
 }

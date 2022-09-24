@@ -5,6 +5,7 @@ using NailsSys.Application.Validations;
 using NailsSys.Core.Entities;
 using NailsSys.Core.Enums;
 using NailsSys.Core.Interfaces;
+using NailsSys.Core.Notificacoes;
 using NailsSys.Core.Services;
 using NailsSys.UnitsTests.Application.Configurations;
 using Xunit;
@@ -62,8 +63,8 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             // Assert
             Assert.False(result.IsValid);
             var erros = ObterListagemErro(result);
-            Assert.True(erros.Contains("Necessário informar o nome completo.") ||
-                        erros.Contains("O nome do usuário deve conter no mínimo 5 caracteres e no máximo 70 caracteres."));
+            Assert.True(erros.Contains(MensagensUsuario.NomeCompletoCurtoOuLongo) ||
+                        erros.Contains(MensagensUsuario.NomeCompletoNullVazio));
         }
 
         [Theory]
@@ -81,8 +82,8 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             // Assert
             Assert.False(result.IsValid);
             var erros = ObterListagemErro(result);
-            Assert.True(erros.Contains("Necessário informar o login do usuário.") ||
-                        erros.Contains("O login do usuário deve conter no mínimo 5 caracteres e no máximo 15 caracteres."));
+            Assert.True(erros.Contains(MensagensUsuario.LoginCurtoOuLongo) ||
+                        erros.Contains(MensagensUsuario.LoginNullVazio));
         }
 
         [Theory]
@@ -100,8 +101,8 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             // Assert
             Assert.False(result.IsValid);
             var erros = ObterListagemErro(result);
-            Assert.True(erros.Contains("Necessário informar a senha do usuário.") ||
-                        erros.Contains("Senha deve conter pelo menos 8 caracteres, um número, uma letra maiúscula, uma minúscula, e um caractere especial"));
+            Assert.True(erros.Contains(MensagensUsuario.SenhaNullVazio) ||
+                        erros.Contains(MensagensUsuario.SenhaFraca));
         }
 
         [Theory]
@@ -117,8 +118,8 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             // Assert
             Assert.False(result.IsValid);
             var erros = ObterListagemErro(result);
-            Assert.True(erros.Contains("Necessário informar o cargo do usuário.") ||
-                        erros.Contains("Cargo do usuário inválido, o cargo deve ser Adminitrador, Gerente ou Atendente."));
+            Assert.True(erros.Contains(MensagensUsuario.CargoNullVazio) ||
+                        erros.Contains(MensagensUsuario.CargoInvalido));
         }
     }
 }

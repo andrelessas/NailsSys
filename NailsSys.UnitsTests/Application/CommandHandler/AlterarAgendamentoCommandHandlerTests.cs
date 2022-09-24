@@ -75,8 +75,8 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             //Assert
             Assert.False(result.IsValid);
             var erros = ObterListagemErro(result);
-            Assert.True(erros.Contains("Data inválida.") ||
-                        erros.Contains("Necessário informar uma Data válida."));
+            Assert.True(erros.Contains(MensagensAgendamento.DataAtendimentoNullVazia) ||
+                        erros.Contains(MensagensAgendamento.DataAtendimentoInvalida));
         }               
 
         [Theory]
@@ -91,9 +91,9 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             //Assert
             Assert.False(result.IsValid);
             var erros = ObterListagemErro(result);
-            Assert.True(erros.Contains("Horário inválido.") ||
-                        erros.Contains("Necessário informar um horário válido.") ||
-                        erros.Contains("O término do agendamento não pode ser maior que o inicio do agendamento."));
+            Assert.True(erros.Contains(MensagensAgendamento.HorarioInvalido) ||
+                        erros.Contains(MensagensAgendamento.HorarioNullVazio) ||
+                        erros.Contains(MensagensAgendamento.TerminoAtendimentoMaiorQueInicioDoAtendimento));
         }               
     }
 }

@@ -63,7 +63,8 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             //Assert
             Assert.False(result.IsValid);
             var erros = ObterListagemErro(result);
-            Assert.True(erros.Contains("Para remover o item do agendamento, é necessário informar o Item."));
+            Assert.True(erros.Contains(MensagensItensAgendamento.ItemMaiorQueZero) ||
+                        erros.Contains(MensagensItensAgendamento.ItemNullVazio));
         }
     }
 }

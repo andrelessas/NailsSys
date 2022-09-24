@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation;
 using NailsSys.Application.Commands.ItemAgendamentoCommands.RemoverItem;
+using NailsSys.Core.Notificacoes;
 
 namespace NailsSys.Application.Validations
 {
@@ -12,9 +13,9 @@ namespace NailsSys.Application.Validations
         public RemoverItemCommandValidation()
         {
             RuleFor(x => x.Id)
-                .NotNull().WithMessage("Para remover o item do agendamento, é necessário informar o Item.")
-                .NotEmpty().WithMessage("Para remover o item do agendamento, é necessário informar o Item.")
-                .GreaterThan(0).WithMessage("Para remover o item do agendamento, é necessário informar o Item.");
+                .NotNull().WithMessage(MensagensItensAgendamento.ItemNullVazio)
+                .NotEmpty().WithMessage(MensagensItensAgendamento.ItemNullVazio)
+                .GreaterThan(0).WithMessage(MensagensItensAgendamento.ItemMaiorQueZero);
         }
     }
 }

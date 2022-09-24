@@ -1,6 +1,7 @@
 using System.Text.RegularExpressions;
 using FluentValidation;
 using NailsSys.Application.Commands.ClienteCommands.InserirCliente;
+using NailsSys.Core.Notificacoes;
 
 namespace NailsSys.Application.Validations
 {
@@ -9,18 +10,14 @@ namespace NailsSys.Application.Validations
         public InserirClienteCommandValidation()
         {
             RuleFor(x=>x.NomeCliente)
-                .NotNull()
-                .WithMessage("Necessário informar o nome do cliente.")
-                .NotEmpty()
-                .WithMessage("Necessário informar o nome do cliente.")
-                .MaximumLength(50)
-                .WithMessage("O nome do cliente deve ter no máximo 50 caracteres.");
+                .NotNull().WithMessage(MensagensCliente.NomeClienteNullVazio)
+                .NotEmpty().WithMessage(MensagensCliente.NomeClienteNullVazio)
+                .MaximumLength(50).WithMessage(MensagensCliente.NomeClienteQuantidadeCaracteresSuperiorAoLimite);
 
             RuleFor(x=>x.Telefone)            
-                .NotNull()
-                .NotEmpty()
-                .Must(ValidarTelefone)
-                .WithMessage("Informe um telefone válido.");
+                .NotNull().WithMessage(MensagensCliente.TelefoneInvalido)
+                .NotEmpty().WithMessage(MensagensCliente.TelefoneInvalido)
+                .Must(ValidarTelefone).WithMessage(MensagensCliente.TelefoneInvalido);
         }
 
         public bool ValidarTelefone(string phone)

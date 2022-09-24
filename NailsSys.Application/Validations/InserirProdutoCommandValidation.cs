@@ -1,5 +1,6 @@
 using FluentValidation;
 using NailsSys.Application.Commands.ProdutoCommands.InserirProduto;
+using NailsSys.Core.Notificacoes;
 
 namespace NailsSys.Application.Validations
 {
@@ -8,26 +9,19 @@ namespace NailsSys.Application.Validations
         public InserirProdutoCommandValidation()
         {
             RuleFor(x=>x.Descricao)
-                .NotNull()
-                .NotEmpty()
-                .WithMessage("Informe o nome do produto.")
-                .MaximumLength(50)
-                .WithMessage("Descrição do produto deve ter no máximo 50 caracteres.");
+                .NotNull().WithMessage(MensagensProduto.DescricaoNullVazio)
+                .NotEmpty().WithMessage(MensagensProduto.DescricaoNullVazio)
+                .MaximumLength(50).WithMessage(MensagensProduto.LimiteTamanhoDescricao);
             
             RuleFor(x=>x.TipoProduto)
-                .NotEmpty()
-                .WithMessage("Necessário informar o tipo do produto.")
-                .NotNull()
-                .WithMessage("Necessário informar o tipo do produto.")
-                .Must(ValidarTipoProduto)
-                .MaximumLength(1)
-                .WithMessage("Necessário informar o tipo do produto, se é S - Serviço ou P - Produto.");
+                .NotEmpty().WithMessage(MensagensProduto.TipoProdutoNullVazio)
+                .NotNull().WithMessage(MensagensProduto.TipoProdutoNullVazio)
+                .Must(ValidarTipoProduto).WithMessage(MensagensProduto.ValidarTipoProduto);
 
             RuleFor(x=>x.Preco)
-                .GreaterThan(0)
-                .NotNull()
-                .NotEmpty()
-                .WithMessage("Informe o preço de venda do produto.");
+                .GreaterThan(0).WithMessage(MensagensProduto.PrecoMaiorQueZero)
+                .NotNull().WithMessage(MensagensProduto.PrecoNullVazio)
+                .NotEmpty().WithMessage(MensagensProduto.PrecoNullVazio);
         }
         private bool ValidarTipoProduto(string tipoProduto)
             => tipoProduto == "S" || tipoProduto == "P";

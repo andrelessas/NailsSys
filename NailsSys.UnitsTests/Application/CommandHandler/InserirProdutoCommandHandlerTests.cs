@@ -4,6 +4,7 @@ using NailsSys.Application.Commands.ProdutoCommands.InserirProduto;
 using NailsSys.Application.Validations;
 using NailsSys.Core.Entities;
 using NailsSys.Core.Interfaces;
+using NailsSys.Core.Notificacoes;
 using NailsSys.UnitsTests.Application.Configurations;
 using Xunit;
 
@@ -51,8 +52,8 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             //Assert
             Assert.False(result.IsValid);
             var erros = ObterListagemErro(result);
-            Assert.True(erros.Contains("Informe o nome do produto.") || 
-                        erros.Contains("Descrição do produto deve ter no máximo 50 caracteres."));        
+            Assert.True(erros.Contains(MensagensProduto.DescricaoNullVazio) || 
+                        erros.Contains(MensagensProduto.LimiteTamanhoDescricao));
         }
 
         [Theory]
@@ -70,8 +71,8 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             //Assert
             Assert.False(result.IsValid);
             var erros = ObterListagemErro(result);
-            Assert.True(erros.Contains("Necessário informar o tipo do produto, se é S - Serviço ou P - Produto.") ||
-                        erros.Contains("Necessário informar o tipo do produto."));        
+            Assert.True(erros.Contains(MensagensProduto.TipoProdutoNullVazio) ||
+                        erros.Contains(MensagensProduto.DescricaoNullVazio));        
         }
         
         [Theory]
@@ -88,7 +89,8 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             //Assert
             Assert.False(result.IsValid);
             var erros = ObterListagemErro(result);
-            Assert.True(erros.Contains("Informe o preço de venda do produto."));        
+            Assert.True(erros.Contains(MensagensProduto.PrecoMaiorQueZero) ||
+                        erros.Contains(MensagensProduto.PrecoNullVazio));        
         } 
     }
 }

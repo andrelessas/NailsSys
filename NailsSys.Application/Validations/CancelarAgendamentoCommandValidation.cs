@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation;
 using NailsSys.Application.Commands.AgendamentoCommands.CancelamentoAgendamento;
+using NailsSys.Core.Notificacoes;
 
 namespace NailsSys.Application.Validations
 {
@@ -12,9 +13,9 @@ namespace NailsSys.Application.Validations
         public CancelarAgendamentoCommandValidation()
         {
             RuleFor(x=> x.Id)
-                .NotEmpty().WithMessage("Para cancelar o agendamento, é necessário informar o Id do Agendamento.")
-                .GreaterThan(0).WithMessage("Para cancelar o agendamento, é necessário informar o Id do Agendamento.")
-                .NotNull().WithMessage("Para cancelar o agendamento, é necessário informar o Id do Agendamento.");
+                .NotEmpty().WithMessage(MensagensAgendamento.IdAgendamentoNaoInformadoCancelarAgendamento)
+                .GreaterThan(0).WithMessage(MensagensAgendamento.IdAgendamentoNaoInformadoCancelarAgendamento)
+                .NotNull().WithMessage(MensagensAgendamento.IdAgendamentoNaoInformadoCancelarAgendamento);
         }
     }
 }

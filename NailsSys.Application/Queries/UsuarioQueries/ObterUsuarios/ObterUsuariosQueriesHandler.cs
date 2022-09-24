@@ -3,6 +3,7 @@ using MediatR;
 using NailsSys.Application.ViewModels;
 using NailsSys.Core.Interfaces;
 using NailsSys.Core.Models;
+using NailsSys.Core.Notificacoes;
 
 namespace NailsSys.Application.Queries.UsuarioQueries.ObterUsuarios
 {
@@ -19,7 +20,12 @@ namespace NailsSys.Application.Queries.UsuarioQueries.ObterUsuarios
         }
         public async Task<PaginationResult<UsuarioViewModel>> Handle(ObterUsuariosQueries request, CancellationToken cancellationToken)
         {
-            return _mapper.Map<PaginationResult<UsuarioViewModel>>(await _usuarioRepository.ObterTodosAsync(request.Page));
+            var usuarios = await _usuarioRepository.ObterTodosAsync(request.Page);
+
+            if(usuarios == null || usuarios.Data.Count() == 0)
+                throw new ExcecoesPersonalizadas("Nenhum usuário encontrado.");
+
+            return _mapper.Map<PaginationResult<UsuarioViewModel>>(usuarios);
         }
     }
 }

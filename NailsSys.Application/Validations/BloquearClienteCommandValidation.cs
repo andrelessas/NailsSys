@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation;
 using NailsSys.Application.Commands.ClienteCommands.BloquearCliente;
+using NailsSys.Core.Notificacoes;
 
 namespace NailsSys.Application.Validations
 {
@@ -12,9 +13,9 @@ namespace NailsSys.Application.Validations
         public BloquearClienteCommandValidation()
         {
             RuleFor(x=>x.Id)
-                .NotNull().WithMessage("Para bloquear o cliente, é necessário informar o Id do Cliente válido.")
-                .NotEmpty().WithMessage("Para bloquear o cliente, é necessário informar o Id do Cliente válido.")
-                .GreaterThan(0).WithMessage("Para bloquear o cliente, é necessário informar o Id do Cliente válido.");
+                .NotNull().WithMessage(MensagensCliente.IdClienteNaoInformadoAoBloquearCLiente)
+                .NotEmpty().WithMessage(MensagensCliente.IdClienteNaoInformadoAoBloquearCLiente)
+                .GreaterThan(0).WithMessage(MensagensCliente.IdClienteNaoInformadoAoBloquearCLiente);
         }
     }
 }

@@ -1,5 +1,6 @@
 using FluentValidation;
 using NailsSys.Application.Commands.AgendamentoCommands.AlterarAgendamento;
+using NailsSys.Core.Notificacoes;
 
 namespace NailsSys.Application.Validations
 {
@@ -9,37 +10,37 @@ namespace NailsSys.Application.Validations
         {
             RuleFor(x => x.IdCliente)
                 .NotNull()
-                .WithMessage("Necessário informar o Cliente que será atendido.")
+                .WithMessage(MensagensAgendamento.ClienteNullVazio)
                 .NotEmpty()
-                .WithMessage("Necessário informar o Cliente que será atendido.");
+                .WithMessage(MensagensAgendamento.ClienteNullVazio);
 
             RuleFor(x => x.DataAtendimento)
                 .NotNull()
-                .WithMessage("Necessário informar uma Data válida.")
+                .WithMessage(MensagensAgendamento.DataAtendimentoNullVazia)
                 .NotEmpty()
-                .WithMessage("Necessário informar uma Data válida.")
+                .WithMessage(MensagensAgendamento.DataAtendimentoNullVazia)
                 .Must(ValidarData)
-                .WithMessage("Data inválida.");
+                .WithMessage(MensagensAgendamento.DataAtendimentoInvalida);
 
             RuleFor(x => x.InicioPrevisto)
                 .NotNull()
-                .WithMessage("Necessário informar um horário válido.")
+                .WithMessage(MensagensAgendamento.HorarioNullVazio)
                 .NotEmpty()
-                .WithMessage("Necessário informar um horário válido.")
+                .WithMessage(MensagensAgendamento.HorarioNullVazio)
                 .Must(ValidarHorario)
-                .WithMessage("Horário inválido.");
+                .WithMessage(MensagensAgendamento.HorarioInvalido);
 
             RuleFor(x => x.TerminoPrevisto)
                 .NotNull()
-                .WithMessage("Necessário informar um horário válido.")
+                .WithMessage(MensagensAgendamento.HorarioNullVazio)
                 .NotEmpty()
-                .WithMessage("Necessário informar um horário válido.")
+                .WithMessage(MensagensAgendamento.HorarioNullVazio)
                 .Must(ValidarHorario)
-                .WithMessage("Horário inválido.");
+                .WithMessage(MensagensAgendamento.DataAtendimentoInvalida);
 
             RuleFor(x => x)
                 .Must(horario => ValidarHorario(horario.InicioPrevisto,horario.TerminoPrevisto))
-                .WithMessage("O término do agendamento não pode ser maior que o inicio do agendamento.");
+                .WithMessage(MensagensAgendamento.TerminoAtendimentoMaiorQueInicioDoAtendimento);
         }
         public bool ValidarData(DateTime data)
             => data.Date > DateTime.Now.Date;

@@ -63,8 +63,8 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             //Assert
             Assert.False(result.IsValid);
             var erros = ObterListagemErro(result);
-            Assert.True(erros.Contains("Necessário informar o Item.") ||
-                        erros.Contains("O Item deve ser maior que 0."));
+            Assert.True(erros.Contains(MensagensItensAgendamento.ItemMaiorQueZero) ||
+                        erros.Contains(MensagensItensAgendamento.ItemNullVazio));
         }
 
         [Theory]
@@ -80,8 +80,8 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             //Assert
             Assert.False(result.IsValid);
             var erros = ObterListagemErro(result);
-            Assert.True(erros.Contains("Necessário informar a quantidade do item.") ||
-                        erros.Contains("A Quantidade deve ser maior que 0."));
+            Assert.True(erros.Contains(MensagensItensAgendamento.QuantidadeMaiorQueZero) ||
+                        erros.Contains(MensagensItensAgendamento.QuantidadeNullVazio));
         }
     }
 }
