@@ -13,6 +13,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
 {
     public class AlterarItemCommandHandlerTests:TestsConfigurations
     {
+        private readonly Mock<IUnitOfWorks> _unitOfWorks;
         private readonly Mock<IItemAgendamentoRepository> _itemAgendamentoRepository;
         private readonly AlterarItemCommand _alterarItemCommand;
         private readonly AlterarItemCommandHandler _alterarItemCommandHandler;
@@ -20,14 +21,15 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
 
         public AlterarItemCommandHandlerTests()
         {
+            _unitOfWorks = new Mock<IUnitOfWorks>();
             _itemAgendamentoRepository = new Mock<IItemAgendamentoRepository>();
             _alterarItemCommand = new Faker<AlterarItemCommand>()
                 .RuleFor(i => i.Id, v => v.Random.Int())
                 .RuleFor(i => i.Quantidade, v => v.Random.Int())
                 .Generate();
 
-            _alterarItemCommandHandler = new AlterarItemCommandHandler(_itemAgendamentoRepository.Object);
-
+            _unitOfWorks.SetupGet(x => x.ItemAgendamento).Returns(_itemAgendamentoRepository.Object);
+            _alterarItemCommandHandler = new AlterarItemCommandHandler(_unitOfWorks.Object);
             _alterarItemCommandValidation = new AlterarItemCommandValidation();
         }
         [Fact]
@@ -39,7 +41,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             //Act
             await _alterarItemCommandHandler.Handle(_alterarItemCommand, new CancellationToken());
             //Assert
-            _itemAgendamentoRepository.Verify(ir => ir.SaveChangesAsync(),Times.Once);
+            _unitOfWorks.Verify(ir => ir.SaveChangesAsync(),Times.Once);
         }
 
         [Fact]

@@ -11,19 +11,19 @@ namespace NailsSys.Application.Commands.UsuarioCommands.LoginUsuarioCommand
 {
     public class LoginUsuarioCommandHandler : IRequestHandler<LoginUsuarioCommand, LoginUsuarioViewModel>
     {
-        private readonly IUsuarioRepository _usuarioRepository;
+        private readonly IUnitOfWorks _unitOfWorks;
         private readonly IAutenticacaoService _autenticacaoService;
 
-        public LoginUsuarioCommandHandler(IUsuarioRepository usuarioRepository,
+        public LoginUsuarioCommandHandler(IUnitOfWorks unitOfWorks,
                                           IAutenticacaoService autenticacaoService)
         {
-            _usuarioRepository = usuarioRepository;
+            _unitOfWorks = unitOfWorks;
             _autenticacaoService = autenticacaoService;
         }
         public async Task<LoginUsuarioViewModel> Handle(LoginUsuarioCommand request, CancellationToken cancellationToken)
         {
             var senhaHash = _autenticacaoService.ConverteSha256Hash(request.Senha);
-            var usuario = await _usuarioRepository.ObterUsuarioPorIdLoginSenha(request.Id,request.Usuario, senhaHash);
+            var usuario = await _unitOfWorks.Usuario.ObterUsuarioPorIdLoginSenha(request.Id,request.Usuario, senhaHash);
             
             if (usuario == null)
                 return null;

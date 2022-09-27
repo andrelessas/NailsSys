@@ -28,6 +28,7 @@ namespace NailsSys.API.Configurations
             services.AddScoped<IAgendamentoRepository,AgendamentoRepository>();
             services.AddScoped<IUsuarioRepository,UsuarioRepository>();
             services.AddScoped<IAutenticacaoService,AutenticacaoService>();
+            services.AddScoped<IFormaPagamentoRepository,FormaPagamentoRepository>();
         }
     }
 }

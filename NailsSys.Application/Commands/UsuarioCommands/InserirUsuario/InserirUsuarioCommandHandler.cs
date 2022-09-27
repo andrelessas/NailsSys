@@ -12,20 +12,20 @@ namespace NailsSys.Application.Commands.UsuarioCommands.InserirUsuario
 {
     public class InserirUsuarioCommandHandler : IRequestHandler<InserirUsuarioCommand, Unit>
     {
-        private readonly IUsuarioRepository _usuarioRepository;
+        private readonly IUnitOfWorks _unitOfWorks;
         private readonly IAutenticacaoService _autenticacaoService;
 
-        public InserirUsuarioCommandHandler(IUsuarioRepository usuarioRepository,
+        public InserirUsuarioCommandHandler(IUnitOfWorks unitOfWorks,
                                             IAutenticacaoService autenticacaoService)
         {
-            _usuarioRepository = usuarioRepository;
+            _unitOfWorks = unitOfWorks;
             _autenticacaoService = autenticacaoService;
         }
         public async Task<Unit> Handle(InserirUsuarioCommand request, CancellationToken cancellationToken)
         {
             var hashSenha = _autenticacaoService.ConverteSha256Hash(request.Senha);
-            _usuarioRepository.InserirAsync(new Usuario(request.NomeCompleto,request.Login,hashSenha,request.Cargo.ToString()));
-            await _usuarioRepository.SaveChangesAsync();
+            _unitOfWorks.Usuario.InserirAsync(new Usuario(request.NomeCompleto,request.Login,hashSenha,request.Cargo.ToString()));
+            await _unitOfWorks.SaveChangesAsync();
             return Unit.Value;
         }
     }

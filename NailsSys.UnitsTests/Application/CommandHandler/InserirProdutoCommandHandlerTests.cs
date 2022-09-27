@@ -12,12 +12,14 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
 {
     public class InserirProdutoCommandHandlerTests:TestsConfigurations
     {
+        private readonly Mock<IUnitOfWorks> _unitOfWorks;
         private readonly Mock<IProdutoRepository> _produtoRepository;
         private readonly InserirProdutoCommand _produtoCommand;
         private readonly InserirProdutoCommandHandler _inserirProdutoCommandHandler;
 
         public InserirProdutoCommandHandlerTests()
         {
+            _unitOfWorks = new Mock<IUnitOfWorks>();
             _produtoRepository = new Mock<IProdutoRepository>();
             _produtoCommand = new Faker<InserirProdutoCommand>()                
                 .RuleFor(p=> p.Descricao, f=> f.Commerce.ProductName())
@@ -25,7 +27,9 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
                 .RuleFor(p=> p.TipoProduto, "S")
                 .Generate(); 
 
-            _inserirProdutoCommandHandler = new InserirProdutoCommandHandler(_produtoRepository.Object);
+            _unitOfWorks.SetupGet(x => x.Produto).Returns(_produtoRepository.Object);
+
+            _inserirProdutoCommandHandler = new InserirProdutoCommandHandler(_unitOfWorks.Object);
         }        
 
         [Fact]
@@ -35,7 +39,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             await _inserirProdutoCommandHandler.Handle(_produtoCommand,new CancellationToken());
             //Assert
             _produtoRepository.Verify(x=> x.InserirAsync(It.IsAny<Produto>()),Times.Once);
-            _produtoRepository.Verify(x=> x.SaveChangesAsync(),Times.Once);
+            _unitOfWorks.Verify(x=> x.SaveChangesAsync(),Times.Once);
         }   
 
         [Theory]

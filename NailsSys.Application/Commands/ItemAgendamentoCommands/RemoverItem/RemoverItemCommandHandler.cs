@@ -10,21 +10,21 @@ namespace NailsSys.Application.Commands.ItemAgendamentoCommands.RemoverItem
 {
     public class RemoverItemCommandHandler : IRequestHandler<RemoverItemCommand, Unit>
     {
-        private readonly IItemAgendamentoRepository _itemAgendamentoRepository;
+        private readonly IUnitOfWorks _unitOfWorks;
 
-        public RemoverItemCommandHandler(IItemAgendamentoRepository itemAgendamentoRepository)
+        public RemoverItemCommandHandler(IUnitOfWorks unitOfWorks)
         {
-            _itemAgendamentoRepository = itemAgendamentoRepository;
+            _unitOfWorks = unitOfWorks;
         }
         public async Task<Unit> Handle(RemoverItemCommand request, CancellationToken cancellationToken)
         {
-            var item = await _itemAgendamentoRepository.ObterPorIDAsync(request.Id);
+            var item = await _unitOfWorks.ItemAgendamento.ObterPorIDAsync(request.Id);
 
             if(item == null)
                 throw new ExcecoesPersonalizadas("Item não encontrado.");
 
-            _itemAgendamentoRepository.ExcluirAsync(item);
-            await _itemAgendamentoRepository.SaveChangesAsync();
+            _unitOfWorks.ItemAgendamento.ExcluirAsync(item);
+            await _unitOfWorks.SaveChangesAsync();
             return Unit.Value;
         }
     }

@@ -7,39 +7,43 @@ namespace NailsSys.Application.Commands.AgendamentoCommands.NovoAgendamento
 {
     public class NovoAgendamentoCommandHandler : IRequestHandler<NovoAgendamentoCommand, Unit>
     {
-        private readonly IAgendamentoRepository _agendamentoRepository;
-        private readonly IItemAgendamentoRepository _itemAgendamentoRepository;
-        private readonly IProdutoRepository _produtoRepository;
+        private readonly IUnitOfWorks _unitOfWorks;
 
-        public NovoAgendamentoCommandHandler(IAgendamentoRepository agendamentoRepository,
-                                             IItemAgendamentoRepository itemAgendamentoRepository,
-                                             IProdutoRepository produtoRepository)
+        public NovoAgendamentoCommandHandler(IUnitOfWorks unitOfWorks)
         {
-            _agendamentoRepository = agendamentoRepository;
-            _itemAgendamentoRepository = itemAgendamentoRepository;
-            _produtoRepository = produtoRepository;
+            _unitOfWorks = unitOfWorks;
         }
         public async Task<Unit> Handle(NovoAgendamentoCommand request, CancellationToken cancellationToken)
         {
-            _agendamentoRepository.InserirAsync(new Agendamento(request.IdCliente,
-                                                                request.DataAtendimento,
-                                                                request.InicioPrevisto,
-                                                                request.TerminoPrevisto));
-            await _agendamentoRepository.SaveChangesAsync();
+            await _unitOfWorks.BeginTransactionAsync();
 
-            if(request.Itens == null || request.Itens.Count() == 0)
-                throw new ExcecoesPersonalizadas("Nenhum produto informado para realizar o agendamento.");
+            _unitOfWorks.Agendamento.InserirAsync(
+                new Agendamento(
+                    request.IdCliente,
+                    request.DataAtendimento,
+                    request.InicioPrevisto,
+                    request.TerminoPrevisto));
             
-            var maxAgendamento = await _agendamentoRepository.ObterMaxAgendamento();
+            await _unitOfWorks.SaveChangesAsync();
+
+            if (request.Itens == null || request.Itens.Count() == 0)
+                throw new ExcecoesPersonalizadas("Nenhum produto informado para realizar o agendamento.");
+
+            var maxAgendamento = await _unitOfWorks.Agendamento.ObterMaxAgendamento();
 
             foreach (var item in request.Itens)
             {
-                var maxItem = await _itemAgendamentoRepository.ObterMaxItem(maxAgendamento);
-                await _itemAgendamentoRepository.InserirItemAsync(new ItemAgendamento(maxAgendamento,item.IdProduto,item.Quantidade,maxItem+1));
-                await _itemAgendamentoRepository.SaveChangesAsync();
-            }
-            
+                var maxItem = await _unitOfWorks.ItemAgendamento.ObterMaxItem(maxAgendamento);
+                await _unitOfWorks.ItemAgendamento.InserirItemAsync(
+                    new ItemAgendamento(
+                        maxAgendamento, 
+                        item.IdProduto, 
+                        item.Quantidade, 
+                        maxItem + 1));
 
+                await _unitOfWorks.SaveChangesAsync();
+            }
+            await _unitOfWorks.CommitAsync();
             return Unit.Value;
         }
     }

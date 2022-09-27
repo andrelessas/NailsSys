@@ -9,17 +9,17 @@ namespace NailsSys.Application.Commands.ClienteCommands.BloquearCliente
 {
     public class BloquearClienteCommandHandler : IRequestHandler<BloquearClienteCommand, Unit>
     {
-        private readonly IClienteRepository _clienteRepository;
+        private readonly IUnitOfWorks _unitOfWorks;
 
-        public BloquearClienteCommandHandler(IClienteRepository clienteRepository)
+        public BloquearClienteCommandHandler(IUnitOfWorks unitOfWorks)
         {
-            _clienteRepository = clienteRepository;
+            _unitOfWorks = unitOfWorks;
         }
         public async Task<Unit> Handle(BloquearClienteCommand request, CancellationToken cancellationToken)
         {
-            var cliente = await _clienteRepository.ObterPorIDAsync(request.Id);
+            var cliente = await _unitOfWorks.Cliente.ObterPorIDAsync(request.Id);
             cliente.BloquearCliente();
-            await _clienteRepository.SaveChangesAsync();
+            await _unitOfWorks.SaveChangesAsync();
             return Unit.Value;
         }
     }

@@ -10,16 +10,16 @@ namespace NailsSys.Application.Commands.ClienteCommands.InserirCliente
 {
     public class InserirClienteCommandHandler : IRequestHandler<InserirClienteCommand, Unit>
     {
-        private readonly IClienteRepository _clienteRepository;
+        private readonly IUnitOfWorks _unitOfWorks;
 
-        public InserirClienteCommandHandler(IClienteRepository clienteRepository)
+        public InserirClienteCommandHandler(IUnitOfWorks unitOfWorks)
         {
-            _clienteRepository = clienteRepository;
+            _unitOfWorks = unitOfWorks;
         }
         public async Task<Unit> Handle(InserirClienteCommand request, CancellationToken cancellationToken)
         {
-            _clienteRepository.InserirAsync(new Cliente(request.NomeCliente,request.Telefone));
-            await _clienteRepository.SaveChangesAsync();
+            _unitOfWorks.Cliente.InserirAsync(new Cliente(request.NomeCliente,request.Telefone));
+            await _unitOfWorks.SaveChangesAsync();
             return Unit.Value;
         }
     }

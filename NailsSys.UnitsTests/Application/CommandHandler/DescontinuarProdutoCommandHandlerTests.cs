@@ -17,15 +17,18 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
 {
     public class DescontinuarProdutoCommandHandlerTests:TestsConfigurations
     {
+        private readonly Mock<IUnitOfWorks> _unitOfWorks;
         private readonly DescontinuarProdutoCommand _produtoCommand;
         private readonly Mock<IProdutoRepository> _produtoRepository;
         private readonly DescontinuarProdutoCommandHandler _descontinuarProdutoCommandHandler;
 
         public DescontinuarProdutoCommandHandlerTests()
         {
+            _unitOfWorks = new Mock<IUnitOfWorks>();
             _produtoCommand = new DescontinuarProdutoCommand(1);
             _produtoRepository = new Mock<IProdutoRepository>();
-            _descontinuarProdutoCommandHandler = new DescontinuarProdutoCommandHandler(_produtoRepository.Object);
+            _unitOfWorks.SetupGet(x => x.Produto).Returns(_produtoRepository.Object);
+            _descontinuarProdutoCommandHandler = new DescontinuarProdutoCommandHandler(_unitOfWorks.Object);
         }
         [Fact]
         public async void ProdutoValido_QuandoExecutado_DescontinuarProduto()
@@ -36,7 +39,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             //Act
             await _descontinuarProdutoCommandHandler.Handle(_produtoCommand,new CancellationToken());
             //Assert
-            _produtoRepository.Verify(pr => pr.SaveChangesAsync(),Times.Once);
+            _unitOfWorks.Verify(pr => pr.SaveChangesAsync(),Times.Once);
         }
 
         [Fact]

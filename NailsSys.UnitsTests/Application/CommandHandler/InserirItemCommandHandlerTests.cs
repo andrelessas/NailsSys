@@ -12,24 +12,29 @@ using Xunit;
 
 namespace NailsSys.UnitsTests.Application.CommandHandler
 {
-    public class InserirItemCommandHandlerTests:TestsConfigurations
+    public class InserirItemCommandHandlerTests : TestsConfigurations
     {
-        private readonly AutoMocker _mocker;
+        private readonly Mock<IUnitOfWorks> _unitOfWorks;
+        private readonly Mock<IItemAgendamentoRepository> _itemAgendamentoRepository;
+        private readonly Mock<IProdutoRepository> _produtoRepository;
         private readonly InserirItemCommand _inserirItemCommand;
         private readonly InserirItemCommandHandler _inserirItemCommandHandler;
         private readonly InserirItemCommandValidation _itenserirItemCommandValidate;
 
         public InserirItemCommandHandlerTests()
         {
-            _mocker = new AutoMocker();
-
+            _unitOfWorks = new Mock<IUnitOfWorks>();
+            _itemAgendamentoRepository = new Mock<IItemAgendamentoRepository>();
+            _produtoRepository = new Mock<IProdutoRepository>();
+            _unitOfWorks.SetupGet(x => x.ItemAgendamento).Returns(_itemAgendamentoRepository.Object);
+            _unitOfWorks.SetupGet(x => x.Produto).Returns(_produtoRepository.Object);
             _inserirItemCommand = new Faker<InserirItemCommand>()
-                .RuleFor(i => i.IdAgendamento, v => v.Random.Int(1,50))
-                .RuleFor(i => i.IdProduto, v => v.Random.Int(1,50))
-                .RuleFor(i => i.Quantidade, v => v.Random.Int(1,10))
+                .RuleFor(i => i.IdAgendamento, v => v.Random.Int(1, 50))
+                .RuleFor(i => i.IdProduto, v => v.Random.Int(1, 50))
+                .RuleFor(i => i.Quantidade, v => v.Random.Int(1, 10))
                 .Generate();
 
-            _inserirItemCommandHandler = _mocker.CreateInstance<InserirItemCommandHandler>();
+            _inserirItemCommandHandler = new InserirItemCommandHandler(_unitOfWorks.Object);
             _itenserirItemCommandValidate = new InserirItemCommandValidation();
         }
 
@@ -38,13 +43,13 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
         {
             //Arrange
             var produto = AutoFaker.Generate<Produto>();
-            _mocker.GetMock<IItemAgendamentoRepository>().Setup(it => it.ObterMaxItem(It.IsAny<int>())).ReturnsAsync(2);
-            _mocker.GetMock<IProdutoRepository>().Setup(pr => pr.ObterPorIDAsync(It.IsAny<int>())).ReturnsAsync(produto);
+            _itemAgendamentoRepository.Setup(it => it.ObterMaxItem(It.IsAny<int>())).ReturnsAsync(2);
+            _produtoRepository.Setup(pr => pr.ObterPorIDAsync(It.IsAny<int>())).ReturnsAsync(produto);
             //Act
-            await _inserirItemCommandHandler.Handle(_inserirItemCommand,new CancellationToken());
+            await _inserirItemCommandHandler.Handle(_inserirItemCommand, new CancellationToken());
             //Assert
-            _mocker.GetMock<IItemAgendamentoRepository>().Verify(it => it.InserirItemAsync(It.IsAny<ItemAgendamento>()),Times.Once);
-            _mocker.GetMock<IItemAgendamentoRepository>().Verify(it => it.SaveChangesAsync(),Times.Once);
+            _itemAgendamentoRepository.Verify(it => it.InserirItemAsync(It.IsAny<ItemAgendamento>()), Times.Once);
+            _unitOfWorks.Verify(it => it.SaveChangesAsync(), Times.Once);
         }
 
         [Theory]
@@ -54,7 +59,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
         public void ValidarIdProdutoInvalido_RetornarExcecaoFluentValidation(int idProduto)
         {
             //Arrange
-            var itemAgendamentoCommand = new InserirItemCommand{IdProduto = idProduto};
+            var itemAgendamentoCommand = new InserirItemCommand { IdProduto = idProduto };
             //Act
             var result = _itenserirItemCommandValidate.Validate(itemAgendamentoCommand);
             //Assert
@@ -71,7 +76,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
         public void ValidarIdAgendamentoInvalido_RetornarExcecaoFluentValidation(int idAgendamento)
         {
             //Arrange
-            var itemAgendamentoCommand = new InserirItemCommand{IdAgendamento = idAgendamento};
+            var itemAgendamentoCommand = new InserirItemCommand { IdAgendamento = idAgendamento };
             //Act
             var result = _itenserirItemCommandValidate.Validate(itemAgendamentoCommand);
             //Assert
@@ -88,7 +93,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
         public void ValidarQuantidadeInvalida_RetornarExcecaoFluentValidation(int quantidade)
         {
             //Arrange
-            var itemAgendamentoCommand = new InserirItemCommand{Quantidade = quantidade};
+            var itemAgendamentoCommand = new InserirItemCommand { Quantidade = quantidade };
             //Act
             var result = _itenserirItemCommandValidate.Validate(itemAgendamentoCommand);
             //Assert

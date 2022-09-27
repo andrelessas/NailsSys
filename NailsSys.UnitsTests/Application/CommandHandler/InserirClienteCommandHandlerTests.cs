@@ -1,4 +1,5 @@
 using Bogus;
+using Moq;
 using Moq.AutoMock;
 using NailsSys.Application.Commands.ClienteCommands.InserirCliente;
 using NailsSys.Application.Validations;
@@ -12,15 +13,18 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
 {
     public class InserirClienteCommandHandlerTests:TestsConfigurations
     {
-        private readonly AutoMocker _mocker;
+        private readonly Mock<IUnitOfWorks> _unitOfWorks;
+        private readonly Mock<IClienteRepository> _clienteRepository;
         private readonly InserirClienteCommandHandler _inserirClienteCommandHandler;
         private readonly InserirClienteCommand _inserirClienteCommand;
         private readonly InserirClienteCommandValidation _inserirClienteCommandValidation;
 
         public InserirClienteCommandHandlerTests()
         {
-            _mocker = new AutoMocker();
-            _inserirClienteCommandHandler = _mocker.CreateInstance<InserirClienteCommandHandler>();
+            _unitOfWorks = new Mock<IUnitOfWorks>();
+            _clienteRepository = new Mock<IClienteRepository>();
+            _unitOfWorks.SetupGet(x => x.Cliente).Returns(_clienteRepository.Object);
+            _inserirClienteCommandHandler = new InserirClienteCommandHandler(_unitOfWorks.Object);
             _inserirClienteCommand = new Faker<InserirClienteCommand>()
                 .RuleFor(x=> x.NomeCliente,y=>y.Person.FullName)
                 .RuleFor(x=> x.Telefone,y=>y.Phone.PhoneNumber())
@@ -39,7 +43,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             //Act
             await _inserirClienteCommandHandler.Handle(_inserirClienteCommand,new CancellationToken());
             //Assert
-            _mocker.GetMock<IClienteRepository>().Verify(x=>x.SaveChangesAsync());
+            _unitOfWorks.Verify(x=>x.SaveChangesAsync());
         }
 
         [Theory]

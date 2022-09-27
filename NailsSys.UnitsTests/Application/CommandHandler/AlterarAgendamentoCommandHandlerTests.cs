@@ -17,15 +17,18 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
 {
     public class AlterarAgendamentoCommandHandlerTests:TestsConfigurations
     {
-        private readonly AutoMocker _mocker;
+        private readonly Mock<IUnitOfWorks> _unitOfWorks;
+        private readonly Mock<IAgendamentoRepository> _agendamentoRepository;
         private readonly AlterarAgendamentoCommandHandler _alterarAgendamentoCommandHandler;
         private readonly AlterarAgendamentoCommand _alterarAgendamentoCommand;
         private readonly AlterarAgendamentoCommandValidation _alterarAgendamentoCommandValidation;
 
         public AlterarAgendamentoCommandHandlerTests()
         {
-            _mocker = new AutoMocker();
-            _alterarAgendamentoCommandHandler = _mocker.CreateInstance<AlterarAgendamentoCommandHandler>();
+            _unitOfWorks = new Mock<IUnitOfWorks>();
+            _agendamentoRepository = new Mock<IAgendamentoRepository>();
+            _unitOfWorks.SetupGet(x => x.Agendamento).Returns(_agendamentoRepository.Object);        
+            _alterarAgendamentoCommandHandler = new AlterarAgendamentoCommandHandler(_unitOfWorks.Object);
             
             _alterarAgendamentoCommand = new Faker<AlterarAgendamentoCommand>()
                 .RuleFor(a => a.Id, v => v.Random.Int(0, 50))
@@ -48,11 +51,11 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
                 _alterarAgendamentoCommand.InicioPrevisto,
                 _alterarAgendamentoCommand.TerminoPrevisto);
 
-            _mocker.GetMock<IAgendamentoRepository>().Setup(a => a.ObterPorIDAsync(It.IsAny<int>())).ReturnsAsync(agendamento);
+            _agendamentoRepository.Setup(a => a.ObterPorIDAsync(It.IsAny<int>())).ReturnsAsync(agendamento);
             //Act
             await _alterarAgendamentoCommandHandler.Handle(_alterarAgendamentoCommand, new CancellationToken());
             //Assert
-            _mocker.GetMock<IAgendamentoRepository>().Verify(x => x.SaveChangesAsync());
+            _unitOfWorks.Verify(x => x.SaveChangesAsync());
         }
 
         [Fact]

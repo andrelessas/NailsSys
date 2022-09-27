@@ -12,6 +12,5 @@ namespace NailsSys.Core.Interfaces
         void AlterarAsync(TEntity entity);
         void Property(TEntity entity, Expression<Func<TEntity, object>> predicate, bool isModified);
         void ExcluirAsync(TEntity entity);
-        Task<int> SaveChangesAsync();
     }
 }

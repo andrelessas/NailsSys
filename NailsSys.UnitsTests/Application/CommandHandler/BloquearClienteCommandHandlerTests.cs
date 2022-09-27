@@ -18,15 +18,18 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
 {
     public class BloquearClienteCommandHandlerTests:TestsConfigurations
     {
-        private readonly AutoMocker _mocker;
         private readonly BloquearClienteCommandHandler _bloquearClienteCommandHandler;
         private readonly BloquearClienteCommand _bloquearClienteCommand;
         private readonly BloquearClienteCommandValidation _bloquearClienteCommandValidation;
+        private readonly Mock<IUnitOfWorks> _unitOfWorks;
+        private readonly Mock<IClienteRepository> _clienteRepository;
 
         public BloquearClienteCommandHandlerTests()
         {
-            _mocker = new AutoMocker();
-            _bloquearClienteCommandHandler = _mocker.CreateInstance<BloquearClienteCommandHandler>();
+            _unitOfWorks = new Mock<IUnitOfWorks>();
+            _clienteRepository = new Mock<IClienteRepository>();
+            _unitOfWorks.SetupGet(x => x.Cliente).Returns(_clienteRepository.Object);
+            _bloquearClienteCommandHandler = new BloquearClienteCommandHandler(_unitOfWorks.Object);
             _bloquearClienteCommand = new BloquearClienteCommand(1);
 
             _bloquearClienteCommandValidation = new BloquearClienteCommandValidation();    
@@ -38,11 +41,11 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             //Arrange
             var cliente = new Cliente("teste","9999999999999");
 
-            _mocker.GetMock<IClienteRepository>().Setup(x=>x.ObterPorIDAsync(It.IsAny<int>())).ReturnsAsync(cliente);
+            _clienteRepository.Setup(x=>x.ObterPorIDAsync(It.IsAny<int>())).ReturnsAsync(cliente);
             //Act
             await _bloquearClienteCommandHandler.Handle(_bloquearClienteCommand,new CancellationToken());
             //Assert
-            _mocker.GetMock<IClienteRepository>().Verify(x => x.SaveChangesAsync(),Times.Once);
+            _unitOfWorks.Verify(x => x.SaveChangesAsync(),Times.Once);
         }
 
         [Theory]

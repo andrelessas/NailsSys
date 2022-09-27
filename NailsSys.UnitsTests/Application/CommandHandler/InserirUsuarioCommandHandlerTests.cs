@@ -14,13 +14,16 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
 {
     public class InserirUsuarioCommandHandlerTests:TestsConfigurations
     {
+        private readonly Mock<IUnitOfWorks> _unitOfWorks;
         private InserirUsuarioCommand _inserirUsuarioCommand;
         private FluentValidation.Results.ValidationResult _validationResult;
         private Mock<IUsuarioRepository> _usuarioRepositoryMock;
         private Mock<IAutenticacaoService> _autenticacaoServiceMock;
+        private readonly InserirUsuarioCommandHandler _inserirUsuarioCommandHandler;
 
         public InserirUsuarioCommandHandlerTests()
         {
+            _unitOfWorks = new Mock<IUnitOfWorks>();
             _inserirUsuarioCommand = new Faker<InserirUsuarioCommand>()
                 .RuleFor(u => u.NomeCompleto, "Andre lessas")
                 .RuleFor(u => u.Login, "andre")
@@ -33,17 +36,21 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
 
             _usuarioRepositoryMock = new Mock<IUsuarioRepository>();
             _autenticacaoServiceMock = new Mock<IAutenticacaoService>();
+
+            _unitOfWorks.SetupGet(x => x.Usuario).Returns(_usuarioRepositoryMock.Object);
+
+            _inserirUsuarioCommandHandler = new InserirUsuarioCommandHandler(_unitOfWorks.Object, _autenticacaoServiceMock.Object);
+
         }
         [Fact]
         public async Task DadosDeUsuarioValidos_ExecutaCadastroDeNovoUsuarioAsync()
         {
             //Arrange   
             var senhaHash = "c131c63023da974fb20016d91331797ca214f376ba64debf3a0c4aa9049e965c";
-            var inserirUsuarioCommandHandler = new InserirUsuarioCommandHandler(_usuarioRepositoryMock.Object, _autenticacaoServiceMock.Object);
 
             _autenticacaoServiceMock.Setup(x => x.ConverteSha256Hash(It.IsAny<String>())).Returns(senhaHash);
             //Act
-            await inserirUsuarioCommandHandler.Handle(_inserirUsuarioCommand, new CancellationToken());
+            await _inserirUsuarioCommandHandler.Handle(_inserirUsuarioCommand, new CancellationToken());
             //Assert   
             _usuarioRepositoryMock.Verify(x => x.InserirAsync(It.IsAny<Usuario>()), Times.Once);
         }

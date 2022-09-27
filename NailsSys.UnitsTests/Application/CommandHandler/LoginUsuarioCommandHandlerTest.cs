@@ -15,6 +15,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
     {
         private Mock<IUsuarioRepository> _usuarioRepository;
         private Mock<IAutenticacaoService> _autenticacaoService;
+        private readonly Mock<IUnitOfWorks> _unitOfWorks;
         private LoginUsuarioCommand _usuarioLoginCommand;
         private Usuario _usuario;
         private LoginUsuarioCommandHandler _loginUsuarioCommandHandler;
@@ -24,15 +25,18 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
         {
             _usuarioRepository = new Mock<IUsuarioRepository>();
             _autenticacaoService = new Mock<IAutenticacaoService>();
+            _unitOfWorks = new Mock<IUnitOfWorks>();
 
             _usuarioLoginCommand = new Faker<LoginUsuarioCommand>()
                 .RuleFor(x => x.Usuario,y => y.Name.FirstName())
                 .RuleFor(x => x.Senha,y=> y.Internet.Password(10))
                 .Generate();
 
-            _usuario = new Usuario("",new Faker().Name.FirstName(),"","");                
+            _usuario = new Usuario("",new Faker().Name.FirstName(),"","");    
 
-            _loginUsuarioCommandHandler = new LoginUsuarioCommandHandler(_usuarioRepository.Object,_autenticacaoService.Object);
+            _unitOfWorks.SetupGet(x => x.Usuario).Returns(_usuarioRepository.Object);            
+
+            _loginUsuarioCommandHandler = new LoginUsuarioCommandHandler(_unitOfWorks.Object,_autenticacaoService.Object);
 
             _loginValidate = new LoginUsuarioCommandValidation();
         }

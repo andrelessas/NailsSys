@@ -10,21 +10,21 @@ namespace NailsSys.Application.Commands.AgendamentoCommands.CancelamentoAgendame
 {
     public class CancelarAgendamentoCommandHandler : IRequestHandler<CancelarAgendamentoCommand, Unit>
     {
-        private readonly IAgendamentoRepository _agendamentoRepository;
+        private readonly IUnitOfWorks _unitOfWorks;
 
-        public CancelarAgendamentoCommandHandler(IAgendamentoRepository agendamentoRepository)
+        public CancelarAgendamentoCommandHandler(IUnitOfWorks unitOfWorks)
         {
-            _agendamentoRepository = agendamentoRepository;
+            _unitOfWorks = unitOfWorks;
         }
         public async Task<Unit> Handle(CancelarAgendamentoCommand request, CancellationToken cancellationToken)
         {
-            var agendamento = await _agendamentoRepository.ObterPorIDAsync(request.Id);
+            var agendamento = await _unitOfWorks.Agendamento.ObterPorIDAsync(request.Id);
 
             if(agendamento == null)
                 throw new ExcecoesPersonalizadas("Nenhum agendamento encontrado.");
 
             agendamento.CancelarAgendamento();
-            await _agendamentoRepository.SaveChangesAsync();
+            await _unitOfWorks.SaveChangesAsync();
             return Unit.Value;
         }
     }

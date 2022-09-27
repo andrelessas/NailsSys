@@ -6,20 +6,18 @@ namespace NailsSys.Application.Commands.ItemAgendamentoCommands.InserirItemComma
 {
     public class InserirItemCommandHandler : IRequestHandler<InserirItemCommand, Unit>
     {
-        private readonly IItemAgendamentoRepository _itemAgendamentoRepository;
-        private readonly IProdutoRepository _produtoRepository;
+        private readonly IUnitOfWorks _unitOfWorks;
 
-        public InserirItemCommandHandler(IItemAgendamentoRepository itemAgendamentoRepository,IProdutoRepository produtoRepository)
+        public InserirItemCommandHandler(IUnitOfWorks unitOfWorks)
         {
-            _itemAgendamentoRepository = itemAgendamentoRepository;
-            _produtoRepository = produtoRepository;
+            _unitOfWorks = unitOfWorks;
         }
         public async Task<Unit> Handle(InserirItemCommand request, CancellationToken cancellationToken)
         {
-            var produto = await _produtoRepository.ObterPorIDAsync(request.IdProduto);
-            var maxItem = await _itemAgendamentoRepository.ObterMaxItem(request.IdAgendamento);
-            await _itemAgendamentoRepository.InserirItemAsync(new ItemAgendamento(request.IdAgendamento,request.IdProduto,request.Quantidade,maxItem + 1));
-            await _itemAgendamentoRepository.SaveChangesAsync();
+            var produto = await _unitOfWorks.Produto.ObterPorIDAsync(request.IdProduto);
+            var maxItem = await _unitOfWorks.ItemAgendamento.ObterMaxItem(request.IdAgendamento);
+            await _unitOfWorks.ItemAgendamento.InserirItemAsync(new ItemAgendamento(request.IdAgendamento,request.IdProduto,request.Quantidade,maxItem + 1));
+            await _unitOfWorks.SaveChangesAsync();
             return Unit.Value;
         }
     }

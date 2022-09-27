@@ -11,7 +11,6 @@ namespace NailsSys.Data.Repository
     {
         protected readonly NailsSysContext _context;
         private const int PAGE_SIZE = 10;
-
         public Repository(NailsSysContext context)
         {
             _context = context;
@@ -49,11 +48,6 @@ namespace NailsSys.Data.Repository
         public void Property(TEntity entity, Expression<Func<TEntity, object>> predicate, bool isModified)
         {
             _context.Entry(entity).Property(predicate).IsModified = isModified;
-        }
-
-        public async Task<int> SaveChangesAsync()
-        {
-            return await _context.SaveChangesAsync();
         }
     }
 }

@@ -11,8 +11,9 @@ using Xunit;
 
 namespace NailsSys.UnitsTests.Application.CommandHandler
 {
-    public class AlterarProdutoCommandHandlerTests:TestsConfigurations
+    public class AlterarProdutoCommandHandlerTests : TestsConfigurations
     {
+        private readonly Mock<IUnitOfWorks> _unitOfWorks;
         private readonly Mock<IProdutoRepository> _produtoRepository;
         private readonly AlterarProdutoCommand _produtoCommand;
         private readonly AlterarProdutoCommandHandler _produtoCommandHandler;
@@ -20,15 +21,18 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
 
         public AlterarProdutoCommandHandlerTests()
         {
+            _unitOfWorks = new Mock<IUnitOfWorks>();
             _produtoRepository = new Mock<IProdutoRepository>();
             _produtoCommand = new Faker<AlterarProdutoCommand>()
-                .RuleFor(p=> p.Id, 1)
-                .RuleFor(p=> p.Descricao, f=> f.Commerce.ProductName())
-                .RuleFor(p=> p.Preco, f=> Convert.ToDecimal(f.Commerce.Price()))
-                .RuleFor(p=> p.TipoProduto, "S")
-                .Generate(); 
+                .RuleFor(p => p.Id, 1)
+                .RuleFor(p => p.Descricao, f => f.Commerce.ProductName())
+                .RuleFor(p => p.Preco, f => Convert.ToDecimal(f.Commerce.Price()))
+                .RuleFor(p => p.TipoProduto, "S")
+                .Generate();
 
-            _produtoCommandHandler = new AlterarProdutoCommandHandler(_produtoRepository.Object); 
+            _unitOfWorks.SetupGet(x => x.Produto).Returns(_produtoRepository.Object);
+
+            _produtoCommandHandler = new AlterarProdutoCommandHandler(_unitOfWorks.Object);
             _alterarProdutoValidation = new AlterarProdutoCommandValidation();
         }
 
@@ -39,18 +43,18 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             var produto = AutoFaker.Generate<Produto>();
             _produtoRepository.Setup(x => x.ObterPorIDAsync(It.IsAny<int>())).ReturnsAsync(produto);
             //Act
-            await _produtoCommandHandler.Handle(_produtoCommand,new CancellationToken());
+            await _produtoCommandHandler.Handle(_produtoCommand, new CancellationToken());
             //Assert
-            _produtoRepository.Verify(x => x.ObterPorIDAsync(It.IsAny<int>()),Times.Once);
-            _produtoRepository.Verify(x => x.SaveChangesAsync(),Times.Once);
+            _produtoRepository.Verify(x => x.ObterPorIDAsync(It.IsAny<int>()), Times.Once);
+            _unitOfWorks.Verify(x => x.SaveChangesAsync(), Times.Once);
         }
 
         [Fact]
         public void DadoProdutoNaoEncontrado_QuandoExecutado_RetornarExcecaoAsync()
         {
             //Arrange - Act - Assert
-            var excecao = Assert.ThrowsAsync<ExcecoesPersonalizadas>(() => _produtoCommandHandler.Handle(_produtoCommand,new CancellationToken())).Result;            
-            Assert.Equal("Produto não encontrado.",excecao.Message);
+            var excecao = Assert.ThrowsAsync<ExcecoesPersonalizadas>(() => _produtoCommandHandler.Handle(_produtoCommand, new CancellationToken())).Result;
+            Assert.Equal("Produto não encontrado.", excecao.Message);
         }
 
         [Theory]
@@ -59,13 +63,13 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
         public void TestarDescricaoProdutoInvalida_RetornarExcecoesFluentValidations(string descricao)
         {
             //Arrange
-            var produtoCommand = new AlterarProdutoCommand{Descricao = descricao};
+            var produtoCommand = new AlterarProdutoCommand { Descricao = descricao };
             //Act
             var result = _alterarProdutoValidation.Validate(produtoCommand);
             //Assert
             Assert.False(result.IsValid);
             var erros = ObterListagemErro(result);
-            Assert.True(erros.Contains(MensagensProduto.DescricaoNullVazio) || 
+            Assert.True(erros.Contains(MensagensProduto.DescricaoNullVazio) ||
                         erros.Contains(MensagensProduto.LimiteTamanhoDescricao));
         }
         [Theory]
@@ -75,14 +79,14 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
         public void TestarTipoProdutoInvalido_RetornarExcecoesFluentValidations(string tipoProduto)
         {
             //Arrange
-            var produtoCommand = new AlterarProdutoCommand{TipoProduto = tipoProduto};
+            var produtoCommand = new AlterarProdutoCommand { TipoProduto = tipoProduto };
             //Act
             var result = _alterarProdutoValidation.Validate(produtoCommand);
             //Assert
             Assert.False(result.IsValid);
             var erros = ObterListagemErro(result);
             Assert.True(erros.Contains(MensagensProduto.TipoProdutoNullVazio) ||
-                        erros.Contains(MensagensProduto.ValidarTipoProduto));        
+                        erros.Contains(MensagensProduto.ValidarTipoProduto));
         }
         [Theory]
         [InlineData(0)]
@@ -90,7 +94,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
         public void TestarPrecoProdutoInvalido_RetornarExcecoesFluentValidations(decimal preco)
         {
             //Arrange
-            var produtoCommand = new AlterarProdutoCommand{Preco = preco};
+            var produtoCommand = new AlterarProdutoCommand { Preco = preco };
             //Act
             var result = _alterarProdutoValidation.Validate(produtoCommand);
             //Assert

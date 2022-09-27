@@ -10,21 +10,21 @@ namespace NailsSys.Application.Commands.ClienteCommands.AlterarCliente
 {
     public class AlterarClienteCommandHandler : IRequestHandler<AlterarClienteCommand, Unit>
     {
-        private readonly IClienteRepository _clienteRepository;
+        private readonly IUnitOfWorks _unitOfWorks;
 
-        public AlterarClienteCommandHandler(IClienteRepository clienteRepository)
+        public AlterarClienteCommandHandler(IUnitOfWorks unitOfWorks)
         {
-            _clienteRepository = clienteRepository;
+            _unitOfWorks = unitOfWorks;
         }
         public async Task<Unit> Handle(AlterarClienteCommand request, CancellationToken cancellationToken)
         {
-            var cliente = await _clienteRepository.ObterPorIDAsync(request.Id);
+            var cliente = await _unitOfWorks.Cliente.ObterPorIDAsync(request.Id);
 
             if(cliente == null)
                 throw new ExcecoesPersonalizadas("Nenhum cliente encontrado.");
 
             cliente.AlterarCliente(request.NomeCliente,request.Telefone);
-            await _clienteRepository.SaveChangesAsync();
+            await _unitOfWorks.SaveChangesAsync();
             return Unit.Value;
         }
     }

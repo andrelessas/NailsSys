@@ -16,15 +16,18 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
 {
     public class RemoverItemCommandHandlerTests:TestsConfigurations
     {
-        private readonly AutoMocker _mocker;
+        private readonly Mock<IUnitOfWorks> _unitOfWorks;
+        private readonly Mock<IItemAgendamentoRepository> _itemAgendamentoRepository;
         private readonly RemoverItemCommandHandler _removerItemCommandHandler;
         private readonly RemoverItemCommand _removerItemCommand;
         private readonly RemoverItemCommandValidation _removerItemCommandValidation;
 
         public RemoverItemCommandHandlerTests()
         {
-            _mocker = new AutoMocker();
-            _removerItemCommandHandler = _mocker.CreateInstance<RemoverItemCommandHandler>();
+            _unitOfWorks = new Mock<IUnitOfWorks>();
+            _itemAgendamentoRepository = new Mock<IItemAgendamentoRepository>();
+            _unitOfWorks.SetupGet(x => x.ItemAgendamento).Returns(_itemAgendamentoRepository.Object);
+            _removerItemCommandHandler = new RemoverItemCommandHandler(_unitOfWorks.Object);
             _removerItemCommand = new RemoverItemCommand(1);
             _removerItemCommandValidation = new RemoverItemCommandValidation();
         }
@@ -35,11 +38,11 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             //Arrange
             var item = new ItemAgendamento(1,10,1,1);
             
-            _mocker.GetMock<IItemAgendamentoRepository>().Setup(x=>x.ObterPorIDAsync(It.IsAny<int>())).ReturnsAsync(item);
+            _itemAgendamentoRepository.Setup(x=>x.ObterPorIDAsync(It.IsAny<int>())).ReturnsAsync(item);
             //Act
             await _removerItemCommandHandler.Handle(_removerItemCommand,new CancellationToken());
             //Assert
-            _mocker.GetMock<IItemAgendamentoRepository>().Verify(x=>x.SaveChangesAsync(),Times.Once);
+            _unitOfWorks.Verify(x=>x.SaveChangesAsync(),Times.Once);
         }
 
         [Fact]

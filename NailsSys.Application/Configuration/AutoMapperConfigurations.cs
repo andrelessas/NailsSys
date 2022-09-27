@@ -55,6 +55,14 @@ namespace NailsSys.Application.Configuration
             CreateMap<ItemAgendamentoDTO, ItemAgendamentoViewModel>()
                 .ForMember(dest => dest.NomeProduto, conf => conf.MapFrom(src => src.DescricaoProduto))
                 .ReverseMap();
+            
+            CreateMap<FormaPagamento, FormaPagamentoViewModel>()
+                .ForMember(dest => dest.Id, conf => conf.MapFrom(src => src.Id))
+                .ReverseMap();
+            
+            CreateMap<PaginationResult<FormaPagamento>, PaginationResult<FormaPagamentoViewModel>>()
+                .ForMember(dest => dest.Data, conf => conf.MapFrom(src => src.Data))
+                .ReverseMap();
         }
     }
 }

@@ -6,17 +6,16 @@ namespace NailsSys.Application.Commands.ProdutoCommands.InserirProduto
 {
     public class InserirProdutoCommandHandler : IRequestHandler<InserirProdutoCommand, Unit>
     {
-        private readonly IProdutoRepository _produtoRepository;
+        private readonly IUnitOfWorks _unitOfWorks;
 
-        public InserirProdutoCommandHandler(IProdutoRepository produtoRepository)
+        public InserirProdutoCommandHandler(IUnitOfWorks unitOfWorks)
         {
-            _produtoRepository = produtoRepository;
+            _unitOfWorks = unitOfWorks;
         }
         public async Task<Unit> Handle(InserirProdutoCommand request, CancellationToken cancellationToken)
         {
-            var produto = new Produto(request.Descricao, request.TipoProduto, request.Preco);
-            _produtoRepository.InserirAsync(produto);
-            await _produtoRepository.SaveChangesAsync();
+            _unitOfWorks.Produto.InserirAsync(new Produto(request.Descricao, request.TipoProduto, request.Preco));
+            await _unitOfWorks.SaveChangesAsync();
             return Unit.Value;
         }
     }

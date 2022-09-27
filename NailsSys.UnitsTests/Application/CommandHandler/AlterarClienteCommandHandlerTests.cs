@@ -14,15 +14,18 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
 {
     public class AlterarClienteCommandHandlerTests:TestsConfigurations
     {
-        private readonly AutoMocker _mocker;
+        private readonly Mock<IUnitOfWorks> _unitOfWorks;
+        private readonly Mock<IClienteRepository> _clienteRepository;
         private readonly AlterarClienteCommandHandler _alterarClienteCommandHandler;
         private readonly AlterarClienteCommand _alterarClienteCommand;
         private readonly AlterarClienteCommandValidation _alterarClienteCommandHandlerValidation;
 
         public AlterarClienteCommandHandlerTests()
         {
-            _mocker = new AutoMocker();
-            _alterarClienteCommandHandler = _mocker.CreateInstance<AlterarClienteCommandHandler>();
+            _unitOfWorks = new Mock<IUnitOfWorks>();
+            _clienteRepository = new Mock<IClienteRepository>();
+            _unitOfWorks.SetupGet(x => x.Cliente).Returns(_clienteRepository.Object);
+            _alterarClienteCommandHandler = new AlterarClienteCommandHandler(_unitOfWorks.Object);
             _alterarClienteCommand = new Faker<AlterarClienteCommand>()
                 .RuleFor(x => x.Id, y => y.Random.Int(0, 10))
                 .RuleFor(x => x.NomeCliente, y => y.Person.FullName)
@@ -37,12 +40,11 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
         {
             //Arrange
             var cliente = AutoFaker.Generate<Cliente>();
-
-            _mocker.GetMock<IClienteRepository>().Setup(x => x.ObterPorIDAsync(It.IsAny<int>())).ReturnsAsync(cliente);
+            _clienteRepository.Setup(x => x.ObterPorIDAsync(It.IsAny<int>())).ReturnsAsync(cliente);
             //Act
             await _alterarClienteCommandHandler.Handle(_alterarClienteCommand, new CancellationToken());
             //Assert
-            _mocker.GetMock<IClienteRepository>().Verify(x => x.SaveChangesAsync(), Times.Once);
+            _unitOfWorks.Verify(x => x.SaveChangesAsync(), Times.Once);
         }
 
         [Fact]

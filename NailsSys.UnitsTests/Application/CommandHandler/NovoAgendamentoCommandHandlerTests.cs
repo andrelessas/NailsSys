@@ -18,15 +18,23 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
 {
     public class NovoAgendamentoCommandHandlerTests:TestsConfigurations
     {
-        private readonly AutoMocker _mocker;
+        private readonly Mock<IUnitOfWorks> _unitOfWorks;
+        private readonly Mock<IAgendamentoRepository> _agendamentoRepository;
+        private readonly Mock<IItemAgendamentoRepository> _itemAgendamentoRepository;
         private readonly NovoAgendamentoCommandHandler _novoAgendamentoCommandHandler;
         private readonly NovoAgendamentoCommand _novoAgendamentoCommand;
         private readonly NovoAgendamentoCommandValidation _novoAgendamentoCommandValidation;
 
         public NovoAgendamentoCommandHandlerTests()
         {
-            _mocker = new AutoMocker();
-            _novoAgendamentoCommandHandler = _mocker.CreateInstance<NovoAgendamentoCommandHandler>();
+            _unitOfWorks = new Mock<IUnitOfWorks>();
+            _agendamentoRepository = new Mock<IAgendamentoRepository>();
+            _itemAgendamentoRepository = new Mock<IItemAgendamentoRepository>();
+
+            _unitOfWorks.SetupGet(x => x.Agendamento).Returns(_agendamentoRepository.Object);
+            _unitOfWorks.SetupGet(x => x.ItemAgendamento).Returns(_itemAgendamentoRepository.Object);
+
+            _novoAgendamentoCommandHandler = new NovoAgendamentoCommandHandler(_unitOfWorks.Object);
             _novoAgendamentoCommand = new Faker<NovoAgendamentoCommand>()
                 .RuleFor(x => x.IdCliente, y=>y.Random.Int(0,10))
                 .RuleFor(x => x.DataAtendimento, y=>y.Date.Recent())
@@ -47,17 +55,16 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
                     .RuleFor(x=> x.Quantidade,y=> y.Random.Int(0,50))
                     .Generate(5)
             );
-            _mocker.GetMock<IAgendamentoRepository>().Setup(x=> x.ObterMaxAgendamento()).ReturnsAsync(10);
-            _mocker.GetMock<IItemAgendamentoRepository>().Setup(x=> x.ObterMaxItem(It.IsAny<int>())).ReturnsAsync(1);
+            _agendamentoRepository.Setup(x=> x.ObterMaxAgendamento()).ReturnsAsync(10);
+            _itemAgendamentoRepository.Setup(x=> x.ObterMaxItem(It.IsAny<int>())).ReturnsAsync(1);
 
             //Act
             await _novoAgendamentoCommandHandler.Handle(_novoAgendamentoCommand,new CancellationToken());
             //Assert
-            _mocker.GetMock<IAgendamentoRepository>().Verify(x=> x.InserirAsync(It.IsAny<Agendamento>()),Times.Once);
-            _mocker.GetMock<IAgendamentoRepository>().Verify(x=> x.SaveChangesAsync(),Times.Once);
-
-            _mocker.GetMock<IItemAgendamentoRepository>().Verify(x=> x.InserirItemAsync(It.IsAny<ItemAgendamento>()),Times.Exactly(5));
-            _mocker.GetMock<IItemAgendamentoRepository>().Verify(x=> x.SaveChangesAsync(),Times.Exactly(5));
+            _agendamentoRepository.Verify(x=> x.InserirAsync(It.IsAny<Agendamento>()),Times.Once);
+            _itemAgendamentoRepository.Verify(x=> x.InserirItemAsync(It.IsAny<ItemAgendamento>()),Times.Exactly(5));
+            _unitOfWorks.Verify(x=> x.SaveChangesAsync(),Times.Exactly(6));
+            _unitOfWorks.Verify(x=>x.CommitAsync(),Times.Once);
         }
 
         [Fact]
