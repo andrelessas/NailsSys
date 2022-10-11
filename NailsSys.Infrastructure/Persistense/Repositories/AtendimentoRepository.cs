@@ -17,10 +17,5 @@ namespace NailsSys.Infrastructure.Persistense.Repositories
         {
 
         }
-
-        public async Task<int> ObterUltimoIdAtendimento()
-        {
-            return await _context.Agendamento.Select(x => x.Id).DefaultIfEmpty().MaxAsync();
-        }
     }
 }

@@ -23,22 +23,22 @@ namespace NailsSys.Application.Commands.AgendamentoCommands.NovoAgendamento
                     request.DataAtendimento,
                     request.InicioPrevisto,
                     request.TerminoPrevisto));
-            
+
             await _unitOfWorks.SaveChangesAsync();
 
             if (request.Itens == null || request.Itens.Count() == 0)
                 throw new ExcecoesPersonalizadas("Nenhum produto informado para realizar o agendamento.");
 
-            var maxAgendamento = await _unitOfWorks.Agendamento.ObterMaxAgendamento();
+            var maxAgendamento = await _unitOfWorks.Agendamento.MaxAsync(x => x.Id);
 
             foreach (var item in request.Itens)
             {
                 var maxItem = await _unitOfWorks.ItemAgendamento.ObterMaxItem(maxAgendamento);
                 await _unitOfWorks.ItemAgendamento.InserirItemAsync(
                     new ItemAgendamento(
-                        maxAgendamento, 
-                        item.IdProduto, 
-                        item.Quantidade, 
+                        maxAgendamento,
+                        item.IdProduto,
+                        item.Quantidade,
                         maxItem + 1));
 
                 await _unitOfWorks.SaveChangesAsync();

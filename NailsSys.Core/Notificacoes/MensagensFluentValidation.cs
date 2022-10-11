@@ -33,6 +33,26 @@ namespace NailsSys.Core.Notificacoes
             "Id Produto inválido, o Id Produto deve ser maior que 0.";
 
     }
+    public static class MensagensItensAtendimento
+    {
+        public static string IdAtendimentoNullVazio { get; } =
+            "Necessário informar o id do Atendimento.";
+        public static string IdAtendimentoMaiorQueZero { get; } =
+            "O id Agendamento deve ser maior qur 0.";
+        public static string ItemNullVazio { get; } =
+            "Necessário informar o Item.";
+        public static string ItemMaiorQueZero { get; } =
+            "O Item deve ser maior que 0.";
+        public static string QuantidadeNullVazio { get; } =
+            "Necessário informar a quantidade do item.";
+        public static string QuantidadeMaiorQueZero { get; } =
+            "A Quantidade deve ser maior que 0.";
+        public static string IdProdutoNullVazio { get; } =
+            "Necessário informar o Id do Produto.";
+        public static string IdProdutoMaiorQueZero { get; } =
+            "Id Produto inválido, o Id Produto deve ser maior que 0.";
+
+    }
 
     public static class MensagensProduto
     {
@@ -72,6 +92,10 @@ namespace NailsSys.Core.Notificacoes
             = "O término do agendamento não pode ser maior que o inicio do agendamento."; 
         public static string IdAgendamentoNaoInformadoCancelarAgendamento { get; }
             = "Para cancelar o agendamento, é necessário informar o Id do Agendamento."; 
+        public static string IdAgendamentoNaoInformado { get; }
+            = "Informar o Id do Agendamento."; 
+        public static string IdAgendamentoMaiorQueZero { get; }
+            = "O Id do Agendamento deve ser maior que zero."; 
 
     }
 
@@ -114,4 +138,28 @@ namespace NailsSys.Core.Notificacoes
         public static string CargoInvalido { get; }    
             = "Cargo do usuário inválido, o cargo deve ser Adminitrador, Gerente ou Atendente.";
     }
+
+    public static class MensagensAtendimento
+    {
+        public static string DataAtendimentoNullVazio { get; }
+            = "Necessário informar a data do atendimento";
+        public static string InicioAtendimentoNullVazio { get; }
+            = "Necessário informar o inicio do atendimento";
+        public static string TerminoAtendimentoNullVazio { get; }
+            = "Necessário informar o término do atendimento";
+        public static string IdClienteNullVazio { get; }
+            = "Necessário informar o cliente atendido.";
+        public static string IdFormaPgtoNullVazio { get; }
+            = "Necessário informar a forma de pagamento usada no atendimento.";
+        public static string IdAtendimentoNullVazioCancelamento { get; }
+            = "Informe o Id do atendimento que será cancelado.";
+        public static string IdAtendimentoMaiorQueZero { get; }
+            = "O Id do atendimento deve ser maior que zero.";
+        public static string IdClienteMaiorQueZero { get; }
+            = "Id cliente deve ser maior que zero.";
+        public static string IdFormaPgtoMaiorQueZero { get; }
+            = "Id da forma de pagamento deve ser maior que zero.";
+    }
+
+
 }

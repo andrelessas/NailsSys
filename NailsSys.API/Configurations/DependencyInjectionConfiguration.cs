@@ -9,6 +9,7 @@ using NailsSys.Core.Interfaces;
 using NailsSys.Core.Services;
 using NailsSys.Infrastructure.Autenticacao;
 using NailsSys.Infrastructure.Context;
+using NailsSys.Infrastructure.Persistense;
 using NailsSys.Infrastructure.Persistense.Repositories;
 
 namespace NailsSys.API.Configurations
@@ -29,6 +30,8 @@ namespace NailsSys.API.Configurations
             services.AddScoped<IUsuarioRepository,UsuarioRepository>();
             services.AddScoped<IAutenticacaoService,AutenticacaoService>();
             services.AddScoped<IFormaPagamentoRepository,FormaPagamentoRepository>();
+            services.AddScoped<IAtendimentoRepository,AtendimentoRepository>();
+            services.AddScoped<IUnitOfWorks,UnitOfWorks>();
         }
     }
 }

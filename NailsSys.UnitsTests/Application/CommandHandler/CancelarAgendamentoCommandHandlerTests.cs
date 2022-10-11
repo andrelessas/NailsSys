@@ -1,12 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoBogus;
-using Bogus;
 using Moq;
-using Moq.AutoMock;
-using NailsSys.Application.Commands.AgendamentoCommands.CancelamentoAgendamento;
+using NailsSys.Application.Commands.AgendamentoCommands.CancelarAgendamento;
 using NailsSys.Application.Validations;
 using NailsSys.Core.Entities;
 using NailsSys.Core.Interfaces;

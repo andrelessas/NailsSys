@@ -1,8 +1,8 @@
 using MediatR;
 
-namespace NailsSys.Application.Commands.ItemAgendamentoCommands.InserirItemCommand
+namespace NailsSys.Application.Commands.ItemAgendamentoCommands.InserirItem
 {
-    public class InserirItemCommand:IRequest<Unit>
+    public class InserirItemAgendamentoCommand:IRequest<Unit>
     {
         public int IdProduto { get; set; }
         public int IdAgendamento { get; set; }

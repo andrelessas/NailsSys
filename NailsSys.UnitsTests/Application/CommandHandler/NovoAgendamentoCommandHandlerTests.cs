@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Linq.Expressions;
 using Bogus;
 using Moq;
-using Moq.AutoMock;
 using NailsSys.Application.Commands.AgendamentoCommands.NovoAgendamento;
 using NailsSys.Application.InputModels;
 using NailsSys.Application.Validations;
@@ -49,13 +45,13 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
         public async Task NovoAgendamentoCommandValido_QuandoExecutado_CriarAgendamentoAsync()
         {
             //Arrange
-            _novoAgendamentoCommand.Itens = new List<ItemAgendamentoInputModel>(
-                new Faker<ItemAgendamentoInputModel>()
+            _novoAgendamentoCommand.Itens = new List<ItemInputModel>(
+                new Faker<ItemInputModel>()
                     .RuleFor(x=> x.IdProduto,y=> y.Random.Int(0,50))
                     .RuleFor(x=> x.Quantidade,y=> y.Random.Int(0,50))
                     .Generate(5)
             );
-            _agendamentoRepository.Setup(x=> x.ObterMaxAgendamento()).ReturnsAsync(10);
+            _agendamentoRepository.Setup(x=> x.MaxAsync(It.IsAny<Expression<Func<Agendamento,int>>>())).ReturnsAsync(10);
             _itemAgendamentoRepository.Setup(x=> x.ObterMaxItem(It.IsAny<int>())).ReturnsAsync(1);
 
             //Act

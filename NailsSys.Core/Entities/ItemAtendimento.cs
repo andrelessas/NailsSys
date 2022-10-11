@@ -7,12 +7,12 @@ namespace NailsSys.Core.Entities
 {
     public class ItemAtendimento:BaseEntity
     {
-        public ItemAtendimento(int idAtendimento, int idProduto, decimal quantidade)
+        public ItemAtendimento(int idAtendimento, int idProduto, decimal quantidade, int item)
         {
             IdAtendimento = idAtendimento;
             IdProduto = idProduto;
             Quantidade = quantidade;            
-            Item = Id;
+            Item = item;
         }
 
         public int Item { get; private set; }
@@ -22,5 +22,17 @@ namespace NailsSys.Core.Entities
         public decimal ValorBruto { get; private set; }
         public decimal Desconto { get; private set; }
         public decimal ValorLiquido { get; private set; }
+
+        public void AtualizarPreco(decimal preco)
+        {
+            this.ValorBruto = preco * Quantidade;
+            this.Desconto = 0;
+            this.ValorLiquido = this.ValorBruto;
+        }
+
+        public void AlterarQuantidade(int quantidade)
+        {
+            this.Quantidade = quantidade;
+        }        
     }
 }

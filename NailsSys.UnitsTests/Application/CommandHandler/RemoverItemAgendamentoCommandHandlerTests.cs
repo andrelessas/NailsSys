@@ -14,22 +14,22 @@ using Xunit;
 
 namespace NailsSys.UnitsTests.Application.CommandHandler
 {
-    public class RemoverItemCommandHandlerTests:TestsConfigurations
+    public class RemoverItemAgendamentoCommandHandlerTests:TestsConfigurations
     {
         private readonly Mock<IUnitOfWorks> _unitOfWorks;
         private readonly Mock<IItemAgendamentoRepository> _itemAgendamentoRepository;
-        private readonly RemoverItemCommandHandler _removerItemCommandHandler;
-        private readonly RemoverItemCommand _removerItemCommand;
-        private readonly RemoverItemCommandValidation _removerItemCommandValidation;
+        private readonly RemoverItemAgendamentoCommandHandler _removerItemCommandHandler;
+        private readonly RemoverItemAgendamentoCommand _removerItemCommand;
+        private readonly RemoverItemAgendamentoCommandValidation _removerItemCommandValidation;
 
-        public RemoverItemCommandHandlerTests()
+        public RemoverItemAgendamentoCommandHandlerTests()
         {
             _unitOfWorks = new Mock<IUnitOfWorks>();
             _itemAgendamentoRepository = new Mock<IItemAgendamentoRepository>();
             _unitOfWorks.SetupGet(x => x.ItemAgendamento).Returns(_itemAgendamentoRepository.Object);
-            _removerItemCommandHandler = new RemoverItemCommandHandler(_unitOfWorks.Object);
-            _removerItemCommand = new RemoverItemCommand(1);
-            _removerItemCommandValidation = new RemoverItemCommandValidation();
+            _removerItemCommandHandler = new RemoverItemAgendamentoCommandHandler(_unitOfWorks.Object);
+            _removerItemCommand = new RemoverItemAgendamentoCommand(1);
+            _removerItemCommandValidation = new RemoverItemAgendamentoCommandValidation();
         }
 
         [Fact]
@@ -60,7 +60,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
         public void ItemInvalido_RetornarExcecoesFluentValidation(int id)
         {
             //Arrange
-            var removerItemCommand = new RemoverItemCommand(id);
+            var removerItemCommand = new RemoverItemAgendamentoCommand(id);
             //Act
             var result = _removerItemCommandValidation.Validate(removerItemCommand);
             //Assert

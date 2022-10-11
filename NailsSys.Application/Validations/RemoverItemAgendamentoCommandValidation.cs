@@ -8,9 +8,9 @@ using NailsSys.Core.Notificacoes;
 
 namespace NailsSys.Application.Validations
 {
-    public class RemoverItemCommandValidation : AbstractValidator<RemoverItemCommand>
+    public class RemoverItemAgendamentoCommandValidation : AbstractValidator<RemoverItemAgendamentoCommand>
     {
-        public RemoverItemCommandValidation()
+        public RemoverItemAgendamentoCommandValidation()
         {
             RuleFor(x => x.Id)
                 .NotNull().WithMessage(MensagensItensAgendamento.ItemNullVazio)

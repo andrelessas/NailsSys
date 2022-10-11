@@ -6,7 +6,7 @@ using MediatR;
 
 namespace NailsSys.Application.Commands.ItemAgendamentoCommands.AlterarItem
 {
-    public class AlterarItemCommand:IRequest<Unit>
+    public class AlterarItemAgendamentoCommand:IRequest<Unit>
     {
         public int Id { get; set; }
         public int Quantidade { get; set; }

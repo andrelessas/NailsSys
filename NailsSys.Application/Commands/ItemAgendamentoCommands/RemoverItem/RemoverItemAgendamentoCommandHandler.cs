@@ -8,15 +8,15 @@ using NailsSys.Core.Notificacoes;
 
 namespace NailsSys.Application.Commands.ItemAgendamentoCommands.RemoverItem
 {
-    public class RemoverItemCommandHandler : IRequestHandler<RemoverItemCommand, Unit>
+    public class RemoverItemAgendamentoCommandHandler : IRequestHandler<RemoverItemAgendamentoCommand, Unit>
     {
         private readonly IUnitOfWorks _unitOfWorks;
 
-        public RemoverItemCommandHandler(IUnitOfWorks unitOfWorks)
+        public RemoverItemAgendamentoCommandHandler(IUnitOfWorks unitOfWorks)
         {
             _unitOfWorks = unitOfWorks;
         }
-        public async Task<Unit> Handle(RemoverItemCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(RemoverItemAgendamentoCommand request, CancellationToken cancellationToken)
         {
             var item = await _unitOfWorks.ItemAgendamento.ObterPorIDAsync(request.Id);
 

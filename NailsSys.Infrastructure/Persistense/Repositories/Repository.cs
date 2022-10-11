@@ -20,6 +20,10 @@ namespace NailsSys.Data.Repository
         {
             return await _context.Set<TEntity>().AsNoTracking().Where(predicate).GetPagination<TEntity>(page,PAGE_SIZE);
         }
+        public async Task<IEnumerable<TEntity>> ObterAsync(Expression<Func<TEntity, bool>> predicate)
+        {
+            return await _context.Set<TEntity>().AsNoTracking().Where(predicate).ToListAsync();
+        }
 
         public async Task<TEntity> ObterPorIDAsync(int Id)
         {
@@ -48,6 +52,21 @@ namespace NailsSys.Data.Repository
         public void Property(TEntity entity, Expression<Func<TEntity, object>> predicate, bool isModified)
         {
             _context.Entry(entity).Property(predicate).IsModified = isModified;
+        }
+
+        public async Task<int> MaxAsync(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity,int>> selected)
+        {
+            return await _context.Set<TEntity>().Where(predicate).Select(selected).DefaultIfEmpty().MaxAsync();
+        }
+
+        public async Task<int> MaxAsync(Expression<Func<TEntity, int>> selected)
+        {
+            return await _context.Set<TEntity>().Select(selected).DefaultIfEmpty().MaxAsync();
+        }
+
+        public async Task<decimal> SumAsync(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity,decimal>> sumValue)
+        {
+            return await _context.Set<TEntity>().Where(predicate).SumAsync(sumValue);
         }
     }
 }

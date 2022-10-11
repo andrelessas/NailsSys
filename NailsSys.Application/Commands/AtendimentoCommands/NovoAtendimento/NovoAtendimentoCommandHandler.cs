@@ -19,30 +19,33 @@ namespace NailsSys.Application.Commands.AtendimentoCommands.NovoAtendimento
         }
         public async Task<Unit> Handle(NovoAtendimentoCommand request, CancellationToken cancellationToken)
         {
-            var agendamento = await _unitOfWorks.Agendamento.ObterPorIDAsync(request.IdAgendamento);
+            var formaPagamento = await _unitOfWorks.FormaPagamento.ObterPorIDAsync(request.IdFormaPagamento);
             
-            if(agendamento == null)
-                throw new ExcecoesPersonalizadas("Agendamento não encontrado.");
-            
+            if(formaPagamento == null)
+                throw new ExcecoesPersonalizadas("A forma de pagamento informada não existe.");
+
             await _unitOfWorks.BeginTransactionAsync();
-
             _unitOfWorks.Atendimento.InserirAsync(new Atendimento(
-                agendamento.IdCliente,
-                agendamento.DataAtendimento,
-                agendamento.AtendimentoRealizado,
+                request.IdCliente,
+                request.DataAtendimento,
                 request.IdFormaPagamento,
-                agendamento.InicioPrevisto,
-                agendamento.TerminoPrevisto));
+                request.AtendimentoRealizado,
+                request.InicioAtendimento,
+                request.TerminoAtendimento));
 
-            await _unitOfWorks.SaveChangesAsync();
+            // await _unitOfWorks.SaveChangesAsync();            
 
-            var idAtendimento = await _unitOfWorks.Atendimento.ObterUltimoIdAtendimento();
-            foreach (var item in agendamento.ItemAgendamentos)
+            if(request.Itens == null || !request.Itens.Any())
+                throw new ExcecoesPersonalizadas("Nenhum produto informado para lançar o atendimento.");
+
+            var idAtendimento = await _unitOfWorks.Atendimento.MaxAsync(x => x.Id);
+            foreach (var item in request.Itens)
             {
-                _unitOfWorks.ItemAtendimento.InserirAsync(new ItemAtendimento(idAtendimento,item.IdProduto,item.Quantidade));
-                await _unitOfWorks.SaveChangesAsync();
+                var maxItem = await _unitOfWorks.ItemAtendimento.MaxAsync(x => x.IdAtendimento == idAtendimento, i => i.Id);
+                _unitOfWorks.ItemAtendimento.InserirAsync(new ItemAtendimento(idAtendimento+1, item.IdProduto, item.Quantidade, maxItem + 1));
             }
-
+            
+            await _unitOfWorks.SaveChangesAsync();            
             await _unitOfWorks.CommitAsync();
 
             return Unit.Value;

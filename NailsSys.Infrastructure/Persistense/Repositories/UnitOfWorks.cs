@@ -10,6 +10,7 @@ namespace NailsSys.Infrastructure.Persistense
     {
         private readonly NailsSysContext _context;
         private IDbContextTransaction _transaction;
+
         public UnitOfWorks(NailsSysContext context)
         {
             _context = context;
@@ -52,7 +53,7 @@ namespace NailsSys.Infrastructure.Persistense
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            _context.Dispose();
         }
 
         public async Task<int> SaveChangesAsync()
@@ -60,10 +61,5 @@ namespace NailsSys.Infrastructure.Persistense
             return await _context.SaveChangesAsync();
         }
 
-        void Dispose(bool disposing)
-        {
-            if (disposing)
-                _context.Dispose();
-        }
     }
 }

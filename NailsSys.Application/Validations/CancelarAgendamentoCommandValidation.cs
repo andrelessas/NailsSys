@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation;
-using NailsSys.Application.Commands.AgendamentoCommands.CancelamentoAgendamento;
+using NailsSys.Application.Commands.AgendamentoCommands.CancelarAgendamento;
 using NailsSys.Core.Notificacoes;
 
 namespace NailsSys.Application.Validations

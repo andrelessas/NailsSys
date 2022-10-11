@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using NailsSys.Core.Notificacoes;
 
 namespace NailsSys.Core.Entities
 {
@@ -31,6 +32,8 @@ namespace NailsSys.Core.Entities
         {
             if(!Cancelado && !AtendimentoRealizado)
                 Cancelado = true;
+            else 
+                throw new ExcecoesPersonalizadas("para cancelar o agendamento, é necessário que o mesmo esteja em aberto.");            
         }
         public void AlterarAgendamento(int idCliente, DateTime dataAtendimento, DateTime inicioPrevisto, DateTime terminoPrevisto)
         {
@@ -38,6 +41,12 @@ namespace NailsSys.Core.Entities
             DataAtendimento = dataAtendimento;
             InicioPrevisto = inicioPrevisto;
             TerminoPrevisto = terminoPrevisto;    
+        }
+
+        public void RealizarAtendimento()
+        {
+            if(!AtendimentoRealizado)
+            AtendimentoRealizado = true;
         }
     }
 }

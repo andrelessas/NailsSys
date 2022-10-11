@@ -6,9 +6,9 @@ using MediatR;
 
 namespace NailsSys.Application.Commands.ItemAgendamentoCommands.RemoverItem
 {
-    public class RemoverItemCommand:IRequest<Unit>
+    public class RemoverItemAgendamentoCommand:IRequest<Unit>
     {
-        public RemoverItemCommand(int id)
+        public RemoverItemAgendamentoCommand(int id)
         {
             Id = id;
         }

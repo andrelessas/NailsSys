@@ -11,25 +11,25 @@ using Xunit;
 
 namespace NailsSys.UnitsTests.Application.CommandHandler
 {
-    public class AlterarItemCommandHandlerTests:TestsConfigurations
+    public class AlterarItemAgendamentoCommandHandlerTests:TestsConfigurations
     {
         private readonly Mock<IUnitOfWorks> _unitOfWorks;
         private readonly Mock<IItemAgendamentoRepository> _itemAgendamentoRepository;
-        private readonly AlterarItemCommand _alterarItemCommand;
-        private readonly AlterarItemCommandHandler _alterarItemCommandHandler;
+        private readonly AlterarItemAgendamentoCommand _alterarItemCommand;
+        private readonly AlterarItemAgendamentoCommandHandler _alterarItemCommandHandler;
         private readonly AlterarItemCommandValidation _alterarItemCommandValidation;
 
-        public AlterarItemCommandHandlerTests()
+        public AlterarItemAgendamentoCommandHandlerTests()
         {
             _unitOfWorks = new Mock<IUnitOfWorks>();
             _itemAgendamentoRepository = new Mock<IItemAgendamentoRepository>();
-            _alterarItemCommand = new Faker<AlterarItemCommand>()
+            _alterarItemCommand = new Faker<AlterarItemAgendamentoCommand>()
                 .RuleFor(i => i.Id, v => v.Random.Int())
                 .RuleFor(i => i.Quantidade, v => v.Random.Int())
                 .Generate();
 
             _unitOfWorks.SetupGet(x => x.ItemAgendamento).Returns(_itemAgendamentoRepository.Object);
-            _alterarItemCommandHandler = new AlterarItemCommandHandler(_unitOfWorks.Object);
+            _alterarItemCommandHandler = new AlterarItemAgendamentoCommandHandler(_unitOfWorks.Object);
             _alterarItemCommandValidation = new AlterarItemCommandValidation();
         }
         [Fact]
@@ -59,7 +59,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
         public void ValidarIdItemInvalido_RetornarExcecaoFluentValidation(int idItem)
         {
             //Arrange
-            var itemAgendamentoCommand = new AlterarItemCommand{Id = idItem};
+            var itemAgendamentoCommand = new AlterarItemAgendamentoCommand{Id = idItem};
             //Act
             var result = _alterarItemCommandValidation.Validate(itemAgendamentoCommand);
             //Assert
@@ -76,7 +76,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
         public void ValidarQuantidadeInvalida_RetornarExcecaoFluentValidation(int quantidade)
         {
             //Arrange
-            var itemAgendamentoCommand = new AlterarItemCommand{Quantidade = quantidade};
+            var itemAgendamentoCommand = new AlterarItemAgendamentoCommand{Quantidade = quantidade};
             //Act
             var result = _alterarItemCommandValidation.Validate(itemAgendamentoCommand);
             //Assert

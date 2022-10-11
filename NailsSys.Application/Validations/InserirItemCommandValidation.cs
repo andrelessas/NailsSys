@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation;
-using NailsSys.Application.Commands.ItemAgendamentoCommands.InserirItemCommand;
+using NailsSys.Application.Commands.ItemAgendamentoCommands.InserirItem;
 using NailsSys.Core.Notificacoes;
 
 namespace NailsSys.Application.Validations
 {
-    public class InserirItemCommandValidation:AbstractValidator<InserirItemCommand>
+    public class InserirItemCommandValidation:AbstractValidator<InserirItemAgendamentoCommand>
     {
         public InserirItemCommandValidation()
         {

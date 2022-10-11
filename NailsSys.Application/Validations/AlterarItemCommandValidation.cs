@@ -4,7 +4,7 @@ using NailsSys.Core.Notificacoes;
 
 namespace NailsSys.Application.Validations
 {
-    public class AlterarItemCommandValidation:AbstractValidator<AlterarItemCommand>
+    public class AlterarItemCommandValidation:AbstractValidator<AlterarItemAgendamentoCommand>
     {
         public AlterarItemCommandValidation()
         {

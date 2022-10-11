@@ -6,8 +6,8 @@ using NailsSys.Core.Entities;
 
 namespace NailsSys.Core.Interfaces
 {
-    public interface IAtendimentoRepository:IRepository<Atendimento>
+    public interface IAtendimentoRepository : IRepository<Atendimento>
     {
-        Task<int> ObterUltimoIdAtendimento();
+        
     }
 }

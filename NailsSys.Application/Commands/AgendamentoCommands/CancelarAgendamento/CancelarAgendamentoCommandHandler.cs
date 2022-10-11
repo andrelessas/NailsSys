@@ -6,7 +6,7 @@ using MediatR;
 using NailsSys.Core.Interfaces;
 using NailsSys.Core.Notificacoes;
 
-namespace NailsSys.Application.Commands.AgendamentoCommands.CancelamentoAgendamento
+namespace NailsSys.Application.Commands.AgendamentoCommands.CancelarAgendamento
 {
     public class CancelarAgendamentoCommandHandler : IRequestHandler<CancelarAgendamentoCommand, Unit>
     {

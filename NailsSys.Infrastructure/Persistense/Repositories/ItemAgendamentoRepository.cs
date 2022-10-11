@@ -49,6 +49,11 @@ namespace NailsSys.Infrastructure.Persistense.Repositories
             return await consulta.GetPagination<ItemAgendamentoDTO>(page, PAGE_SIZE);
         }
 
+        public async Task<IEnumerable<ItemAgendamento>> ObterItensAsync(int idAgendamento)
+        {
+            return await _context.ItemAgendamento.Where(x => x.IdAgendamento == idAgendamento).ToListAsync();
+        }
+
         public async Task<int> ObterMaxItem(int idAgendamento)
         {
             return await _context.ItemAgendamento.Where(x => x.IdAgendamento == idAgendamento).Select(i => i.Item).DefaultIfEmpty().MaxAsync();

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace NailsSys.Application.InputModels
 {
-    public class ItemAgendamentoInputModel
+    public class ItemInputModel
     {
         public int IdProduto { get; set; }
         public int Quantidade { get; set; }   

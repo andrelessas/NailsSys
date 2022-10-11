@@ -4,15 +4,15 @@ using NailsSys.Core.Notificacoes;
 
 namespace NailsSys.Application.Commands.ItemAgendamentoCommands.AlterarItem
 {
-    public class AlterarItemCommandHandler : IRequestHandler<AlterarItemCommand, Unit>
+    public class AlterarItemAgendamentoCommandHandler : IRequestHandler<AlterarItemAgendamentoCommand, Unit>
     {
         private readonly IUnitOfWorks _unitOfWorks;
 
-        public AlterarItemCommandHandler(IUnitOfWorks unitOfWorks)
+        public AlterarItemAgendamentoCommandHandler(IUnitOfWorks unitOfWorks)
         {
             _unitOfWorks = unitOfWorks;
         }
-        public async Task<Unit> Handle(AlterarItemCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(AlterarItemAgendamentoCommand request, CancellationToken cancellationToken)
         {
             var item = await _unitOfWorks.ItemAgendamento.ObterPorIDAsync(request.Id);
 
