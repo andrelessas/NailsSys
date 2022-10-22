@@ -4,9 +4,9 @@ using NailsSys.Core.Notificacoes;
 
 namespace NailsSys.Application.Validations
 {
-    public class AlterarItemCommandValidation:AbstractValidator<AlterarItemAgendamentoCommand>
+    public class AlterarItemAgendamentoCommandValidation:AbstractValidator<AlterarItemAgendamentoCommand>
     {
-        public AlterarItemCommandValidation()
+        public AlterarItemAgendamentoCommandValidation()
         {
             RuleFor(a => a.Id)
                 .NotEmpty().WithMessage(MensagensItensAgendamento.ItemNullVazio)

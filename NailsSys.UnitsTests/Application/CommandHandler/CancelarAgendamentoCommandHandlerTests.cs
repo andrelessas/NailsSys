@@ -34,7 +34,11 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
         public async Task InformadoIdAgendamentoValido_QuandoExecutado_CancelarAgendamentoAsync()
         {
             //Arrange
-            var agendamento = AutoFaker.Generate<Agendamento>();
+            var agendamento = new AutoFaker<Agendamento>()
+                .RuleFor(x=>x.Cancelado,false)
+                .RuleFor(x=>x.AtendimentoRealizado,false)
+                .Generate();
+
             _agendamentoRepository.Setup(x=> x.ObterPorIDAsync(It.IsAny<int>())).ReturnsAsync(agendamento);
             //Act
             await _cancelarAgendamentoCommandHandler.Handle(_cancelarAgendamentoCommand, new CancellationToken());

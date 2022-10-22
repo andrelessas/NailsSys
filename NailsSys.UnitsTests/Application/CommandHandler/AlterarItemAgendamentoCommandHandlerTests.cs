@@ -17,7 +17,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
         private readonly Mock<IItemAgendamentoRepository> _itemAgendamentoRepository;
         private readonly AlterarItemAgendamentoCommand _alterarItemCommand;
         private readonly AlterarItemAgendamentoCommandHandler _alterarItemCommandHandler;
-        private readonly AlterarItemCommandValidation _alterarItemCommandValidation;
+        private readonly AlterarItemAgendamentoCommandValidation _alterarItemCommandValidation;
 
         public AlterarItemAgendamentoCommandHandlerTests()
         {
@@ -30,7 +30,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
 
             _unitOfWorks.SetupGet(x => x.ItemAgendamento).Returns(_itemAgendamentoRepository.Object);
             _alterarItemCommandHandler = new AlterarItemAgendamentoCommandHandler(_unitOfWorks.Object);
-            _alterarItemCommandValidation = new AlterarItemCommandValidation();
+            _alterarItemCommandValidation = new AlterarItemAgendamentoCommandValidation();
         }
         [Fact]
         public async void ItemValido_QuandoExceutado_AlterarItemDoAgendamento()
