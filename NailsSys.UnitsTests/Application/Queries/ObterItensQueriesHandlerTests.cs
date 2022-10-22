@@ -19,14 +19,14 @@ namespace NailsSys.UnitsTests.Application.Queries
     public class ObterItensQueriesHandlerTests : TestsConfigurations
     {
         private readonly Mock<IItemAgendamentoRepository> _itensAgendamentoRepository;
-        private readonly ObterItensQueriesHandler _obterItensQueriesHandler;
-        private readonly ObterItensQueriesValidation _obterItensQueriesValidation;
+        private readonly ObterItensAgendamentoQueriesHandler _obterItensQueriesHandler;
+        private readonly ObterItensAgendamentoQueriesValidation _obterItensQueriesValidation;
 
         public ObterItensQueriesHandlerTests()
         {
             _itensAgendamentoRepository = new Mock<IItemAgendamentoRepository>();
-            _obterItensQueriesHandler = new ObterItensQueriesHandler(_itensAgendamentoRepository.Object, IMapper);
-            _obterItensQueriesValidation = new ObterItensQueriesValidation();
+            _obterItensQueriesHandler = new ObterItensAgendamentoQueriesHandler(_itensAgendamentoRepository.Object, IMapper);
+            _obterItensQueriesValidation = new ObterItensAgendamentoQueriesValidation();
         }
 
         [Fact]
@@ -40,7 +40,7 @@ namespace NailsSys.UnitsTests.Application.Queries
 
             _itensAgendamentoRepository.Setup(x => x.ObterItensAsync(It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(pagination);
             //Act
-            var result = await _obterItensQueriesHandler.Handle(new ObterItensQueries(1, 1), new CancellationToken());
+            var result = await _obterItensQueriesHandler.Handle(new ObterItensAgendamentoQueries(1, 1), new CancellationToken());
             //Assert
             Assert.NotNull(result);
             foreach (var item in itens)
@@ -56,7 +56,7 @@ namespace NailsSys.UnitsTests.Application.Queries
         public void ItemInvalido_QuandoExecutado_RetornarExcecao()
         {
             //Arrange - Act - Assert
-            var result = Assert.ThrowsAsync<ExcecoesPersonalizadas>(() => _obterItensQueriesHandler.Handle(new ObterItensQueries(1, 1), new CancellationToken()));
+            var result = Assert.ThrowsAsync<ExcecoesPersonalizadas>(() => _obterItensQueriesHandler.Handle(new ObterItensAgendamentoQueries(1, 1), new CancellationToken()));
             Assert.NotNull(result.Result);
             Assert.Equal("Nenhum item encontrado.", result.Result.Message);
         }
@@ -67,7 +67,7 @@ namespace NailsSys.UnitsTests.Application.Queries
         public void ParametrosDeConsultaInvalido_RetornarExcecaoFluentValidation(int idAgendamento, int page)
         {
             //Arrange - Act
-            var result = _obterItensQueriesValidation.Validate(new ObterItensQueries(idAgendamento, page));
+            var result = _obterItensQueriesValidation.Validate(new ObterItensAgendamentoQueries(idAgendamento, page));
             //Assert
             Assert.NotNull(result);
             var erros = ObterListagemErro(result);

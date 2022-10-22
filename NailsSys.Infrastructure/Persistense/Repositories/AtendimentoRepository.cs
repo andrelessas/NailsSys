@@ -15,7 +15,34 @@ namespace NailsSys.Infrastructure.Persistense.Repositories
         public AtendimentoRepository(NailsSysContext context)
             : base(context)
         {
+            
+        }
 
+        public async Task<IEnumerable<Atendimento>> ObterAtendimentosPorPeriodo(DateTime dataInicial, DateTime dataFinal)
+        {
+            return await _context.Atendimento.Where(x=>x.DataAtendimento >= dataInicial && x.DataAtendimento <= dataFinal)
+                .AsNoTracking()
+                .Include(c=>c.Cliente)
+                .Include(f=>f.FormaPagamento)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Atendimento>> ObterAtendimentosRealizadosHoje()
+        {
+            return await _context.Atendimento.Where(x=>x.DataAtendimento == DateTime.Now)
+                .AsNoTracking()
+                .Include(c=>c.Cliente)
+                .Include(f=>f.FormaPagamento)
+                .ToListAsync();
+        }
+
+        public async Task<Atendimento> ObterPorId(int id)
+        {
+            return await _context.Atendimento.Where(x=>x.Id == id)
+                .AsNoTracking()
+                .Include(c=>c.Cliente)
+                .Include(f=>f.FormaPagamento)
+                .FirstOrDefaultAsync();    
         }
     }
 }

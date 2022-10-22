@@ -17,6 +17,10 @@ namespace NailsSys.API.Controllers
             
         }
 
+        ///<summary>
+        ///Obter listagem de usuarios.
+        ///</summary>        
+        ///<param name = 'page'> página </param>
         [HttpGet]
         // [Authorize(Roles = "Administrador, Gerente")]
         public async Task<IActionResult> ObterUsuariosAsync(int page)
@@ -27,6 +31,9 @@ namespace NailsSys.API.Controllers
             return Ok(usuarios);
         }
 
+        ///<summary>
+        ///Cadastrar usuário.
+        ///</summary>        
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> CadastrarUsuarioAsync(InserirUsuarioCommand request)
@@ -35,6 +42,9 @@ namespace NailsSys.API.Controllers
             return Ok();
         }
 
+        ///<summary>
+        ///Realizar login.
+        ///</summary>        
         [HttpPut("login")]
         [AllowAnonymous]
         public async Task<IActionResult> RealizarLoginAsync(LoginUsuarioCommand request)

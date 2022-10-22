@@ -7,18 +7,18 @@ using NailsSys.Core.Notificacoes;
 
 namespace NailsSys.Application.Queries.ItemAgendamentoQueries.ObterItens
 {
-    public class ObterItensQueriesHandler : IRequestHandler<ObterItensQueries, PaginationResult<ItemAgendamentoViewModel>>
+    public class ObterItensAgendamentoQueriesHandler : IRequestHandler<ObterItensAgendamentoQueries, PaginationResult<ItemAgendamentoViewModel>>
     {
         private readonly IItemAgendamentoRepository _itemAgendamentoRepository;
         private readonly IMapper _mapper;
 
-        public ObterItensQueriesHandler(IItemAgendamentoRepository itemAgendamentoRepository,
+        public ObterItensAgendamentoQueriesHandler(IItemAgendamentoRepository itemAgendamentoRepository,
                                         IMapper mapper)
         {
             _itemAgendamentoRepository = itemAgendamentoRepository;
             _mapper = mapper;
         }
-        public async Task<PaginationResult<ItemAgendamentoViewModel>> Handle(ObterItensQueries request, CancellationToken cancellationToken)
+        public async Task<PaginationResult<ItemAgendamentoViewModel>> Handle(ObterItensAgendamentoQueries request, CancellationToken cancellationToken)
         {
             var itens = await _itemAgendamentoRepository.ObterItensAsync(request.IdAgendamento,request.Page);
 

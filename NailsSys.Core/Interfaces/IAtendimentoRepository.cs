@@ -8,6 +8,8 @@ namespace NailsSys.Core.Interfaces
 {
     public interface IAtendimentoRepository : IRepository<Atendimento>
     {
-        
+        Task<IEnumerable<Atendimento>> ObterAtendimentosPorPeriodo(DateTime dataInicial, DateTime dataFinal);
+        Task<IEnumerable<Atendimento>> ObterAtendimentosRealizadosHoje();
+        Task<Atendimento> ObterPorId(int id);        
     }
 }

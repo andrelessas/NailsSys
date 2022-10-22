@@ -17,6 +17,10 @@ namespace NailsSys.API.Controllers
             :base(mediator)
         {}
 
+        ///<summary>
+        ///Obter listagem de produtos.
+        ///</summary>        
+        ///<param name = 'page'> página </param>
         [HttpGet]
         public async Task<IActionResult> ObterProdutos(int page)
         {
@@ -27,6 +31,11 @@ namespace NailsSys.API.Controllers
             
             return Ok(produtos);
         }
+
+        ///<summary>
+        ///Obter produto por id.
+        ///</summary>        
+        ///<param name = 'id'> id do produto </param>
         [HttpGet("porid")]
         public async Task<IActionResult> ObterProdutoPorId(int id)
         {
@@ -36,6 +45,10 @@ namespace NailsSys.API.Controllers
             
             return Ok(produto);
         }
+
+        ///<summary>
+        ///Cadastrar produto.
+        ///</summary>        
         [HttpPost]
         [Authorize(Roles = "administrador, gerente")]
         public async Task<IActionResult> InserirProduto(InserirProdutoCommand request)
@@ -43,6 +56,10 @@ namespace NailsSys.API.Controllers
             await _mediator.Send(request);
             return Ok();
         }
+
+        ///<summary>
+        ///Alterar cadastro do produto.
+        ///</summary>        
         [HttpPut]
         [Authorize(Roles = "administrador, gerente")]
         public async Task<IActionResult> AlterarProduto(AlterarProdutoCommand request)
@@ -50,6 +67,11 @@ namespace NailsSys.API.Controllers
             await _mediator.Send(request);
             return Ok();
         }
+
+        ///<summary>
+        ///Descontinuar produto.
+        ///</summary>        
+        ///<param name = 'id'> id do produto </param>
         [HttpPut("descontinuar")]
         [Authorize(Roles = "administrador, gerente")]
         public async Task<IActionResult> DescontinuarProduto(int id)

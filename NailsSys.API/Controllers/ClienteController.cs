@@ -17,6 +17,10 @@ namespace NailsSys.API.Controllers
             :base(mediator)
         {}  
 
+        ///<summary>
+        ///Obter listagem de clientes
+        ///</summary>        
+        ///<param name = 'page'> página </param>
         [HttpGet]
         public async Task<IActionResult> ObterClientes(int page)
         {
@@ -27,6 +31,10 @@ namespace NailsSys.API.Controllers
             return Ok(clientes);
         }
 
+        ///<summary>
+        ///Obter cliente por id
+        ///</summary>        
+        ///<param name = 'id'> id cliente </param>
         [HttpGet("porId")]
         public async Task<IActionResult> ObterClientePorId(int id)
         {            
@@ -37,6 +45,9 @@ namespace NailsSys.API.Controllers
             return Ok(cliente);
         }
 
+        ///<summary>
+        ///Cadastrar cliente.
+        ///</summary>        
         [HttpPost]
         public async Task<IActionResult> InserirCliente(InserirClienteCommand request)
         {
@@ -44,6 +55,9 @@ namespace NailsSys.API.Controllers
             return Ok();
         }
         
+        ///<summary>
+        ///Alterar cadastro de cliente.
+        ///</summary>        
         [HttpPut]
         public async Task<IActionResult> AlterarCliente(AlterarClienteCommand request)
         {
@@ -52,6 +66,10 @@ namespace NailsSys.API.Controllers
             return Ok();
         }
         
+        ///<summary>
+        ///Bloquear cliente.
+        ///</summary>        
+        ///<param name = 'id'> id cliente </param>
         [HttpPut("bloquearcliente")]
         [Authorize(Roles = "administrador, gerente")]
         public async Task<IActionResult> BloquearCliente(int id)

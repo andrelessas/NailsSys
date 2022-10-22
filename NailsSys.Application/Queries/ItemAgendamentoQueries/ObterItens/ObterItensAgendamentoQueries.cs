@@ -8,9 +8,9 @@ using NailsSys.Core.Models;
 
 namespace NailsSys.Application.Queries.ItemAgendamentoQueries.ObterItens
 {
-    public class ObterItensQueries:IRequest<PaginationResult<ItemAgendamentoViewModel>>
+    public class ObterItensAgendamentoQueries:IRequest<PaginationResult<ItemAgendamentoViewModel>>
     {
-        public ObterItensQueries(int idAgendamento, int page)
+        public ObterItensAgendamentoQueries(int idAgendamento, int page)
         {
             IdAgendamento = idAgendamento;
             Page = page;

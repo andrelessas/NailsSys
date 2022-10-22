@@ -8,9 +8,9 @@ using NailsSys.Core.Notificacoes;
 
 namespace NailsSys.Application.Validations
 {
-    public class ObterItensQueriesValidation:AbstractValidator<ObterItensQueries>
+    public class ObterItensAgendamentoQueriesValidation:AbstractValidator<ObterItensAgendamentoQueries>
     {
-        public ObterItensQueriesValidation()
+        public ObterItensAgendamentoQueriesValidation()
         {
             RuleFor(x=>x.IdAgendamento)
                 .NotNull().WithMessage(MensagensItensAgendamento.IdAgendamentoNullVazio)
