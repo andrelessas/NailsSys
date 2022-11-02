@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
 using NailsSys.Application.ViewModels;
+using NailsSys.Core.Entities;
 using NailsSys.Core.Interfaces;
 using NailsSys.Core.Models;
 using NailsSys.Core.Notificacoes;
@@ -28,7 +29,7 @@ namespace NailsSys.Application.Queries.AtendimentoQueries.ObterAtendimentosPorPe
             if(!atendimentos.Any())
                 throw new ExcecoesPersonalizadas("Nenhum atendimento encontrado.");
 
-            return _mapper.Map<IEnumerable<AtendimentoViewModel>>(atendimentos);
+            return _mapper.Map<IEnumerable<Atendimento>,IEnumerable<AtendimentoViewModel>>(atendimentos);
         }
     }
 }

@@ -15,6 +15,11 @@ namespace NailsSys.Application.Commands.AgendamentoCommands.NovoAgendamento
         }
         public async Task<Unit> Handle(NovoAgendamentoCommand request, CancellationToken cancellationToken)
         {
+            var cliente = await _unitOfWorks.Cliente.ObterPorIDAsync(request.IdCliente);
+            
+            if(cliente == null)
+                throw new ExcecoesPersonalizadas("O cliente informado não existe.");
+
             await _unitOfWorks.BeginTransactionAsync();
 
             _unitOfWorks.Agendamento.InserirAsync(

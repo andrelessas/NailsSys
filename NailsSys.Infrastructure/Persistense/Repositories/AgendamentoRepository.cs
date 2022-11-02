@@ -24,6 +24,8 @@ namespace NailsSys.Infrastructure.Persistense.Repositories
         public async Task<IEnumerable<Agendamento>> ObterAgendamentosPorDataAsync(DateTime data)
         {
             return await _context.Agendamento.Include(c=>c.Cliente)
+                                             .Include(i => i.ItemAgendamentos)  
+                                             .ThenInclude(p => p.Produto)
                                              .Where(d => d.DataAtendimento.Date == data.Date)
                                              .ToListAsync();
         }

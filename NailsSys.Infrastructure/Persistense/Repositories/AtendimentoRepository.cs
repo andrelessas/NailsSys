@@ -24,15 +24,18 @@ namespace NailsSys.Infrastructure.Persistense.Repositories
                 .AsNoTracking()
                 .Include(c=>c.Cliente)
                 .Include(f=>f.FormaPagamento)
+                .Include(i=>i.ItensAtendimento)
                 .ToListAsync();
         }
 
         public async Task<IEnumerable<Atendimento>> ObterAtendimentosRealizadosHoje()
         {
-            return await _context.Atendimento.Where(x=>x.DataAtendimento == DateTime.Now)
-                .AsNoTracking()
+            return await _context.Atendimento
                 .Include(c=>c.Cliente)
                 .Include(f=>f.FormaPagamento)
+                .Include(i=>i.ItensAtendimento)
+                .AsNoTracking()
+                .Where(x=>x.DataAtendimento.Date == DateTime.Now.Date)
                 .ToListAsync();
         }
 
@@ -42,6 +45,7 @@ namespace NailsSys.Infrastructure.Persistense.Repositories
                 .AsNoTracking()
                 .Include(c=>c.Cliente)
                 .Include(f=>f.FormaPagamento)
+                .Include(i=>i.ItensAtendimento)
                 .FirstOrDefaultAsync();    
         }
     }

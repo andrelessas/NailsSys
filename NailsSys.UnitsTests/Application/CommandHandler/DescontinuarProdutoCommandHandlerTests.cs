@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoBogus;
 using Bogus;
 using Moq;
 using NailsSys.Application.Commands.ProdutoCommands.DescontinuarProduto;
@@ -34,7 +33,11 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
         public async void ProdutoValido_QuandoExecutado_DescontinuarProduto()
         {
             //Arrange
-            var produto = AutoFaker.Generate<Produto>();                
+            var produto = new Produto(
+                new Faker().Commerce.ProductName(),
+                "S",
+                Convert.ToDecimal(new Faker().Commerce.Price()));
+                
             _produtoRepository.Setup(pr => pr.ObterPorIDAsync(It.IsAny<int>())).ReturnsAsync(produto);
             //Act
             await _descontinuarProdutoCommandHandler.Handle(_produtoCommand,new CancellationToken());

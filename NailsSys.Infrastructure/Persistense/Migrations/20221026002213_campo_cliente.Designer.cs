@@ -3,17 +3,19 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NailsSys.Infrastructure.Context;
 
 #nullable disable
 
-namespace NailsSys.Infrastructure.Migrations
+namespace NailsSys.Infrastructure.Persistense.Migrations
 {
     [DbContext(typeof(NailsSysContext))]
-    partial class NailsSysContextModelSnapshot : ModelSnapshot
+    [Migration("20221026002213_campo_cliente")]
+    partial class campo_cliente
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -195,6 +197,9 @@ namespace NailsSys.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int?>("AtendimentoId")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("Desconto")
                         .HasColumnType("decimal(18,2)");
 
@@ -218,9 +223,7 @@ namespace NailsSys.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdAtendimento");
-
-                    b.HasIndex("IdProduto");
+                    b.HasIndex("AtendimentoId");
 
                     b.ToTable("ItemAtendimento");
                 });
@@ -329,21 +332,9 @@ namespace NailsSys.Infrastructure.Migrations
 
             modelBuilder.Entity("NailsSys.Core.Entities.ItemAtendimento", b =>
                 {
-                    b.HasOne("NailsSys.Core.Entities.Atendimento", "Atendimento")
+                    b.HasOne("NailsSys.Core.Entities.Atendimento", null)
                         .WithMany("ItensAtendimento")
-                        .HasForeignKey("IdAtendimento")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("NailsSys.Core.Entities.Produto", "Produto")
-                        .WithMany("ItemAtendimentos")
-                        .HasForeignKey("IdProduto")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Atendimento");
-
-                    b.Navigation("Produto");
+                        .HasForeignKey("AtendimentoId");
                 });
 
             modelBuilder.Entity("NailsSys.Core.Entities.Agendamento", b =>
@@ -371,8 +362,6 @@ namespace NailsSys.Infrastructure.Migrations
             modelBuilder.Entity("NailsSys.Core.Entities.Produto", b =>
                 {
                     b.Navigation("ItemAgendamentos");
-
-                    b.Navigation("ItemAtendimentos");
                 });
 #pragma warning restore 612, 618
         }

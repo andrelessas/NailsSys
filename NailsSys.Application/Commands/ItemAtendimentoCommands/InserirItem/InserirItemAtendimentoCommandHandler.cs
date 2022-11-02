@@ -31,9 +31,10 @@ namespace NailsSys.Application.Commands.ItemAtendimentoCommands.InserirItem
             await _unitOfWorks.SaveChangesAsync();
 
             atendimento.AtualizarValores(
-                await _unitOfWorks.ItemAtendimento.SumAsync(x=>x.IdAtendimento == atendimento.Id,x=>x.ValorBruto),
-                await _unitOfWorks.ItemAtendimento.SumAsync(x=>x.IdAtendimento == atendimento.Id,x=>x.Desconto),
-                await _unitOfWorks.ItemAtendimento.SumAsync(x=>x.IdAtendimento == atendimento.Id,x=>x.ValorLiquido));
+                // await _unitOfWorks.ItemAtendimento.SumAsync(x=>x.IdAtendimento == atendimento.Id,x=>x.ValorBruto),
+                // await _unitOfWorks.ItemAtendimento.SumAsync(x=>x.IdAtendimento == atendimento.Id,x=>x.Desconto),
+                // await _unitOfWorks.ItemAtendimento.SumAsync(x=>x.IdAtendimento == atendimento.Id,x=>x.ValorLiquido)
+                );
 
             await _unitOfWorks.SaveChangesAsync();
             await _unitOfWorks.CommitAsync();

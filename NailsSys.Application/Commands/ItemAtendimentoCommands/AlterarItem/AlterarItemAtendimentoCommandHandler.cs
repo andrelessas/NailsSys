@@ -31,9 +31,9 @@ namespace NailsSys.Application.Commands.ItemAtendimentoCommands.AlterarItem
             item.AlterarQuantidade(request.Quantidade);            
 
             atendimento.AtualizarValores(
-                await _unitOfWorks.ItemAtendimento.SumAsync(x=>x.IdAtendimento == request.IdAtendimento,y => y.ValorBruto),
-                await _unitOfWorks.ItemAtendimento.SumAsync(x=>x.IdAtendimento == request.IdAtendimento,y => y.Desconto),
-                await _unitOfWorks.ItemAtendimento.SumAsync(x=>x.IdAtendimento == request.IdAtendimento,y => y.ValorLiquido)
+                // await _unitOfWorks.ItemAtendimento.SumAsync(x=>x.IdAtendimento == request.IdAtendimento,y => y.ValorBruto),
+                // await _unitOfWorks.ItemAtendimento.SumAsync(x=>x.IdAtendimento == request.IdAtendimento,y => y.Desconto),
+                // await _unitOfWorks.ItemAtendimento.SumAsync(x=>x.IdAtendimento == request.IdAtendimento,y => y.ValorLiquido)
             );
             await _unitOfWorks.SaveChangesAsync();
             await _unitOfWorks.CommitAsync();

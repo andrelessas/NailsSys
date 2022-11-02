@@ -29,9 +29,10 @@ namespace NailsSys.Application.Commands.ItemAtendimentoCommands.RemoverItem
             _unitOfWorks.ItemAtendimento.ExcluirAsync(item);
             
             atendimento.AtualizarValores(
-                await _unitOfWorks.ItemAtendimento.SumAsync(x=>x.IdAtendimento == atendimento.Id,x=>x.ValorBruto),
-                await _unitOfWorks.ItemAtendimento.SumAsync(x=>x.IdAtendimento == atendimento.Id,x=>x.Desconto),
-                await _unitOfWorks.ItemAtendimento.SumAsync(x=>x.IdAtendimento == atendimento.Id,x=>x.ValorLiquido));
+                // await _unitOfWorks.ItemAtendimento.SumAsync(x=>x.IdAtendimento == atendimento.Id,x=>x.ValorBruto),
+                // await _unitOfWorks.ItemAtendimento.SumAsync(x=>x.IdAtendimento == atendimento.Id,x=>x.Desconto),
+                // await _unitOfWorks.ItemAtendimento.SumAsync(x=>x.IdAtendimento == atendimento.Id,x=>x.ValorLiquido)
+                );
             
             await _unitOfWorks.SaveChangesAsync();
             await _unitOfWorks.CommitAsync();

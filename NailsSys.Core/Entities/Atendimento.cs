@@ -77,7 +77,7 @@ namespace NailsSys.Core.Entities
             }            
         }
 
-        public void AtualizarValores(decimal valorBruto, decimal desconto, decimal valorLiquido)
+        public void AtualizarValores()
         {            
             ValorBruto = ItensAtendimento.Sum(x=> x.ValorBruto);
             Desconto = ItensAtendimento.Sum(x=> x.Desconto);

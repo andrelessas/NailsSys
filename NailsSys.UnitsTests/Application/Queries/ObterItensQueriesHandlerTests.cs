@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoBogus;
+using Bogus;
 using Moq;
 using NailsSys.Application.Queries.ItemAgendamentoQueries.ObterItens;
 using NailsSys.Application.Validations;
@@ -33,8 +29,19 @@ namespace NailsSys.UnitsTests.Application.Queries
         public async void ObterItens_QuandoExecutado_RetornarObjeto()
         {
             //Arrange
-            var itens = AutoFaker.Generate<ItemAgendamentoDTO>(5);
-            var pagination = new AutoFaker<PaginationResult<ItemAgendamentoDTO>>()
+            List<ItemAgendamentoDTO> itens = new List<ItemAgendamentoDTO>();
+            for (int i = 0; i < 5; i++)
+            {
+                itens.Add(new ItemAgendamentoDTO(1,
+                    1,
+                    1,
+                    new Faker().Commerce.ProductName(),
+                    1,
+                    Convert.ToDecimal(new Faker().Commerce.Price()),
+                    1));
+            }
+            
+            var pagination = new Faker<PaginationResult<ItemAgendamentoDTO>>()
                 .RuleFor(x => x.Data, itens)
                 .Generate();
 
@@ -46,8 +53,7 @@ namespace NailsSys.UnitsTests.Application.Queries
             foreach (var item in itens)
             {
                 Assert.Contains<ItemAgendamentoViewModel>(result.Data, x => x.Item == item.Item);
-                Assert.Contains<ItemAgendamentoViewModel>(result.Data, x => x.NomeProduto == item.DescricaoProduto);
-                Assert.Contains<ItemAgendamentoViewModel>(result.Data, x => x.PrecoInicial == item.PrecoInicial);
+                Assert.Contains<ItemAgendamentoViewModel>(result.Data, x => x.NomeProduto == item.DescricaoProduto);            
                 Assert.Contains<ItemAgendamentoViewModel>(result.Data, x => x.Quantidade == item.Quantidade);
             }
         }

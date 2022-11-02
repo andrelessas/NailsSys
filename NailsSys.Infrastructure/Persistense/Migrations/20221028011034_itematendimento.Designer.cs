@@ -3,17 +3,19 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NailsSys.Infrastructure.Context;
 
 #nullable disable
 
-namespace NailsSys.Infrastructure.Migrations
+namespace NailsSys.Infrastructure.Persistense.Migrations
 {
     [DbContext(typeof(NailsSysContext))]
-    partial class NailsSysContextModelSnapshot : ModelSnapshot
+    [Migration("20221028011034_itematendimento")]
+    partial class itematendimento
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

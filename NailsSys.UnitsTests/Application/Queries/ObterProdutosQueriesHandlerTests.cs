@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoBogus;
+using Bogus;
 using Moq;
-using NailsSys.Application.Queries.ClienteQueries.ObterClientes;
 using NailsSys.Application.Queries.ProdutoQueries.ObterProdutos;
 using NailsSys.Application.Validations;
 using NailsSys.Application.ViewModels;
@@ -34,9 +29,15 @@ namespace NailsSys.UnitsTests.Application.Queries
         public async Task ObterProdutosValidos_QuandoExecutado_RetornarObjetoAsync()
         {
             //Arrange
-            var produtos = AutoFaker.Generate<Produto>(10);            
+            List<Produto> produtos = new List<Produto>();
+            for (int i = 0; i < 5; i++)
+            {
+                produtos.Add(new Produto(new Faker().Commerce.ProductName(),
+                    "S",
+                    Convert.ToDecimal(new Faker().Commerce.Price())));
+            }
 
-            var pagination = new AutoFaker<PaginationResult<Produto>>()
+            var pagination = new Faker<PaginationResult<Produto>>()
                 .RuleFor(x=>x.Data,produtos);
 
             _produtoRepostory.Setup(x=>x.ObterTodosAsync(It.IsAny<int>())).ReturnsAsync(pagination);

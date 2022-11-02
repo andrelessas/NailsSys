@@ -1,4 +1,3 @@
-using AutoBogus;
 using Bogus;
 using Moq;
 using NailsSys.Application.Commands.ItemAgendamentoCommands.InserirItem;
@@ -41,7 +40,11 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
         public async Task ItemValido_QuandoExcecutado_InserirNovoItemNoAgendamentoAsync()
         {
             //Arrange
-            var produto = AutoFaker.Generate<Produto>();
+            var produto = new Produto(
+                new Faker().Commerce.ProductName(),
+                "S",
+                Convert.ToDecimal(new Faker().Commerce.Price()));
+                
             _itemAgendamentoRepository.Setup(it => it.ObterMaxItem(It.IsAny<int>())).ReturnsAsync(2);
             _produtoRepository.Setup(pr => pr.ObterPorIDAsync(It.IsAny<int>())).ReturnsAsync(produto);
             //Act

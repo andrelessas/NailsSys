@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
 using NailsSys.Application.ViewModels;
+using NailsSys.Core.Entities;
 using NailsSys.Core.Interfaces;
 using NailsSys.Core.Notificacoes;
 
@@ -27,7 +28,7 @@ namespace NailsSys.Application.Queries.AtendimentoQueries.ObterAtendimentoRealiz
             if(!atendimentos.Any())
                 throw new ExcecoesPersonalizadas("Nenhum atendimento foi realizado hoje.");
 
-            return _mapper.Map<IEnumerable<AtendimentoViewModel>>(atendimentos);
+            return _mapper.Map<IEnumerable<Atendimento>,IEnumerable<AtendimentoViewModel>>(atendimentos);
         }
     }
 }

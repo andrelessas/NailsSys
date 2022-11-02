@@ -17,8 +17,10 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
         private readonly Mock<IUnitOfWorks> _unitOfWorks;
         private readonly Mock<IAgendamentoRepository> _agendamentoRepository;
         private readonly Mock<IItemAgendamentoRepository> _itemAgendamentoRepository;
+        private readonly Mock<IClienteRepository> _clienteRepository;
         private readonly NovoAgendamentoCommandHandler _novoAgendamentoCommandHandler;
         private readonly NovoAgendamentoCommand _novoAgendamentoCommand;
+        private readonly Cliente _cliente;
         private readonly NovoAgendamentoCommandValidation _novoAgendamentoCommandValidation;
 
         public NovoAgendamentoCommandHandlerTests()
@@ -26,9 +28,11 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             _unitOfWorks = new Mock<IUnitOfWorks>();
             _agendamentoRepository = new Mock<IAgendamentoRepository>();
             _itemAgendamentoRepository = new Mock<IItemAgendamentoRepository>();
+            _clienteRepository = new Mock<IClienteRepository>();
 
             _unitOfWorks.SetupGet(x => x.Agendamento).Returns(_agendamentoRepository.Object);
             _unitOfWorks.SetupGet(x => x.ItemAgendamento).Returns(_itemAgendamentoRepository.Object);
+            _unitOfWorks.SetupGet(x => x.Cliente).Returns(_clienteRepository.Object);
 
             _novoAgendamentoCommandHandler = new NovoAgendamentoCommandHandler(_unitOfWorks.Object);
             _novoAgendamentoCommand = new Faker<NovoAgendamentoCommand>()
@@ -37,6 +41,8 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
                 .RuleFor(x => x.InicioPrevisto, y=>y.Date.Recent())
                 .RuleFor(x => x.TerminoPrevisto, y=>y.Date.Recent(2))
                 .Generate();
+
+            _cliente = new Cliente(new Faker().Person.FullName,new Faker().Phone.PhoneNumber());
 
             _novoAgendamentoCommandValidation = new NovoAgendamentoCommandValidation();
         }
@@ -51,6 +57,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
                     .RuleFor(x=> x.Quantidade,y=> y.Random.Int(0,50))
                     .Generate(5)
             );
+            _clienteRepository.Setup(x=>x.ObterPorIDAsync(It.IsAny<int>())).ReturnsAsync(_cliente);
             _agendamentoRepository.Setup(x=> x.MaxAsync(It.IsAny<Expression<Func<Agendamento,int>>>())).ReturnsAsync(10);
             _itemAgendamentoRepository.Setup(x=> x.ObterMaxItem(It.IsAny<int>())).ReturnsAsync(1);
 
@@ -66,10 +73,21 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
         [Fact]
         public void AgedamentoCommandSemItens_QuandoExecutado_RetornarExcecao()
         {
-            //Arrange - Act - Assert
+            //Arrange 
+            _clienteRepository.Setup(x=>x.ObterPorIDAsync(It.IsAny<int>())).ReturnsAsync(_cliente);
+            //Act - Assert
             var erro = Assert.ThrowsAsync<ExcecoesPersonalizadas>(() => _novoAgendamentoCommandHandler.Handle(_novoAgendamentoCommand,new CancellationToken()));
             Assert.NotNull(erro.Result);
             Assert.Equal("Nenhum produto informado para realizar o agendamento.",erro.Result.Message);
+        }
+
+        [Fact]
+        public void AgedamentoCommandClienteInvalido_QuandoExecutado_RetornarExcecao()
+        {
+            //Arrange - Act - Assert
+            var erro = Assert.ThrowsAsync<ExcecoesPersonalizadas>(() => _novoAgendamentoCommandHandler.Handle(_novoAgendamentoCommand,new CancellationToken()));
+            Assert.NotNull(erro.Result);
+            Assert.Equal("O cliente informado não existe.",erro.Result.Message);
         }
 
         [Theory]

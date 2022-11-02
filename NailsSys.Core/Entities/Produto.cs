@@ -17,6 +17,7 @@ namespace NailsSys.Core.Entities
         public bool Descontinuado { get; private set; }
         public DateTime DataCriacao { get; private set; }
         public List<ItemAgendamento> ItemAgendamentos { get; private set; }
+        public List<ItemAtendimento> ItemAtendimentos { get; private set; }
 
         public void DescontinuarProduto()
         {

@@ -1,4 +1,4 @@
-using AutoBogus;
+using Bogus;
 using Moq;
 using NailsSys.Application.Queries.ClienteQueries.ObterClientes;
 using NailsSys.Application.Validations;
@@ -29,15 +29,15 @@ namespace NailsSys.UnitsTests.Application.Queries
         public async Task ObterClientes_QuandoExecutado_RetornarListaDeClientesAsync()
         {
             //Arrange            
-            var clienteFaker = new AutoFaker<Cliente>()
-                .RuleFor(x=> x.Id,y=> y.Random.Int(0,20))
-                .RuleFor(x=> x.DataCadastro,y=> y.Date.Future(-10))
-                .RuleFor(x=> x.NomeCliente,y=> y.Person.FullName)
-                .RuleFor(x=> x.Telefone,y=> y.Phone.PhoneNumber())
-                .Generate(5);
+            List<Cliente> clientes = new List<Cliente>();
+            for (int i = 0; i < 5; i++)
+            {
+                clientes.Add(new Cliente(new Faker().Person.FullName,
+                new Faker().Phone.PhoneNumber()));
+            }
 
-            var paginationResult = new AutoFaker<PaginationResult<Cliente>>()
-                .RuleFor(x=> x.Data,clienteFaker)
+            var paginationResult = new Faker<PaginationResult<Cliente>>()
+                .RuleFor(x=> x.Data,clientes)
                 .RuleFor(x=> x.Page,y=>y.Random.Int(0,5))
                 .RuleFor(x=> x.ItemsCount,y=>y.Random.Int(0,5))
                 .RuleFor(x=> x.PageSize,y=>y.Random.Int(0,5))
@@ -49,8 +49,8 @@ namespace NailsSys.UnitsTests.Application.Queries
             var paginations = await _obterClientesQueriesHandler.Handle(new ObterClientesQueries(5), new CancellationToken());
             //Assert
             Assert.NotNull(paginations);
-            Assert.Equal(clienteFaker.Count(),paginations.Data.Count());
-            foreach (var cliente in clienteFaker)
+            Assert.Equal(clientes.Count(),paginations.Data.Count());
+            foreach (var cliente in clientes)
             {
                 Assert.Contains<ClienteViewModel>(paginations.Data,t => t.Telefone == cliente.Telefone);
                 Assert.Contains<ClienteViewModel>(paginations.Data,t => t.NomeCliente == cliente.NomeCliente);

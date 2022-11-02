@@ -19,6 +19,7 @@ namespace NailsSys.Core.Entities
         public DateTime DataCadastro { get; private set; }
         public bool Bloqueado { get; private set; }
         public List<Agendamento> Agendamentos { get; private set; }
+        public List<Atendimento> Atendimentos { get; private set; }
 
         public void BloquearCliente()
         {

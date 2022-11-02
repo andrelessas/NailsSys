@@ -10,5 +10,6 @@ namespace NailsSys.Application.ViewModels
         public int Id { get; set; }
         public string Descricao { get; set; }
         public string AVistaAPrazo { get; set; }
+        public bool Descontinuado { get; set; }
     }
 }

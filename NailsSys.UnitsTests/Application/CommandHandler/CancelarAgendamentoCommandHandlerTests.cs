@@ -1,4 +1,4 @@
-using AutoBogus;
+using Bogus;
 using Moq;
 using NailsSys.Application.Commands.AgendamentoCommands.CancelarAgendamento;
 using NailsSys.Application.Validations;
@@ -34,10 +34,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
         public async Task InformadoIdAgendamentoValido_QuandoExecutado_CancelarAgendamentoAsync()
         {
             //Arrange
-            var agendamento = new AutoFaker<Agendamento>()
-                .RuleFor(x=>x.Cancelado,false)
-                .RuleFor(x=>x.AtendimentoRealizado,false)
-                .Generate();
+            var agendamento = new Agendamento(1,DateTime.Now,DateTime.Now,DateTime.Now);                
 
             _agendamentoRepository.Setup(x=> x.ObterPorIDAsync(It.IsAny<int>())).ReturnsAsync(agendamento);
             //Act

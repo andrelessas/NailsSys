@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoBogus;
+using Bogus;
 using Moq;
 using NailsSys.Application.Queries.ProdutoQueries.ObterProdutoPorId;
 using NailsSys.Application.Validations;
@@ -31,7 +31,10 @@ namespace NailsSys.UnitsTests.Application.Queries
         public async Task IdProdutoValido_QuandoExecutado_RetornarObjetoAsync()
         {
             //Arrange
-            var produto = AutoFaker.Generate<Produto>();
+            var produto = new Produto(new Faker().Commerce.ProductName(),
+                "S",
+                Convert.ToDecimal(new Faker().Commerce.Price()));
+
             _produtoRepository.Setup(x=>x.ObterPorIDAsync(It.IsAny<int>())).ReturnsAsync(produto);
             //Act
             var result = await _obterProdutoPorIdQueriesHandler.Handle(new ObterProdutoPorIdQueries(1),new CancellationToken());

@@ -50,7 +50,7 @@ namespace NailsSys.API.Controllers
         ///Cadastrar produto.
         ///</summary>        
         [HttpPost]
-        [Authorize(Roles = "administrador, gerente")]
+        // [Authorize(Roles = "administrador, gerente")]
         public async Task<IActionResult> InserirProduto(InserirProdutoCommand request)
         {
             await _mediator.Send(request);

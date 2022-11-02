@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoBogus;
+using Bogus;
 using Moq;
 using NailsSys.Application.Queries.ClienteQueries.ObterClientes;
 using NailsSys.Application.Queries.UsuarioQueries.ObterUsuarios;
@@ -34,8 +34,16 @@ namespace NailsSys.UnitsTests.Application.Queries
         public async void ParametrosDeUsuarioValido_QuandoExecutado_RetornarObjeto()
         {
             //Arrange
-            var usuarios = AutoFaker.Generate<Usuario>(10);
-            var pagination = new AutoFaker<PaginationResult<Usuario>>()
+            List<Usuario> usuarios = new List<Usuario>();
+            for (int i = 0; i < 5; i++)
+            {
+                usuarios.Add(new Usuario(new Faker().Person.FullName,
+                    new Faker().Person.FirstName,
+                    new Faker().Internet.Password(),
+                    "G"));
+            }            
+            
+            var pagination = new Faker<PaginationResult<Usuario>>()
                 .RuleFor(x => x.Data, usuarios)
                 .Generate();
 

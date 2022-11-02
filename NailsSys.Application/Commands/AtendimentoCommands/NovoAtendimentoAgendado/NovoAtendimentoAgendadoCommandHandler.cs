@@ -27,26 +27,32 @@ namespace NailsSys.Application.Commands.AtendimentoCommands.NovoAtendimentoAgend
             if (!itensAgendamento.Any())
                 throw new ExcecoesPersonalizadas("O agendamento informado não possui itens lançados.");
 
-            await _unitOfWorks.BeginTransactionAsync();
-            _unitOfWorks.Atendimento.InserirAsync(new Atendimento(
+            var atendimento = new Atendimento(
                 agendamento.IdCliente,
                 agendamento.DataAtendimento,
                 request.IdFormaPagamento,
                 (request.InicioAtendimento != null ? request.InicioAtendimento.GetValueOrDefault() : agendamento.InicioPrevisto),
-                (request.TerminoAtendimento != null ? request.TerminoAtendimento.GetValueOrDefault() : agendamento.TerminoPrevisto)));
+                (request.TerminoAtendimento != null ? request.TerminoAtendimento.GetValueOrDefault() : agendamento.TerminoPrevisto));
+
+            await _unitOfWorks.BeginTransactionAsync();
+            _unitOfWorks.Atendimento.InserirAsync(atendimento);
+            await _unitOfWorks.SaveChangesAsync();
 
             var maxIdAtendimento = await _unitOfWorks.Atendimento.MaxAsync(x => x.Id);
 
             foreach (var item in itensAgendamento)
             {
-                _unitOfWorks.ItemAtendimento.InserirAsync(new ItemAtendimento(
-                    maxIdAtendimento+1,
+                var itemAtendimento = new ItemAtendimento(
+                    maxIdAtendimento,
                     item.IdProduto,
                     item.Quantidade,
-                    item.Item));
+                    item.Item);
+
+                await _unitOfWorks.ItemAtendimento.InserirItemAtendimento(itemAtendimento);
+                atendimento.AtualizarValores();
+                await _unitOfWorks.SaveChangesAsync();
             }
 
-            await _unitOfWorks.SaveChangesAsync();
             await _unitOfWorks.CommitAsync();
             return Unit.Value;
         }

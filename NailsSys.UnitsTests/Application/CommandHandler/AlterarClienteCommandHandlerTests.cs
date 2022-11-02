@@ -1,7 +1,5 @@
-using AutoBogus;
 using Bogus;
 using Moq;
-using Moq.AutoMock;
 using NailsSys.Application.Commands.ClienteCommands.AlterarCliente;
 using NailsSys.Application.Validations;
 using NailsSys.Core.Entities;
@@ -39,7 +37,10 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
         public async Task DadosClienteValido_QuandoExecutado_AlteraCadastroClienteAsync()
         {
             //Arrange
-            var cliente = AutoFaker.Generate<Cliente>();
+            var cliente = new Cliente(
+                new Faker().Person.FullName,
+                new Faker().Person.Phone);
+
             _clienteRepository.Setup(x => x.ObterPorIDAsync(It.IsAny<int>())).ReturnsAsync(cliente);
             //Act
             await _alterarClienteCommandHandler.Handle(_alterarClienteCommand, new CancellationToken());

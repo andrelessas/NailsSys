@@ -46,7 +46,7 @@ namespace NailsSys.Data.Repository
 
         public void InserirAsync(TEntity entity)
         {
-            _context.Set<TEntity>().Add(entity);
+            _context.Set<TEntity>().Add(entity);        
         }
 
         public void Property(TEntity entity, Expression<Func<TEntity, object>> predicate, bool isModified)

@@ -1,11 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoBogus;
+using Bogus;
 using Moq;
-using NailsSys.Application.Commands.AgendamentoCommands.AlterarAgendamento;
-using NailsSys.Application.Commands.AtendimentoCommands.AlterarAtendimento;
 using NailsSys.Application.Commands.ItemAtendimentoCommands.AlterarItem;
 using NailsSys.Application.Validations;
 using NailsSys.Core.Entities;
@@ -21,8 +15,10 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
         private readonly Mock<IAtendimentoRepository> _atendimentoRepository;
         private readonly Mock<IItemAtendimentoRepository> _itemAtendimentoRepository;
         private readonly Mock<IUnitOfWorks> _unitOfWorks;
-        private readonly AlterarItemAtendimentoCommand _alterarAtendimentoCommand;
+        private AlterarItemAtendimentoCommand _alterarAtendimentoCommand;
         private readonly AlterarItemAtendimentoCommandHandler _alterarAtendimentoCommandHandler;
+        private Atendimento _atendimento;
+        private ItemAtendimento _itemAtendimento;
 
         public AlterarItemAtendimentoCommandHandlerTests()
         {
@@ -33,18 +29,21 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             _unitOfWorks.SetupGet(x => x.Atendimento).Returns(_atendimentoRepository.Object);
             _unitOfWorks.SetupGet(x => x.ItemAtendimento).Returns(_itemAtendimentoRepository.Object);
 
-            _alterarAtendimentoCommand = AutoFaker.Generate<AlterarItemAtendimentoCommand>();
+            _alterarAtendimentoCommand = new AlterarItemAtendimentoCommand(1,1,1,1);
+
             _alterarAtendimentoCommandHandler = new AlterarItemAtendimentoCommandHandler(_unitOfWorks.Object);
+
+            _atendimento = new Atendimento(1,DateTime.Now,1,DateTime.Now,DateTime.Now);
+
+            _itemAtendimento = new ItemAtendimento(1,1,1,1);
         }
 
         [Fact]
         public async Task ItemValido_QuandoExecutado_AlterarItemAtendimentoEAtualizarTotalVendaAsync()
         {
             //Arrange
-            var atendimento = AutoFaker.Generate<Atendimento>();
-            var itemAtendimento = AutoFaker.Generate<ItemAtendimento>();
-            _unitOfWorks.Setup(x => x.Atendimento.ObterPorIDAsync(It.IsAny<int>())).ReturnsAsync(atendimento);
-            _unitOfWorks.Setup(x => x.ItemAtendimento.ObterItemAtendimento(It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(itemAtendimento);
+            _unitOfWorks.Setup(x => x.Atendimento.ObterPorIDAsync(It.IsAny<int>())).ReturnsAsync(_atendimento);
+            _unitOfWorks.Setup(x => x.ItemAtendimento.ObterItemAtendimento(It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(_itemAtendimento);
             //Act
             await _alterarAtendimentoCommandHandler.Handle(_alterarAtendimentoCommand, new CancellationToken());
             //Assert
@@ -65,7 +64,7 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
         public void ItemAtendimentoNaoEncontrado_QuandoExecutado_RetornarExcecao()
         {
             //Arrange 
-            _unitOfWorks.Setup(x=>x.Atendimento.ObterPorIDAsync(It.IsAny<int>())).ReturnsAsync(AutoFaker.Generate<Atendimento>());
+            _unitOfWorks.Setup(x=>x.Atendimento.ObterPorIDAsync(It.IsAny<int>())).ReturnsAsync(_atendimento);
             //Act - Assert
             var result = Assert.ThrowsAsync<ExcecoesPersonalizadas>(() => _alterarAtendimentoCommandHandler.Handle(_alterarAtendimentoCommand, new CancellationToken()));
             Assert.NotNull(result.Result);

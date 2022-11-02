@@ -10,6 +10,8 @@ namespace NailsSys.Application.ViewModels
         public int Item { get; private set; }
         public string NomeProduto { get; private set; }
         public int Quantidade { get; private set; }
-        public decimal PrecoInicial { get; private set; }  
+        public decimal ValorBruto { get; private set; }
+        public decimal Desconto { get; private set; }
+        public decimal ValorLiquido { get; private set; }
     }
 }

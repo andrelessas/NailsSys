@@ -11,7 +11,6 @@ using NailsSys.Application.Commands.AtendimentoCommands.NovoAtendimentoAgendado;
 using NailsSys.Application.Queries.AtendimentoQueries.ObterAtendimentoPorId;
 using NailsSys.Application.Queries.AtendimentoQueries.ObterAtendimentoRealizadosHoje;
 using NailsSys.Application.Queries.AtendimentoQueries.ObterAtendimentosPorPeriodo;
-using NailsSys.Core.Notificacoes;
 
 namespace NailsSys.API.Controllers
 {

@@ -18,6 +18,11 @@ namespace NailsSys.Infrastructure.Persistense.Configurations
                     .WithMany(x=> x.Atendimentos) // lista de objetos
                     .HasForeignKey(x => x.IdFormaPagamento) // chave estrangeira 
                     .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(x=>x.Cliente)
+                .WithMany(x=>x.Atendimentos)
+                .HasForeignKey(x=>x.IdCliente)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

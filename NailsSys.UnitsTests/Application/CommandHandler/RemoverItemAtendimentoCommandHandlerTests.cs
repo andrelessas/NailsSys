@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using AutoBogus;
+using Bogus;
 using Moq;
 using NailsSys.Application.Commands.ItemAtendimentoCommands.RemoverItem;
 using NailsSys.Application.Validations;
@@ -22,6 +22,8 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
         private readonly Mock<IItemAtendimentoRepository> _atendimentoItemRepository;
         private readonly RemoverItemAtendimentoCommandHandler _removerItemAtendimentoCommandHandler;
         private readonly RemoverItemAtendimentoCommandValidation _removerItemAtendimentoCommandValidation;
+        private Atendimento _atendimento;
+        private ItemAtendimento _itemAtendimento;
 
         public RemoverItemAtendimentoCommandHandlerTests()
         {
@@ -32,28 +34,29 @@ namespace NailsSys.UnitsTests.Application.CommandHandler
             _removerItemAtendimentoCommandValidation = new RemoverItemAtendimentoCommandValidation();
             _unitOfWorks.SetupGet(x=> x.Atendimento).Returns(_atendimentoRepository.Object);
             _unitOfWorks.SetupGet(x=> x.ItemAtendimento).Returns(_atendimentoItemRepository.Object);
+            _atendimento = new Atendimento(1,DateTime.Now,1,DateTime.Now,DateTime.Now);
+            _itemAtendimento = new ItemAtendimento(1,1,1,1);
         }
         
         [Fact]
         public async Task ProdutoValido_QuandoExecutado_RemoveItemEAtualizaTotalAtendimentoAsync()
         {
             //Arrange
-            _atendimentoItemRepository.Setup(x=>x.ObterItemAtendimento(It.IsAny<int>(),It.IsAny<int>())).ReturnsAsync(AutoFaker.Generate<ItemAtendimento>());
-            _atendimentoRepository.Setup(x=>x.ObterPorIDAsync(It.IsAny<int>())).ReturnsAsync(AutoFaker.Generate<Atendimento>());
+            _atendimentoItemRepository.Setup(x=>x.ObterItemAtendimento(It.IsAny<int>(),It.IsAny<int>())).ReturnsAsync(_itemAtendimento);
+            _atendimentoRepository.Setup(x=>x.ObterPorIDAsync(It.IsAny<int>())).ReturnsAsync(_atendimento);
             //Act
-            await _removerItemAtendimentoCommandHandler.Handle(AutoFaker.Generate<RemoverItemAtendimentoCommand>(),new CancellationToken());
+            await _removerItemAtendimentoCommandHandler.Handle(new RemoverItemAtendimentoCommand(1,1),new CancellationToken());
             //Assert
             _unitOfWorks.Verify(x=>x.BeginTransactionAsync(),Times.Once);
             _unitOfWorks.Verify(x=>x.SaveChangesAsync(),Times.Once);
             _unitOfWorks.Verify(x=>x.CommitAsync(),Times.Once);
-            _atendimentoItemRepository.Verify(x=>x.SumAsync(It.IsAny<Expression<Func<ItemAtendimento,bool>>>(),It.IsAny<Expression<Func<ItemAtendimento,decimal>>>()),Times.Exactly(3));
         }
 
         [Fact]
         public void ItemNaoEncontrado_QuandoExecutado_RetornarExcecao()
         {
             //Arrange - Act - Assert
-            var result = Assert.ThrowsAsync<ExcecoesPersonalizadas>(() => _removerItemAtendimentoCommandHandler.Handle(AutoFaker.Generate<RemoverItemAtendimentoCommand>(),new CancellationToken()));
+            var result = Assert.ThrowsAsync<ExcecoesPersonalizadas>(() => _removerItemAtendimentoCommandHandler.Handle(new RemoverItemAtendimentoCommand(1,1),new CancellationToken()));
             Assert.NotNull(result.Result);
             Assert.NotEmpty(result.Result.Message);
             Assert.Equal("Nenhum item encontrado.",result.Result.Message);
